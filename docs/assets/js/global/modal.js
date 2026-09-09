@@ -297,7 +297,10 @@ export function openViewHelpModal() {
     document.body.style.overflow = "hidden";
 }
 
-export function openContributorCharterModal() {
+export function openContributorCharterModal(withPublish = false) {
+    // withPublish shows the Annuler/Publier footer (publish confirmation flow)
+    const actions = document.getElementById("contributor-charter-actions");
+    if (actions) actions.hidden = !withPublish;
     contributorCharterModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }

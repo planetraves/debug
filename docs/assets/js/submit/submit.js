@@ -1,6 +1,6 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=dev";
+import { openErrorModal, openSuccessModal, openContributorCharterModal } from "../global/modal.js?v=dev";
 import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=dev";
 
 /* === VARIABLES === */
@@ -14,6 +14,7 @@ const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
 
 let user_profile = null;
+let pendingEvent = null;  // validated payload awaiting charter acceptance
 
 /* === LOCAL FUNCTIONS === */
 async function initSubmitPage() {
@@ -87,19 +88,24 @@ function showSubmit(user, profile) {
 
 /* === EXPORTED FUNCTIONS === */
 export async function submitEvent() {
-    button.setAttribute("aria-busy", "true");
-
-    /* get form payload */
+    /* validate the form first; the charter must be accepted before publishing */
     const new_event = getEventFormPayload();
-    if (!new_event) {
-        button.setAttribute("aria-busy", "false");
-        return;
-    };
+    if (!new_event) return;
+
+    pendingEvent = new_event;
+    openContributorCharterModal(true);
+}
+
+export async function confirmPublish() {
+    if (!pendingEvent) return;
+    const new_event = pendingEvent;
+    const publishBtn = document.getElementById("charter-publish-btn");
+    publishBtn?.setAttribute("aria-busy", "true");
 
     /* upload image if needed */
     const {imageUrl, error} = await uploadImageFile();
     if (error) {
-        button.setAttribute("aria-busy", "false");
+        publishBtn?.setAttribute("aria-busy", "false");
         openErrorModal("Problème pendant le téléchargement de l'image");
         console.error(error);
         return;
@@ -118,7 +124,7 @@ export async function submitEvent() {
 
         const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
         if (error) {
-            button.setAttribute("aria-busy", "false");
+            publishBtn?.setAttribute("aria-busy", "false");
             if ((new_event.nb_days > 1) && (day > 0)) {
                 openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`, error.message ? error.message : null);
             } else {
@@ -129,7 +135,8 @@ export async function submitEvent() {
         }
     }
 
-    button.setAttribute("aria-busy", "false");
+    publishBtn?.setAttribute("aria-busy", "false");
+    pendingEvent = null;
     window.scrollTo(0, 0);
     form.reset();
     openSuccessModal("Évènement publié ! Retour à la liste des évènements automatiquement.")

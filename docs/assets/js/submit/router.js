@@ -17,7 +17,7 @@ import {
 } from "../global/address.js?v=dev"
 
 import { 
-    submitEvent
+    submitEvent, confirmPublish
 } from "./submit.js"
 
 
@@ -48,6 +48,10 @@ async function handleClick(el, e) {
 
         case "submit-event":
             await submitEvent();
+            break;
+
+        case "confirm-publish":
+            await confirmPublish();
             break;
 
         case "close-modal":
