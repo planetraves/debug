@@ -10,7 +10,7 @@ import {
 
 import { 
     addTag, removeLastTag
-} from "../global/tags.js"
+} from "../global/tags.js?v=dev"
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
