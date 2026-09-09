@@ -20,11 +20,6 @@
             Plus d'infos sur
             <a href="../account/" >Mon compte</a>
         </p>
-
-        <button class="notice-btn" data-action="open-contributor-charter" aria-label="Ouvrir la charte du contributeur·rice">
-            <span class="material-symbols-outlined" aria-hidden="true">description</span>
-            Ouvrir la charte du contributeur·rice
-        </button>
     </div>
 
     <article class="submit-tile" data-allow-action>
@@ -43,6 +38,18 @@
                 </span>
                 <div id="category-choices" class="category-choices"></div>
             </label>
+
+            <label for="tag-input" class="pico">
+                <span class="label-help">
+                    Tags *
+                    <button type="button" class="help-btn" data-action="open-tag-help" aria-label="Aide : tags">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                </span>
+            </label>
+            <div class="tag-input-container" id="tag-container">
+                <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
+            </div>
 
             <label class="pico">
                 Nom du lieu *
@@ -84,18 +91,6 @@
                 Description de l'évènement
                 <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
             </label>
-            
-            <label for="tag-input" class="pico">
-                <span class="label-help">
-                    Tags
-                    <button type="button" class="help-btn" data-action="open-tag-help" aria-label="Aide : tags">
-                        <span class="material-symbols-outlined">help</span>
-                    </button>
-                </span>
-            </label>
-            <div class="tag-input-container" id="tag-container">
-                <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
-            </div>
 
             <label class="pico">
                 <span class="label-help">

@@ -52,8 +52,9 @@
             <ul>
                 <li><strong>Exemple de tag</strong> : enfant, cirque, rock, etc.</li>
                 <li><strong>Conseil</strong> : utilisez des tags pertinents, précis et cours.</li>
+                <li><strong>Minimum</strong> 1 tag.</li>
+                <li><strong>Maximum</strong> 4 tags.</li>
             </ul>
-            <p>Vous pouvez ajouter jusqu'à 4 tags.</p>
         </div>
     </div>
 </div>
@@ -134,7 +135,7 @@
             <span class="material-symbols-outlined">close</span>
         </button>
         <div class="modal-content help">
-            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Charte du contributeur·rice</h3>
+            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Charte du.de la contributeur·rice</h3>
             <p>En publiant un évènement, vous acceptez de respecter la présente charte. Elle vise à garder l'agenda utile, culturel et agréable pour tout le monde.</p>
 
             <p><strong>Ce que vous pouvez publier :</strong></p>
@@ -142,7 +143,7 @@
 
             <p><strong>Vous vous engagez à :</strong></p>
             <ul>
-                <li>publier des informations <strong>exactes et complètes</strong> (titre, date, lieu, tarif, public)</li>
+                <li>publier des informations <strong>exactes</strong> (titre, date, lieu, tarif, public)</li>
                 <li>ne publier que des évènements dont vous êtes <strong>organisateur·rice</strong> ou que vous êtes autorisé·e à relayer</li>
                 <li>éviter les <strong>doublons</strong> : vérifiez que l'évènement n'est pas déjà en ligne</li>
                 <li>utiliser un contenu et une image <strong>appropriés</strong>, dont vous détenez les droits</li>
@@ -160,6 +161,13 @@
             <p>Selon votre statut, votre évènement est publié <strong>instantanément</strong> (contributeur·rice officiel·le) ou après un <strong>délai de trois jours</strong> (contributeur·rice non-officiel·le). L'équipe de modération peut à tout moment retirer un évènement qui ne respecte pas cette charte.</p>
 
             <p><strong>Note :</strong> tout ceci a pour but d'éviter de saturer l'agenda avec des évènements non-culturels ou hors sujet. Merci de votre participation ! 💚</p>
+        </div>
+        <div id="contributor-charter-actions" class="modal-actions row" data-allow-action hidden>
+            <button class="modal-btn confirm basic" data-action="close-modal">Annuler</button>
+            <button id="charter-publish-btn" class="modal-btn confirm info" data-action="confirm-publish">
+                <span class="material-symbols-outlined" aria-hidden="true">send</span>
+                Publier
+            </button>
         </div>
     </div>
 </div>
