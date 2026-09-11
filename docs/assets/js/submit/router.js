@@ -5,7 +5,7 @@ import {
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -108,6 +108,10 @@ async function handleChange(el) {
             const file = el.files[0];
             if (!file) return;
             await handleImageChoice(file);
+            break;
+
+        case "event-date":
+            updateEndDateBounds();
             break;
 
         default:

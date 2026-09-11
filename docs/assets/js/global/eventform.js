@@ -6,6 +6,7 @@ import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=dev";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
+const MAX_EVENT_DAYS = 7; // maximum span (in days) allowed for a multi-day event
 
 const form = document.getElementById("event-form");
 const categoryChoices = document.getElementById("category-choices");
@@ -15,6 +16,8 @@ const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
 const eventImage = document.getElementById("event-image");
 const deleteImageBtn = document.getElementById("remove-image-btn");
+const eventDateInput = document.getElementById("event_date");
+const endDateInput = document.getElementById("end_date");
 
 let currentImageUrl = null;
 let imageToUpload = null;
@@ -73,6 +76,24 @@ function renderCategoryChoices() {
     });
 }
 
+/* restrict the end date picker to the [event_date+1, event_date+MAX_EVENT_DAYS-1] range */
+export function updateEndDateBounds() {
+    if (!eventDateInput.value) {
+        endDateInput.disabled = true;
+        endDateInput.value = "";
+        endDateInput.removeAttribute("min");
+        endDateInput.removeAttribute("max");
+        return;
+    }
+    endDateInput.disabled = false;
+    const start = new Date(eventDateInput.value + "T00:00:00");
+    endDateInput.min = addDays(start, 1).toLocaleDateString("fr-CA");
+    endDateInput.max = addDays(start, MAX_EVENT_DAYS - 1).toLocaleDateString("fr-CA");
+    if (endDateInput.value && (endDateInput.value < endDateInput.min || endDateInput.value > endDateInput.max)) {
+        endDateInput.value = "";
+    }
+}
+
 /* === EXPORTED FUNCTIONS === */
 export function toggleCategory(el) {
     const key = el.dataset.category;
@@ -104,6 +125,8 @@ export function initEventForm(eventData=null) {
     /* init userTags */
     clearTags();
 
+    updateEndDateBounds();
+
     if (!eventData) return;
 
     /* init form with data */
@@ -119,6 +142,7 @@ export function initEventForm(eventData=null) {
     form.querySelector("#min_age").value = eventData.min_age;
     form.querySelector("#max_age").value = eventData.max_age;
     form.querySelector("#event_date").value = eventData.event_date;
+    updateEndDateBounds();
     if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
     if (eventData.tags) eventData.tags.forEach(t => addTag(t));
     if (eventData.phone) form.querySelector("#phone").value = eventData.phone;
@@ -262,7 +286,9 @@ export function getEventFormPayload() {
             endDate.setCustomValidity("La date de fin doit être à strictement supérieure à la date de début");
         } else {
             nb_days = Math.round((new Date(endDate.value + "T00:00:00") - new Date(eventDate.value + "T00:00:00")) / 86400000) + 1;  // 86400000ms per day
-   
+            if (nb_days > MAX_EVENT_DAYS) {
+                endDate.setCustomValidity(`Un évènement ne peut pas durer plus de ${MAX_EVENT_DAYS} jours`);
+            }
         }
     }
 
