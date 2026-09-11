@@ -2,19 +2,19 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal, 
     openContributorCharterModal
-} from "../global/modal.js?v=8e0d2f2a.b39a9ed";
+} from "../global/modal.js?v=49df20e3.cfefda3";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory
-} from "../global/eventform.js?v=8e0d2f2a.b39a9ed"
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds
+} from "../global/eventform.js?v=49df20e3.cfefda3"
 
 import { 
     addTag, removeLastTag
-} from "../global/tags.js?v=8e0d2f2a.b39a9ed"
+} from "../global/tags.js?v=49df20e3.cfefda3"
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=8e0d2f2a.b39a9ed"
+} from "../global/address.js?v=49df20e3.cfefda3"
 
 import { 
     submitEvent, confirmPublish
@@ -108,6 +108,10 @@ async function handleChange(el) {
             const file = el.files[0];
             if (!file) return;
             await handleImageChoice(file);
+            break;
+
+        case "event-date":
+            updateEndDateBounds();
             break;
 
         default:

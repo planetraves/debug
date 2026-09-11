@@ -538,6 +538,7 @@
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Date de fin</h3>
             <p>Indiquez la date de fin de l'évènement si celui-ci s'étend sur plusieurs jours. Un évènement individuel sur chaque jour sera créé automatiquement.</p>
+            <p><strong>Durée maximum</strong> : 7 jours à partir de la date de début.</p>
             <p><strong>Note</strong> : lorsque vous voudrez supprimer ou éditer l'évènement, il faudra ensuite le faire pour chaque jour séparément.</p>
         </div>
     </div>
@@ -754,7 +755,7 @@
 
             <label class="pico">
                 Date *
-                <input type="date" id="event_date" required>
+                <input type="date" id="event_date" data-change-type="event-date" required>
             </label>
 
             <label id="end_date_container" class="pico" hidden>
@@ -764,7 +765,7 @@
                         <span class="material-symbols-outlined">help</span>
                     </button>
                 </span>
-                <input type="date" id="end_date">
+                <input type="date" id="end_date" disabled>
             </label>
 
             <label class="pico">
@@ -853,7 +854,7 @@
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/edit_event/router.js?v=8e0d2f2a.b39a9ed"></script>
+<script type="module" defer src="../assets/js/edit_event/router.js?v=49df20e3.cfefda3"></script>
 <html data-theme="light">
 
 
@@ -955,13 +956,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=8e0d2f2a.b39a9ed"></script>
+        <script src="../assets/js/global/config.js?v=49df20e3.cfefda3"></script>
       
-        <script src="../assets/js/global/helper.js?v=8e0d2f2a.b39a9ed"></script>
+        <script src="../assets/js/global/helper.js?v=49df20e3.cfefda3"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=8e0d2f2a.b39a9ed"></script>
+        <script src="../assets/js/global/user_profile.js?v=49df20e3.cfefda3"></script>
       
-        <script src="../assets/js/global/supabase.js?v=8e0d2f2a.b39a9ed"></script>
+        <script src="../assets/js/global/supabase.js?v=49df20e3.cfefda3"></script>
       
     
   </body>
