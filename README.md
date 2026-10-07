@@ -11,7 +11,7 @@ Ici se trouve tout le code nécessaire au déploiement du site.
 - [Supabase](https://supabase.com/dashboard/project/jpicbqssqixagnwejefu) : gestion de la base de données, des comptes utilisateur·rice·s, de la sécurité et de l'automatisation.
 - [MkDocs](https://www.mkdocs.org) : générateur de site statique (avec le thème [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)) utilisé pour construire les pages du site.
 - [Resend](https://resend.com) : envoi des emails transactionnels (notifications de modération) via une fonction Edge Supabase.
-- [Python](https://www.python.org) : langage des scripts d'outillage du projet (déploiement, gestion de la base de données via `sbdb.py`).
+- [Python](https://www.python.org) : langage des scripts d'outillage du projet (déploiement, gestion de la base de données via `tools/sbdb/sbdb.py`).
 - [Pico CSS](https://picocss.com) : petite bibliothèque CSS minimaliste utilisée pour la mise en forme des formulaires et éléments d'interface.
 
 ## Développement
@@ -24,7 +24,7 @@ scripts d'outillage sont en Python et tournent dans un environnement virtuel (`v
 - [Python](https://www.python.org/downloads/) 3.10 ou plus, avec `pip`.
 - [Git](https://git-scm.com/).
 - Un jeton d'accès Supabase placé dans `~/.supabase/planetraves.token` (nécessaire
-  pour `sbdb.py` et le déploiement release).
+  pour `tools/sbdb/sbdb.py` et le déploiement release).
 
 ### 2. Activer le projet
 
@@ -74,30 +74,33 @@ Le déploiement génère le site (`mkdocs build`) puis le publie sur GitHub Page
 Le hash du commit courant est injecté dans les URLs des fichiers JS/CSS pour forcer
 le rafraîchissement du cache.
 
-## sbdb.py — outil base de données & Supabase
+## sbdb — outil base de données & Supabase
 
-`sbdb.py` communique avec Supabase directement (Postgres via `psycopg2`) ou via
+`tools/sbdb/sbdb.py` communique avec Supabase directement (Postgres via `psycopg2`) ou via
 l'API de gestion (HTTPS), ce qui contourne les problèmes de proxy/TLS du CLI officiel.
 Il gère deux environnements : `dev` et `prod`.
 
-Commandes principales :
+> 📖 Guide complet (options, workflow DEV -> PROD, limitations, sécurité) :
+> [tools/sbdb/README.md](tools/sbdb/README.md)
+
+Commandes principales (depuis la racine du dépôt) :
 
 | Commande | Description |
 | --- | --- |
-| `py sbdb.py` | dump complet de `dev` |
-| `py sbdb.py dump --env dev` | dump du schéma / des données |
-| `py sbdb.py query --env dev "SELECT ..."` | exécuter une requête SQL |
-| `py sbdb.py exec --env prod --file PATH` | exécuter un `.sql` ou un dossier de dump |
-| `py sbdb.py migrate --from dev --to prod` | recopier `dev` vers `prod` |
-| `py sbdb.py config get --env dev` | récupérer la config auth (URLs, templates…) |
+| `py tools/sbdb/sbdb.py` | dump complet de `dev` |
+| `py tools/sbdb/sbdb.py dump --env dev` | dump du schéma / des données |
+| `py tools/sbdb/sbdb.py query --env dev "SELECT ..."` | exécuter une requête SQL |
+| `py tools/sbdb/sbdb.py exec --env prod --file PATH` | exécuter un `.sql` ou un dossier de dump |
+| `py tools/sbdb/sbdb.py migrate --from dev --to prod` | recopier la structure de `dev` vers `prod` |
+| `py tools/sbdb/sbdb.py config get --env dev` | récupérer la config auth (URLs, templates…) |
 
 Commandes propres à ce projet :
 
 | Commande | Description |
 | --- | --- |
-| `py sbdb.py deploy-function send-email --env dev` | déployer la fonction Edge `send-email` |
-| `py sbdb.py delete-user EMAIL_OU_ID --env dev` | supprimer un compte (cascade sur le profil) |
-| `py sbdb.py update-email EMAIL_OU_ID NOUVEL_EMAIL` | changer l'email d'un compte |
+| `py tools/sbdb/sbdb.py deploy-function send-email --env dev` | déployer la fonction Edge `send-email` |
+| `py tools/sbdb/sbdb.py delete-user EMAIL_OU_ID --env dev` | supprimer un compte (cascade sur le profil) |
+| `py tools/sbdb/sbdb.py update-email EMAIL_OU_ID NOUVEL_EMAIL` | changer l'email d'un compte |
 
 
 > Les opérations utilisent le jeton `~/.supabase/planetraves.token`. Ajoutez `--yes` pour sauter la confirmation des actions

@@ -10,7 +10,7 @@ Commands
 --------
     py sbdb.py                                          full dump of dev (shorthand)
     py sbdb.py dump    [--env dev]  [--out DIR] [--schema public|all] [--schema-only|--data-only] [--clean] [--include-auth] [--include-storage] [--include-config] [--include-all]
-    py sbdb.py exec    [--env prod] --file PATH  [--yes]   PATH is a .sql file or a dump folder
+    py sbdb.py exec    [--env dev] --file PATH  [--yes]   PATH is a .sql file or a dump folder
     py sbdb.py query   [--env dev]  "SELECT ..."  [--json]
     py sbdb.py migrate [--from dev] [--to prod] [--out DIR] [--include-data] [--clean] [--include-auth] [--include-storage] [--include-config] [--include-all] [--yes]
     py sbdb.py config  [get|apply] [--env dev] [--out DIR | --file PATH] [--yes]
@@ -32,8 +32,8 @@ Backends (--backend, default: api)
     api  Supabase Management API via requests (needs SUPABASE_ACCESS_TOKEN)
     pg   direct Postgres connection via psycopg2
 
-planetraves.env (next to this script) is loaded automatically; real environment
-variables take precedence over it.
+planetraves.env (at the project root) is loaded automatically; real environment
+variables take precedence over it. Full guide: tools/sbdb/README.md
 
 Environment variables
     # per environment ENV = DEV | PROD
@@ -63,6 +63,9 @@ from urllib.parse import quote
 
 SCHEMA_DEFAULT = "all"
 BATCH = 500
+
+# this script lives in <root>/tools/sbdb/
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Management API config resources (fetched over HTTPS, absent from the SQL schema)
 _CONFIG_ENDPOINTS = {"auth": "config/auth"}
@@ -365,6 +368,21 @@ def _column_def(col) -> str:
     return " ".join(parts)
 
 
+def _table_ddl(table_sql, cols) -> str:
+    lines = [f"\nCREATE TABLE IF NOT EXISTS {table_sql} ();"]
+    lines += [f"ALTER TABLE {table_sql} ADD COLUMN IF NOT EXISTS {_column_def(c)};" for c in cols]
+    sync = []
+    for c in cols:
+        name = qi(c["column_name"])
+        if not c.get("identity"):
+            default = c.get("default_expr")
+            sync.append(f"ALTER COLUMN {name} " + (f"SET DEFAULT {default}" if default else "DROP DEFAULT"))
+        sync.append(f"ALTER COLUMN {name} {'SET' if c.get('not_null') else 'DROP'} NOT NULL")
+    if sync:
+        lines.append(f"ALTER TABLE {table_sql}\n    " + ",\n    ".join(sync) + ";")
+    return "\n".join(lines) + "\n"
+
+
 def _dump_enums(backend, schema, out):
     rows = backend.fetch(f"""
         SELECT t.typname AS name, e.enumlabel AS label
@@ -478,16 +496,24 @@ def _dump_indexes(backend, schema, out):
 
 def _dump_views(backend, schema, out):
     rows = backend.fetch(f"""
-        SELECT viewname AS name, definition AS def
-        FROM pg_views WHERE schemaname = '{schema}'
-        ORDER BY viewname
+        SELECT v.viewname AS name, v.definition AS def,
+               array_to_string(c.reloptions, ', ') AS options
+        FROM pg_views v
+        JOIN pg_namespace n ON n.nspname = v.schemaname
+        JOIN pg_class c ON c.relname = v.viewname AND c.relnamespace = n.oid
+        WHERE v.schemaname = '{schema}'
+        ORDER BY v.viewname
     """)
     if not rows:
         return
-    out.write("\n-- Views\n")
+    # drop then recreate: CREATE OR REPLACE cannot remove or reorder view columns
+    out.write("\n-- Views (dropped and recreated; grants are reapplied in 98_grants)\n")
+    for r in rows:
+        out.write(f"DROP VIEW IF EXISTS {qq(schema, r['name'])} CASCADE;\n")
     for r in rows:
         body = r["def"].rstrip().rstrip(";")
-        out.write(f"CREATE OR REPLACE VIEW {qq(schema, r['name'])} AS\n{body};\n")
+        opts = f" WITH ({r['options']})" if r.get("options") else ""
+        out.write(f"\nCREATE VIEW {qq(schema, r['name'])}{opts} AS\n{body};\n")
 
 
 def _dump_triggers(backend, schema, out, user_only=False):
@@ -794,11 +820,11 @@ def do_dump(backend, schema, outdir, *, schema_only=False, data_only=False, clea
                 out.write(f"CREATE SCHEMA IF NOT EXISTS {qi(s)};\n")
 
     def _tables(out):
-        out.write("-- Tables\n")
+        out.write("-- Tables (re-runnable: creates missing tables/columns, syncs defaults and NOT NULL;\n"
+                  "--         never drops, renames or retypes columns)\n")
         for s in schemas:
             for table in sorted(tables[s]):
-                body = ",\n    ".join(_column_def(c) for c in tables[s][table])
-                out.write(f"CREATE TABLE IF NOT EXISTS {qq(s, table)} (\n    {body}\n);\n")
+                out.write(_table_ddl(qq(s, table), tables[s][table]))
 
     def _seqs(out):
         out.write("-- Sequences\n")
@@ -957,7 +983,7 @@ def cmd_dump(args) -> int:
     _resolve_include_all(args)
     backend = make_backend(args.backend, args.env)
     out_dir = args.out or os.path.join(
-        "dump", f"{args.env}_{datetime.datetime.now():%Y%m%d_%H%M%S}"
+        PROJECT_ROOT, "dump", f"{args.env}_{datetime.datetime.now():%Y%m%d_%H%M%S}"
     )
     do_dump(
         backend, args.schema, out_dir,
@@ -1000,9 +1026,7 @@ def cmd_config(args) -> int:
 
 def cmd_deploy_function(args) -> int:
     api = ApiBackend(args.env)
-    root = args.path or os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "supabase", "functions", args.slug
-    )
+    root = args.path or os.path.join(PROJECT_ROOT, "supabase", "functions", args.slug)
     if not os.path.isdir(root):
         error(f"function folder not found: {root}")
         return 1
@@ -1120,7 +1144,7 @@ def cmd_migrate(args) -> int:
     _resolve_include_all(args)
     src = make_backend(args.backend, getattr(args, "from"))
     out_dir = args.out or os.path.join(
-        "dump", f"migrate_{getattr(args, 'from')}_to_{args.to}_{datetime.datetime.now():%Y%m%d_%H%M%S}"
+        PROJECT_ROOT, "dump", f"migrate_{getattr(args, 'from')}_to_{args.to}_{datetime.datetime.now():%Y%m%d_%H%M%S}"
     )
     do_dump(src, args.schema, out_dir, clean=args.clean,
             schema_only=not args.include_data,
@@ -1169,7 +1193,7 @@ def _print_table(rows):
 # CLI
 # -----------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Supabase DB dump / migrate tool")
+    parser = argparse.ArgumentParser(description="Supabase DB dump / migrate tool (see tools/sbdb/README.md)")
     parser.add_argument("--backend", choices=["pg", "api"], default="api")
     parser.add_argument("--schema", default=SCHEMA_DEFAULT,
                         help='schema to dump, or "all" for every user schema')
@@ -1197,7 +1221,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_dump.set_defaults(func=cmd_dump)
 
     p_exec = sub.add_parser("exec", help="run a .sql file or dump folder against a project")
-    p_exec.add_argument("--env", default="prod")
+    p_exec.add_argument("--env", default="dev")
     p_exec.add_argument("--file", required=True, help="a .sql file or a dump folder")
     p_exec.add_argument("--yes", action="store_true")
     p_exec.set_defaults(func=cmd_exec)
@@ -1259,8 +1283,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _load_env_file():
-    """Load KEY=VALUE lines from planetraves.env next to this script (env wins if set)."""
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "planetraves.env")
+    """Load KEY=VALUE lines from <root>/planetraves.env (env wins if set)."""
+    path = os.path.join(PROJECT_ROOT, "planetraves.env")
     try:
         with open(path, "r", encoding="utf-8") as f:
             lines = f.readlines()
