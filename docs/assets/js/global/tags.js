@@ -35,6 +35,8 @@ function renderTags() {
     });
 
     tagInput.value = "";
+    // tag list changed programmatically; notify listeners (e.g. clear validation errors)
+    tagInput.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 

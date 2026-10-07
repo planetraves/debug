@@ -24,6 +24,37 @@ let imageToUpload = null;
 let selectedCategories = new Set();
 
 /* === LOCAL FUNCTIONS === */
+function clearFieldError(el) {
+    el.classList.remove("field-invalid");
+    el.removeAttribute("aria-invalid");
+    const msg = el.parentElement?.querySelector(`.field-error-msg[data-for="${el.id || el.name}"]`);
+    if (msg) msg.remove();
+}
+
+/* mark every invalid field with an inline message, returns the first one */
+function markInvalidFields() {
+    form.querySelectorAll(".field-invalid").forEach(clearFieldError);
+    let first = null;
+    Array.from(form.elements).forEach(el => {
+        if (!el.willValidate || el.validity.valid) return;
+        if (!first) first = el;
+        el.classList.add("field-invalid");
+        el.setAttribute("aria-invalid", "true");
+        const msg = document.createElement("small");
+        msg.className = "field-error-msg";
+        msg.dataset.for = el.id || el.name;
+        msg.textContent = el.validationMessage;
+        el.insertAdjacentElement("afterend", msg);
+    });
+    return first;
+}
+
+function focusField(el) {
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.focus({ preventScroll: true });
+}
+
 async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -95,6 +126,10 @@ export function updateEndDateBounds() {
 }
 
 /* === EXPORTED FUNCTIONS === */
+export function onFieldEdited(el) {
+    if (el.classList?.contains("field-invalid")) clearFieldError(el);
+}
+
 export function toggleCategory(el) {
     const key = el.dataset.category;
     if (selectedCategories.has(key)) {
@@ -112,6 +147,7 @@ export function toggleCategory(el) {
 /* === EXPORTED FUNCTIONS === */
 export function initEventForm(eventData=null) {
     form.reset()
+    form.querySelectorAll(".field-invalid").forEach(clearFieldError);
     currentImageUrl = null;
     imageToUpload = null;
 
@@ -236,6 +272,8 @@ export function getEventFormPayload() {
     const eventDate = form.querySelector("#event_date");
     const endDate = form.querySelector("#end_date");
     const phoneInput = form.querySelector("#phone");
+    const minAgeInput = form.querySelector("#min_age");
+    const maxAgeInput = form.querySelector("#max_age");
     const long_description = form.querySelector('#long_description').value
     const start_time = form.querySelector('#event_start_time').value;
     const toEat = form.querySelector('input[name="to_eat"]').checked;
@@ -254,6 +292,7 @@ export function getEventFormPayload() {
     eventDate.setCustomValidity("");
     endDate.setCustomValidity("");
     minPrice.setCustomValidity("");
+    maxAgeInput.setCustomValidity("");
 
     /* check phone number */
     if (phoneInput.value && (phoneInput.value != "")) {
@@ -273,6 +312,12 @@ export function getEventFormPayload() {
     /* check userTags */
     if (userTags.length > 4) {
         tagInput.setCustomValidity("Maximum 4 tags");
+    }
+    /* require at least one tag (ignoring the internal "is_test" marker) */
+    const tags = userTags.map((t) => t.trim().toLowerCase())
+        .filter(Boolean);
+    if (tags.filter((t) => t !== "is_test").length === 0) {
+        tagInput.setCustomValidity("Au moins un tag est requis");
     }
 
     // check dates
@@ -304,9 +349,17 @@ export function getEventFormPayload() {
         }
     }
 
+    /* check ages */
+    const min_age = minAgeInput.value.trim() === "" ? null : Number(minAgeInput.value);
+    const max_age = maxAgeInput.value.trim() === "" ? null : Number(maxAgeInput.value);
+    if (min_age !== null && max_age !== null && min_age > max_age) {
+        maxAgeInput.setCustomValidity("L'âge maximum doit être supérieur ou égal à l'âge minimum");
+    }
+
     /* report form validity */
-    if (!form.checkValidity()) {
-        form.reportValidity(); // shows native errors
+    const firstInvalid = markInvalidFields();
+    if (firstInvalid) {
+        openErrorModal("Le formulaire contient des erreurs", null, () => focusField(firstInvalid));
         return;
     };
 
@@ -314,15 +367,6 @@ export function getEventFormPayload() {
     console.log("selectedCategories:", selectedCategories);
     if (selectedCategories.size === 0) {
         openErrorModal("Choisissez au moins une catégorie");
-        return;
-    }
-        
-    const tags = userTags.map((t) => t.trim().toLowerCase())
-        .filter(Boolean);
-
-    /* require at least one tag (ignoring the internal "is_test" marker) */
-    if (tags.filter((t) => t !== "is_test").length === 0) {
-        openErrorModal("Ajoutez au moins un tag");
         return;
     }
 
@@ -349,8 +393,8 @@ export function getEventFormPayload() {
         phone: phoneNumber,
         email: form.querySelector("#email").value,
         site_url: form.querySelector('#site_url').value,
-        min_age: form.querySelector('#min_age').value.trim() === "" ? null : Number(form.querySelector('#min_age').value),
-        max_age: form.querySelector('#max_age').value.trim() === "" ? null : Number(form.querySelector('#max_age').value),
+        min_age: min_age,
+        max_age: max_age,
         to_eat: toEat
     }
 

@@ -3,6 +3,54 @@
    Back button and image delete button.
    ============================================================ */
 
+#event-form .field-invalid {
+  border-color: var(--primary-error) !important;
+  box-shadow: 0 0 0 2px var(--primary-error--lighter);
+}
+
+#event-form .field-error-msg {
+  position: relative;
+  display: table;
+  max-width: 100%;
+  margin-top: 0rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--primary-error--text);
+  background: var(--primary-error--lighter);
+  border: 1px solid var(--primary-error);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  animation: field-error-pop 0.15s ease-out;
+}
+
+/* bubble tail: outer triangle = border, inner triangle = fill */
+#event-form .field-error-msg::before,
+#event-form .field-error-msg::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  border: solid transparent;
+}
+
+#event-form .field-error-msg::before {
+  top: -7px;
+  border-width: 0 7px 7px 7px;
+  border-bottom-color: var(--primary-error);
+}
+
+#event-form .field-error-msg::after {
+  top: -5px;
+  left: 13px;
+  border-width: 0 6px 6px 6px;
+  border-bottom-color: var(--primary-error--lighter);
+}
+
+@keyframes field-error-pop {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .back-btn {
   display: inline-flex;
   align-items: center;

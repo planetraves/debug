@@ -5,7 +5,7 @@ import {
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, onFieldEdited
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -148,6 +148,7 @@ document.addEventListener("keydown", async (event) => {
 });
 
 document.addEventListener("input", (event) => {
+    onFieldEdited(event.target); // clear inline validation error of the edited field
     const el = event.target.closest("[data-input-type]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
@@ -155,6 +156,7 @@ document.addEventListener("input", (event) => {
 });
 
 document.addEventListener("change", (event) => {
+    onFieldEdited(event.target); // clear inline validation error of the edited field
     const el = event.target.closest("[data-change-type]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
