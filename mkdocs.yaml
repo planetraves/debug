@@ -7,8 +7,8 @@ site_url: https://planetraves.fr
 
 theme:
   name: material
-  favicon: assets/images/logo2.ico
-  logo: assets/images/logo2.png
+  favicon: assets/images/logo.ico
+  logo: assets/images/logo.png
   custom_dir: docs/assets
   palette:
     - scheme: default
