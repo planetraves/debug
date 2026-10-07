@@ -91,6 +91,8 @@ export function selectAddress(el) {
     els.input.value = props.name || props.label || els.input.value;
     if (els.codeInput) els.codeInput.value = props.postcode || "";
     if (els.townInput) els.townInput.value = props.city || "";
+    // programmatic value changes don't fire "input"; notify listeners (e.g. clear validation errors)
+    [els.codeInput, els.townInput].forEach(i => i?.dispatchEvent(new Event("input", { bubbles: true })));
     if (els.input) els.input.classList.remove("looking");
     hideAddressSuggestions();
 }

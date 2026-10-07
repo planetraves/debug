@@ -41,6 +41,7 @@ let currentModal = null;
 let sessionProfile = null;
 let eventModalType = null;
 let reasonRequired = false;
+let errorModalOnClose = null;
 
 // Predefined moderation motives shown as checkboxes in the confirm modal.
 const MODERATION_REASONS = {
@@ -69,6 +70,9 @@ function closeSuccessModal() {
 function closeErrorModal() {
     errorModal.classList.add("hidden");
     document.body.style.overflow = "";
+    const onClose = errorModalOnClose;
+    errorModalOnClose = null;
+    if (onClose) onClose();
 }
 
 function closeCurrentModal() {
@@ -258,7 +262,8 @@ export function openSuccessModal(text) {
     document.body.style.overflow = "hidden";
 }
 
-export function openErrorModal(text, message=null) {
+export function openErrorModal(text, message=null, onClose=null) {
+    errorModalOnClose = onClose;
     errorModal.querySelector("#text").innerText = text;
     if (message !== null) {
         errorModal.querySelector("#message").innerText = message;
@@ -600,9 +605,9 @@ export async function confirm(action) {
     closeConfirmModal();
     closeCurrentModal();
     
-    // setTimeout(function () {
-    //     window.location.reload();
-    // }, 3000);
+    setTimeout(function () {
+        window.location.reload();
+    }, 3000);
 }
 
 export function closeModal(target) {
