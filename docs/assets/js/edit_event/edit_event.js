@@ -100,6 +100,7 @@ export async function editEvent() {
     payload.pending = user_profile.role == 0;
     // payload.created_by = user_profile?.id ?? null;
     // payload.creator_name = user_profile?.name ?? null;
+    // payload.creator_email = user_profile?.email ?? null;
     payload.image_url = imageUrl;
     console.log("submit event payload (for edit):", payload);
 

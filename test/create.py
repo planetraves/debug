@@ -128,8 +128,9 @@ def format_event_payload(day_delta, category, title, pending):
 
     return {
         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
-        "creator_name": "Olivier Gohier",
-        "email": random.choice([None, "olivier.gohier@protonmail.com"]),
+        "creator_name": "Planet Raves Test",
+        "creator_email": "planetraves@gmail.com",
+        "email": random.choice([None, "planetraves@gmail.com"]),
         "title": title,
         "is_test": True,
         "category": category,
