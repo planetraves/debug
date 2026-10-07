@@ -600,9 +600,9 @@ export async function confirm(action) {
     closeConfirmModal();
     closeCurrentModal();
     
-    // setTimeout(function () {
-    //     window.location.reload();
-    // }, 3000);
+    setTimeout(function () {
+        window.location.reload();
+    }, 3000);
 }
 
 export function closeModal(target) {

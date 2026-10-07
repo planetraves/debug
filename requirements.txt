@@ -2,6 +2,7 @@ supabase
 keyring
 psycopg2-binary
 requests
+cryptography
 mkdocs<2.0
 mkdocs-material>=9.5
 mkdocs-minify-plugin
