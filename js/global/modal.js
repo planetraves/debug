@@ -138,7 +138,8 @@ async function sendEmail({ to, subject, body, replyTo = null }) {
         console.warn("sendEmail skipped: no recipient");
         return null;
     }
-    console.log("sending email:", { to, subject, replyTo });
+    fileLog("sending email:", { to, subject, replyTo, body });
+    console.log("sending email:", { to, subject, replyTo, body });
     const { error } = await window.supabaseClient.functions.invoke("send-email", {
         body: { to, subject, body, from: `${APP_CONFIG.EMAIL_NAME} <${APP_CONFIG.EMAIL_ADDRESS}>`, replyTo },
     });
@@ -170,6 +171,7 @@ ${formatReason(reason)}Si vous n'êtes pas d'accord avec cette décision, vous p
 L'équipe Planet Raves`;
 
     // Surface a failed notification to the caller so it shows the error modal.
+    fileLog("deleting event:", { event: event });
     return await sendEmail({ to: event.creator_email ?? null, subject, body, replyTo: sessionProfile?.email ?? null });
 }
 

@@ -1,7 +1,7 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal, openContributorCharterModal } from "../global/modal.js?v=ce21a0cd.6f07b29";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=ce21a0cd.6f07b29";
+import { openErrorModal, openSuccessModal, openContributorCharterModal } from "../global/modal.js?v=7b7847d2.6feffaa";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=7b7847d2.6feffaa";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -118,6 +118,7 @@ export async function confirmPublish() {
         payload.pending = user_profile.role == 0
         payload.created_by = user_profile?.id ?? null
         payload.creator_name = user_profile?.name ?? null;
+        payload.creator_email = user_profile?.email ?? null;
         payload.image_url = imageUrl
         payload.is_test = APP_CONFIG.DEV
         console.log("submit event payload:", payload)
