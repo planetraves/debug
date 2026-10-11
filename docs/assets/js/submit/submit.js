@@ -140,11 +140,15 @@ export async function confirmPublish() {
     pendingEvent = null;
     window.scrollTo(0, 0);
     form.reset();
-    openSuccessModal("Évènement publié ! Retour à la liste des évènements automatiquement.")
+    
+    const nonOfficialContributor = user_profile.role == 0;
+    openSuccessModal(nonOfficialContributor
+        ? "Évènement proposé et en cours de validation. Il sera publié sous 3 jours. Retour à la liste des évènements automatiquement."
+        : "Évènement publié ! Retour à la liste des évènements automatiquement.");
 
     setTimeout(function () {
         window.location.href = "..";
-    }, 3000);
+    }, nonOfficialContributor ? 5000 : 3000);
     
 }
 
