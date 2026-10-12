@@ -21,7 +21,7 @@
     --primary-link--active:             #311b92;
     --primary-notice--bg:               #f8f9fd;  
     --primary-notice--text:             #1a237e;
-    --primary-title:                    #870d54;
+    --primary-title:                    #687aa0; /*#870d54;*/
 
     --primary-gray:                     #aaaaaa;
     --primary-dark: #0D2C87;
@@ -47,7 +47,6 @@
     --primary-basic:                    #48536B;
     --primary-basic--lighter:           #DFE3EB;
     --primary-basic--text:              #48536B;
-    
     
     --primary-option:                   #0D2C87;
     --primary-option--light:            #F3ECE9;

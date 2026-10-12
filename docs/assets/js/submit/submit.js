@@ -1,6 +1,6 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal, openContributorCharterModal } from "../global/modal.js?v=dev";
+import { openErrorModal, openSuccessModal, openPublicationCharterModal } from "../global/modal.js?v=dev";
 import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=dev";
 
 /* === VARIABLES === */
@@ -8,9 +8,6 @@ const loading = document.getElementById("loading-screen");
 // keep the spinner outside the .ready-gated content so it stays visible while loading
 document.body.appendChild(loading);
 const form = document.getElementById("event-form");
-const accountDetail = document.getElementById("account-detail");
-const accountRole = document.getElementById("account-role");
-const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
 
 let user_profile = null;
@@ -38,41 +35,13 @@ function showSubmit(user, profile) {
     user_profile = profile;
     
     /* configure roles */
-    accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
-    permissionDetails.innerHTML = renderAccountPermissionDetails();
-    const permissionOfficial = permissionDetails.querySelector("#permission-official");
-    const permissionAdmin = permissionDetails.querySelector("#permission-admin");
-
-    switch(user_profile.role) {
-        case 0: /* non official */
-            permissionOfficial.classList.add("denied");
-            permissionOfficial.classList.remove("granted");
-            permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.hidden = true;
-            break;
-        
-        case 1: /* official */
-            permissionOfficial.classList.remove("denied");
-            permissionOfficial.classList.add("granted");
-            permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.hidden = true;
-            break;
-
-        case 2:
-        case 3: /* moderateur/admin */
-            permissionOfficial.classList.remove("denied");
-            permissionOfficial.classList.add("granted");
-            permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.hidden = false;
-            break;
-        
-        default:
-            permissionOfficial.classList.add("denied");
-            permissionOfficial.classList.remove("granted");
-            permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.hidden = true;
+    const basicContribText = document.querySelector(".text-basic-contributor");
+    if (user_profile.role == 0) {
+        basicContribText.classList.remove("hidden");
+    } else {
+        basicContribText.classList.add("hidden");
     }
-
+    
     /* initialize form */
     initEventForm();
     form.querySelector("#end_date_container").hidden = false;
@@ -80,7 +49,6 @@ function showSubmit(user, profile) {
     form.querySelector("#cancel-btn").disabled = true;
 
     /* show page */
-    accountDetail.hidden = false;
     submitContainer.hidden = false;
     loading.style.display = "none";
     document.documentElement.classList.add("ready");
@@ -93,7 +61,7 @@ export async function submitEvent() {
     if (!new_event) return;
 
     pendingEvent = new_event;
-    openContributorCharterModal(true);
+    openPublicationCharterModal(true);
 }
 
 export async function confirmPublish() {

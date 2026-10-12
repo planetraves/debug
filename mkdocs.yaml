@@ -62,6 +62,7 @@ nav:
 # Hidden redirect page (kept out of nav/tabs/menus on purpose)
 not_in_nav: |
   /taches.md
+  /textes.md
 
 extra_javascript:
   - https://unpkg.com/@supabase/supabase-js@2

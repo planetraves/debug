@@ -11,59 +11,27 @@ APP_CONFIG = {
     EMAILCONFIRMED_REDIRECT_URL: SITE_URL + "/account_confirmed/",
     RESETPWD_REDIRECT_URL: SITE_URL + "/account_reset_pwd/",
     ROLES: {
-        0: "Non-Officiel",
-        1: "Officiel",
+        0: "Contributeur·rice",
+        1: "Contributeur·rice pro",
         2: "Modérateur·rice",
         3: "Admin"
     },
     USER_STATUS: {
         0: {
-            "label": "Particulier·ère",
-            "example": ["habitant·e"]
+            "label": "Personne individuelle",
+            "example": ["bénévole", "adhérent.e d'association", "artistes", "auteur.ices"]
         },
         1: {
-            "label": "Acteur·rice individuel·le",
-            "example": ["artiste indépendant·e", "Auteur·rice / Écrivain·e", "Musicien·ne", "Dj", "Performeur·euse"]
+            "label": "Organisme professionnel du secteur culturel",
+            "example": ["lieu culturel", "compagnie", "collectif d'artiste", "association", "société de production", "entrepreneur culturel"]
         },
         2: {
-            "label": "Organisation artistique",
-            "example": ["compagnie", "orchestre", "groupe de musique", "collectif", "troupe"]
+            "label": "Organisme professionnel hors secteur culturel",
+            "example": ["bar", "restaurant", "ERP divers", "association"]
         },
         3: {
-            "label": "Structure évènementielle",
-            "example": ["société de production", "agence", "festival", "programmateur·rice", "organisateur·rice"]
-        },
-        4: {
-            "label": "Lieu culturel privé",
-            "example": ["théatre", "salle de concert", "bar", "galerie", "cinéma"]
-        },
-        5: {
-            "label": "Lieu public",
-            "example": ["médiathèque", "musée", "théatree", "centre", "MJC"]
-        },
-        6: {
-            "label": "Collectif",
-            "example": ["collectif artistique", "groupe citoyen", "réseau militant"]
-        },
-        7: {
-            "label": "Acteur·rice du patrimoine et du tourisme",
-            "example": ["office de tourisme", "site patrimonial", "parc historique"]
-        },
-        8: {
-            "label": "Média culturel",
-            "example": ["radio", "TV", "platefrom numérique", "label", "maison d'édition", "studio"]
-        },
-        9: {
-            "label": "Acteur·rice social·e",
-            "example": ["centre social", "maison de quartier", "structure", "animateur·rice culturel·le", "réseau éducatif", "EHPAD", "MJC", "ONG"]
-        },
-        10: {
-            "label": "Association",
-            "example": []
-        },
-        11: {
-            "label": "Autre",
-            "example": []
+            "label": "Organisme public",
+            "example": ["service culturel municipal", "médiathèque", "musée", "MJC"]
         }
     },
     CATEGORIES: {
@@ -127,7 +95,7 @@ APP_CONFIG = {
             "codes": ["81630"]
         },
         2: {
-            "label": "Ailleurs",
+            "label": "Aux alentours",
             "icon": "explore_nearby"
         }
     },

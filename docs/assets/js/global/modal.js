@@ -8,7 +8,7 @@ const endDateHelpModal = document.getElementById("end-date-help-modal");
 const categoryHelpModal = document.getElementById("category-help-modal");
 const areaHelpModal = document.getElementById("area-help-modal");
 const viewHelpModal = document.getElementById("view-help-modal");
-const contributorCharterModal = document.getElementById("contributor-charter-modal");
+const publicationCharterModal = document.getElementById("publication-charter-modal");
 const moderatorCharterModal = document.getElementById("moderator-charter-modal");
 
 const eventModal = document.getElementById("event-modal");
@@ -304,11 +304,11 @@ export function openViewHelpModal() {
     document.body.style.overflow = "hidden";
 }
 
-export function openContributorCharterModal(withPublish = false) {
+export function openPublicationCharterModal(withPublish = false) {
     // withPublish shows the Annuler/Publier footer (publish confirmation flow)
-    const actions = document.getElementById("contributor-charter-actions");
+    const actions = document.getElementById("publication-charter-actions");
     if (actions) actions.hidden = !withPublish;
-    contributorCharterModal.classList.remove("hidden");
+    publicationCharterModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 

@@ -184,7 +184,7 @@
     color: #b0b0b0;
 }
 
-.role-request {
+/* .role-request {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -194,6 +194,61 @@
 .role-request-text {
     margin: 0;
     color: #666;
+} */
+
+
+.role-request-btn {
+    /* margin: 0.2rem auto 0; */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--primary-link);
+    transition: color 0.15s ease;
+    font-size: 0.65rem;
+    text-align: left;
+    white-space: normal;
+}
+
+.role-request-btn .material-symbols-outlined {
+    flex-shrink: 0;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.role-request-btn:hover {
+    background: transparent;
+    color: var(--primary-link--hover);
+}
+
+.role-request-btn:focus-visible {
+    outline: 2px solid var(--primary-link);
+    outline-offset: 3px;
+}
+
+.text-basic-contributor.hidden {
+    display: none;
+}
+
+.text-basic-contributor hr {
+    width: 20vw;
+    max-width: 100%;
+    height: 0;
+    margin: 1rem auto;
+    border: 0;
+    border-top: 1px solid var(--primary-notice--text);
+    background: transparent;
+    box-shadow: none;
+    opacity: 1;
 }
 
 .role-request.hidden {

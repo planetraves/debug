@@ -47,9 +47,18 @@
     color: var(--primary-notice--text);
 }
 
+.notice-text.hidden {
+    display: none;
+}
+
 .notice-text a {
     color: var(--primary-link);
     cursor: pointer;
+}
+
+.notice-text.about {
+    text-align: justify;
+    text-justify: newspaper;
 }
 
 .notice-btn {
@@ -72,6 +81,13 @@
 
 .notice-btn .material-symbols-outlined {
     font-size: 1.1rem;
+}
+
+.notice-btn {
+    margin-top: 0.5rem;
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
 }
 
 .notice-btn:hover {

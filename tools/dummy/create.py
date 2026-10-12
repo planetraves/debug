@@ -192,7 +192,7 @@ def generate_users(n: int):
             "name": f"{USER_NAME_PREFIX} {i}",
             "pwd": f"{USER_EMAIL_PREFIX}{i}",
             "role": role,
-            "status": random.randrange(12),
+            "status": random.randrange(4),
             "official_request": official_request,
             "official_request_details": official_request_details
         }
