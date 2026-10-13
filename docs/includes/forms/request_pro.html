@@ -1,0 +1,51 @@
+<div id="request-container" class="page-container" hidden>
+    <section id="notice-tile" class="notice-tile">
+        <div class="notice-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">info</span>
+            <span id="title">Demander un compte pro</span>
+        </div>
+        
+        <p class="notice-text about">
+            Vous souhaitez devenir contributeur·rice <strong>pro</strong> et publier instantanément.
+            Nous vous rassurons, c'est gratuit.
+        </p>
+        <p class="notice-text about">
+            Un contributeur pro est un professionnel du secteur culturel ou tout autre type d'organisme qui produit
+            au moins 3 événements artistiques & culturels distincts annuels sur le territoire et aux alentours. 
+        </p>
+        <p class="notice-text about">    
+            <strong>Présentez-nous</strong> votre structure et les événements que vous organisez en quelques lignes : quels genre d'évènements
+            avez vous l'habitude de programmer, pour quel type de public, à quelle fréquence, etc...<br>
+            
+            Pensez à préciser votre <strong>raison sociale</strong> et le lieu de <strong>siège social</strong>,
+            et n'hésitez pas à partager des exemples d'événements !
+        </p>
+
+    </section>
+
+    <article class="submit-tile" data-allow-action>
+        <form id="request-form">
+            <label class="pico">
+                Description de votre demande
+                <div class="textarea-wrapper">
+                    <textarea
+                        class="details-textarea"
+                        id="details-input"
+                        placeholder="minimum 100 charactères"
+                        minlength="100"
+                        rows="8"
+                        data-input-type="request-details"
+                    ></textarea>
+                    <div class="char-counter">
+                        <span id="request-char-count">0</span>/100
+                    </div>
+                </div>
+            </label>
+
+            <label class="pico">
+                <button type="submit" id="button" data-action="send-request">Envoyer</button>
+            </label>
+        </form>
+
+    </article>
+</div>

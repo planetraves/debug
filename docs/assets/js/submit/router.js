@@ -78,6 +78,11 @@ async function handleClick(el, e) {
             openPublicationCharterModal();
             break;
 
+
+        case "open-request-pro":
+            window.location.href = `../request_pro`;
+            break;
+
         default:
             console.warn("unknown 'click' action:", el.dataset.action)
     }

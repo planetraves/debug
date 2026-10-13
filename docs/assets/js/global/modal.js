@@ -29,10 +29,10 @@ const confirmReasons = document.getElementById("confirm-reasons");
 const confirmReasonsList = document.getElementById("confirm-reasons-list");
 const confirmReasonText = document.getElementById("confirm-reason-text");
 
-const officialRequestModal = document.getElementById("official-request-modal");
-const officialRequestInput = document.getElementById("details-input");
-const officialRequestCharCount = document.getElementById("request-char-count");
-const officialRequestSendBtn = document.getElementById("modal-official-request-btn");
+// const officialRequestModal = document.getElementById("official-request-modal");
+// const officialRequestInput = document.getElementById("details-input");
+// const officialRequestCharCount = document.getElementById("request-char-count");
+// const officialRequestSendBtn = document.getElementById("modal-official-request-btn");
 
 let generatedCode = null;
 let currentEvent = null;
@@ -462,16 +462,16 @@ export function openEventModal(event, type, user_profile=null) {
     eventModal.scrollTop = 0;
 }
 
-export function openRoleRequestModal(profile) {
-    currentProfile = profile;
-    currentModal = officialRequestModal;
-    officialRequestInput.value = "";
-    officialRequestSendBtn.disabled = true;
-    officialRequestSendBtn.setAttribute("aria-busy", "false");
+// export function openRoleRequestModal(profile) {
+//     currentProfile = profile;
+//     currentModal = officialRequestModal;
+//     officialRequestInput.value = "";
+//     officialRequestSendBtn.disabled = true;
+//     officialRequestSendBtn.setAttribute("aria-busy", "false");
 
-    officialRequestModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-}
+//     officialRequestModal.classList.remove("hidden");
+//     document.body.style.overflow = "hidden";
+// }
 
 export function openConfirmModal(type, action_type) {
     generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
@@ -641,35 +641,35 @@ export function closeModal(target) {
     }
 }
 
-export async function sendOfficialRequest() {
-    if (!currentProfile) return;
+// export async function sendOfficialRequest() {
+//     if (!currentProfile) return;
 
-    // SUPABASE UPDATE PROFILES
-    console.log("Official role request for user", currentProfile);
-    const { error } = await window.supabaseClient
-        .from("profiles")
-        .update({
-            official_request: true,
-            official_request_details: officialRequestInput.value
-        })
-        .eq("id", currentProfile.id); // auth.uid()
+//     // SUPABASE UPDATE PROFILES
+//     console.log("Official role request for user", currentProfile);
+//     const { error } = await window.supabaseClient
+//         .from("profiles")
+//         .update({
+//             official_request: true,
+//             official_request_details: officialRequestInput.value
+//         })
+//         .eq("id", currentProfile.id); // auth.uid()
 
-    if (error) {
-        openErrorModal("Un problème est survenu");
-        console.error(error);
-        return;
-    }
+//     if (error) {
+//         openErrorModal("Un problème est survenu");
+//         console.error(error);
+//         return;
+//     }
 
-    openSuccessModal("Requête envoyée !");
-    closeCurrentModal();
-}
+//     openSuccessModal("Requête envoyée !");
+//     closeCurrentModal();
+// }
 
 export function setConfirmBtnState(target) {
     updateConfirmBtnState();
 }
 
-export function setSendBtnState(target) {
-    officialRequestSendBtn.disabled = target.value.length < 100;
-    officialRequestCharCount.innerText = target.value.length;
-}
+// export function setSendBtnState(target) {
+//     officialRequestSendBtn.disabled = target.value.length < 100;
+//     officialRequestCharCount.innerText = target.value.length;
+// }
 
