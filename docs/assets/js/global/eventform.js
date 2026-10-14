@@ -155,6 +155,7 @@ export function initEventForm(eventData=null) {
     if (eventData.email) eventForm.querySelector("#email").value = eventData.email;
     if (eventData.site_url) eventForm.querySelector("#site_url").value = eventData.site_url;
     if (eventData.to_eat) eventForm.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
+    if (eventData.to_drink) eventForm.querySelector('input[name="to_drink"]').checked = eventData.to_drink;
     priceChoiceList.value = eventData.price;
     if (eventData.price == 2) {
         if (eventData.max_price && (eventData.max_price > 0)) {
@@ -247,6 +248,7 @@ export function getEventFormPayload() {
     const long_description = eventForm.querySelector('#long_description').value
     const start_time = eventForm.querySelector('#event_start_time').value;
     const toEat = eventForm.querySelector('input[name="to_eat"]').checked;
+    const toDrink = eventForm.querySelector('input[name="to_drink"]').checked;
 
     /* combine address parts (keeps postal code + town in the saved address) */
     const addressStreet = eventForm.querySelector('#location_address').value.trim();
@@ -365,7 +367,8 @@ export function getEventFormPayload() {
         site_url: eventForm.querySelector('#site_url').value,
         min_age: min_age,
         max_age: max_age,
-        to_eat: toEat
+        to_eat: toEat,
+        to_drink: toDrink
     }
 
     return {payload: payload, nb_days: nb_days}

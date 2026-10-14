@@ -26,7 +26,6 @@ async function initSubmitPage() {
 
 function showLoginWarning() {
     user_profile = null;
-    accountDetail.hidden = true;
     submitContainer.hidden = true;
     window.location.href = `../account/`
 }

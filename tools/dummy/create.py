@@ -148,6 +148,7 @@ def format_event_payload(day_delta, category, title, pending):
         "pending": pending,
         "phone": random.choice([None, "+33 6 01 12 13 14"]),
         "site_url": random.choice([None, "https://rcsculture.github.io"]),
+        "to_drink": random.choice([True, False]),
         "to_eat": random.choice([True, False]),
         "min_age": min_age,
         "max_age": max_age,
@@ -203,7 +204,8 @@ def generate_users(n: int):
 def update_supabase_events(events: list):
     print("update 'events' table...")
     supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, options=OPTIONS)
-    for event in events:
+    for idx, event in enumerate(events):
+        print(f"--> inserting event #{idx + 1}:", event["title"])
         supabase_db.table("events").insert(event,).execute()
 
 

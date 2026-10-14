@@ -293,6 +293,12 @@ function renderEventData(event, details = false) {
                </div>`
             : "";
 
+        eventData.drinkHtml = eventData.to_drink
+            ? `<div class="event-meta">
+                    ${renderMaterialIconText("local_bar", "Buvette sur place")}
+               </div>`
+            : "";
+
         eventData.pendingHtml = eventData.pending
             ? ` <div class="event-meta pending">
                     ${renderMaterialIconText("hourglass_top", "En attente de publication")}

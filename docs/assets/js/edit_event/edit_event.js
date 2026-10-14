@@ -16,7 +16,6 @@ const noticeText = notice.querySelector("#text");
 const loading = document.getElementById("loading-screen");
 const backBtn = document.getElementById("back-btn");
 const form = document.getElementById("event-form");
-const accountDetail = document.getElementById("account-detail");
 const submitContainer = document.getElementById("submit-container");
 
 let user_profile = null;
@@ -49,7 +48,6 @@ async function initEditEventPage() {
 function showLoginWarning() {
     user_profile = null;
     submitContainer.hidden = true;
-    accountDetail.hidden = true;
     window.location.href = `../account/`;
 }
 
@@ -64,8 +62,10 @@ function showEdit(user, profile, event) {
 
     /* show page */
     noticeTitle.innerText = "Editer votre évènement";
-    noticeText.innerHTML = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`;
-    accountDetail.hidden = true;
+    noticeText.innerHTML = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}
+        <br><br>
+        Pour plus d'information sur les critères de publication, nous vous invitons à lire la <strong>charte de publication</strong>. 
+        Elle vise à garder l'agenda utile, culturel et agréable pour tout le monde. `;
     submitContainer.hidden = false;
     backBtn.classList.remove("hidden");
     loading.style.display = "none";
@@ -73,7 +73,16 @@ function showEdit(user, profile, event) {
 
 /* === EXPORTED FUNCTIONS === */
 export function goBack(){
-    window.location.href = `${previousPage}#id=${eventId}&type=myevent`;
+    const currentPage = new URL(window.location.href);
+    const referrer = previousPage ? new URL(previousPage) : null;
+    const referrerIsCurrentPage = referrer
+        && referrer.origin === currentPage.origin
+        && referrer.pathname === currentPage.pathname;
+    const backPage = referrerIsCurrentPage || !referrer ? ".." : previousPage;
+    const backUrl = !previousPage || !eventId ? ".." : `${backPage}#id=${eventId}&type=myevent`;
+
+    console.log("Going back to previous page:", backUrl);
+    window.location.href = backUrl;
 }
 
 export async function editEvent() {

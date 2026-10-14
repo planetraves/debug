@@ -436,6 +436,7 @@ export function openEventModal(event, type, user_profile=null) {
                 ${eventData.locationAddressHtml}
             </div>
             ${eventData.eatHtml}
+            ${eventData.drinkHtml}
             ${eventData.siteUrlHtml}
             ${eventData.phoneHtml}
             ${eventData.emailHtml}

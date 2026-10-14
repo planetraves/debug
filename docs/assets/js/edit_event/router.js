@@ -78,8 +78,12 @@ async function handleClick(el, e) {
             openCategoryHelpModal();
             break;
 
-        case "open-contributor-charter":
+        case "open-publication-charter":
             openPublicationCharterModal();
+            break;
+
+        case "open-request-pro":
+            window.location.href = `../request_pro`;
             break;
 
         default:
