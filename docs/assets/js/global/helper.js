@@ -148,138 +148,6 @@ function linkify(text) {
     });
 }
 
-/* === ROLES === */
-function roleId(roleLabel) {
-    for (const [id, label] of Object.entries(APP_CONFIG.ROLES)) {
-        if (label === roleLabel) {
-            return id;
-        }
-    }
-    return null;
-}
-
-/* === CATEGORIES (an event may have several) === */
-function eventCategoryIds(event) {
-    const c = event.category;
-    if (Array.isArray(c)) return c.map(Number).filter(n => !Number.isNaN(n));
-    if (c === null || c === undefined || c === "") return [];
-    if (typeof c === "string") return c.split(",").map(s => Number(s.trim())).filter(n => !Number.isNaN(n));
-    return [Number(c)];
-}
-
-function categoryLabel(ids) {
-    if (!ids || ids.length === 0) return "";
-    if (ids.length > 1) return "Mixte";
-    return APP_CONFIG.CATEGORIES[ids[0]]["label"];
-}
-
-function categoryPrimaryId(ids) {
-    return (ids && ids.length) ? ids[0] : 0;
-}
-
-/* === AREA (derived from the event postal code) === */
-function eventAreaId(event) {
-    const code = String(event.location_address_code ?? "").trim();
-    let fallback = null;
-    for (const key of Object.keys(APP_CONFIG.AREAS)) {
-        const codes = APP_CONFIG.AREAS[key]["codes"];
-        if (!codes) { fallback = key; continue; }  // area without codes = "Ailleurs"
-        if (codes.includes(code)) return key;
-    }
-    return fallback;
-}
-
-/* pie ("camembert") background of all category colors; solid when only one */
-function categoryPieBackground(ids) {
-    if (!ids || ids.length === 0) return APP_CONFIG.CATEGORIES[0]["color"];
-    if (ids.length === 1) return APP_CONFIG.CATEGORIES[ids[0]]["color"];
-    const slice = 360 / ids.length;
-    const stops = ids.map((id, i) =>
-        `${APP_CONFIG.CATEGORIES[id]["color"]} ${i * slice}deg ${(i + 1) * slice}deg`
-    );
-    // start at 45° so 2/4-way splits land on diagonals, not the vertical/horizontal axes
-    return `conic-gradient(from 45deg, ${stops.join(", ")})`;
-}
-
-/* inline text color for a category label; gradient across all colors when "Mixte" */
-function categoryTextStyle(ids) {
-    if (!ids || ids.length <= 1) {
-        const color = APP_CONFIG.CATEGORIES[(ids && ids[0]) || 0]["color"];
-        return `color: ${color};`;
-    }
-    const stops = ids.map(id => APP_CONFIG.CATEGORIES[id]["color"]).join(", ");
-    return `background: linear-gradient(90deg, ${stops}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;`;
-}
-
-
-
-function renderAccountPermissionDetails() {
-    return `
-        <div class="detail-section-list">
-            <div class="permission granted">
-                <span id="icon" class="material-symbols-outlined">check</span>
-                Publier des évènements
-            </div>
-            <div class="permission granted">
-                <span id="icon" class="material-symbols-outlined">check</span>
-                Editer vos évènements
-            </div>
-            <div id="permission-pro" class="permission denied">
-                <span id="icon" class="material-symbols-outlined">lock</span>
-                Publier instantanément (sans délais de 3 jours)
-            </div>
-        </div>
-        <div id="permission-admin" class="detail-section-list hidden">
-            <div class="permission granted">
-                <span id="icon" class="material-symbols-outlined">check</span>
-                Modération: accepter/refuser une nouvelle publication
-            </div>
-            <div class="permission granted">
-                <span id="icon" class="material-symbols-outlined">check</span>
-                Modération: accepter/refuser une requête contributeur·rice "Officiel"
-            </div>
-            <div class="permission granted">
-                <span id="icon" class="material-symbols-outlined">check</span>
-                Modération: supprimer n'importe quel évènement
-            </div>
-        </div>
-        <div id="permission-super-admin" class="detail-section-list hidden">
-            <div class="permission granted">
-                <span id="icon" class="material-symbols-outlined">check</span>
-                <span >Admin: Changer le role d'un·e contributeur·rice</span>
-            </div>
-        </div>
-    `
-}
-
-function setEventImage(container, url) {
-    const img = container.querySelector(".event-thumbnail");
-    const placeholder = container.querySelector(".image-placeholder");
-
-    // Reset state BEFORE changing src
-    img.classList.remove("loaded");
-    placeholder.style.display = "flex";  // show loading
-
-    // Set new image
-    img.src = url;
-
-    // When image is loaded
-    img.onload = () => {
-        const ratio = img.naturalWidth / img.naturalHeight;
-
-        const container = img.parentElement;
-        container.style.aspectRatio = ratio;
-
-        img.classList.add("loaded");
-        placeholder.style.display = "none";
-    };
-
-    // Handle error
-    // img.onerror = () => {
-    //     placeholder.textContent = "image";
-    // };
-}
-
 function renderEventData(event, details = false) {
     const eventData = event;
 
@@ -449,6 +317,96 @@ function renderEventData(event, details = false) {
     return eventData;
 }
 
+/* === ROLES === */
+function roleId(roleLabel) {
+    for (const [id, label] of Object.entries(APP_CONFIG.ROLES)) {
+        if (label === roleLabel) {
+            return id;
+        }
+    }
+    return null;
+}
+
+/* === CATEGORIES (an event may have several) === */
+function eventCategoryIds(event) {
+    const c = event.category;
+    if (Array.isArray(c)) return c.map(Number).filter(n => !Number.isNaN(n));
+    if (c === null || c === undefined || c === "") return [];
+    if (typeof c === "string") return c.split(",").map(s => Number(s.trim())).filter(n => !Number.isNaN(n));
+    return [Number(c)];
+}
+
+function categoryLabel(ids) {
+    if (!ids || ids.length === 0) return "";
+    if (ids.length > 1) return "Mixte";
+    return APP_CONFIG.CATEGORIES[ids[0]]["label"];
+}
+
+function categoryPrimaryId(ids) {
+    return (ids && ids.length) ? ids[0] : 0;
+}
+
+function categoryPieBackground(ids) {
+    if (!ids || ids.length === 0) return APP_CONFIG.CATEGORIES[0]["color"];
+    if (ids.length === 1) return APP_CONFIG.CATEGORIES[ids[0]]["color"];
+    const slice = 360 / ids.length;
+    const stops = ids.map((id, i) =>
+        `${APP_CONFIG.CATEGORIES[id]["color"]} ${i * slice}deg ${(i + 1) * slice}deg`
+    );
+    // start at 45° so 2/4-way splits land on diagonals, not the vertical/horizontal axes
+    return `conic-gradient(from 45deg, ${stops.join(", ")})`;
+}
+
+function categoryTextStyle(ids) {
+    if (!ids || ids.length <= 1) {
+        const color = APP_CONFIG.CATEGORIES[(ids && ids[0]) || 0]["color"];
+        return `color: ${color};`;
+    }
+    const stops = ids.map(id => APP_CONFIG.CATEGORIES[id]["color"]).join(", ");
+    return `background: linear-gradient(90deg, ${stops}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;`;
+}
+
+/* === AREA (derived from the event postal code) === */
+function eventAreaId(event) {
+    const code = String(event.location_address_code ?? "").trim();
+    let fallback = null;
+    for (const key of Object.keys(APP_CONFIG.AREAS)) {
+        const codes = APP_CONFIG.AREAS[key]["codes"];
+        if (!codes) { fallback = key; continue; }  // area without codes = "Ailleurs"
+        if (codes.includes(code)) return key;
+    }
+    return fallback;
+}
+
+
+function setEventImage(container, url) {
+    const img = container.querySelector(".event-thumbnail");
+    const placeholder = container.querySelector(".image-placeholder");
+
+    // Reset state BEFORE changing src
+    img.classList.remove("loaded");
+    placeholder.style.display = "flex";  // show loading
+
+    // Set new image
+    img.src = url;
+
+    // When image is loaded
+    img.onload = () => {
+        const ratio = img.naturalWidth / img.naturalHeight;
+
+        const container = img.parentElement;
+        container.style.aspectRatio = ratio;
+
+        img.classList.add("loaded");
+        placeholder.style.display = "none";
+    };
+
+    // Handle error
+    // img.onerror = () => {
+    //     placeholder.textContent = "image";
+    // };
+}
+
 function configureSelectList(configList, selectList, defaultValue=null) {
     Object.keys(configList).forEach(key => {
         const opt = document.createElement("option");
@@ -461,7 +419,7 @@ function configureSelectList(configList, selectList, defaultValue=null) {
     }
 }
 
-/* === OTHERS === */
+/* === SHARE === */
 async function navigatorShareEvent(event, event_url) {
     const event_title = categoryLabel(eventCategoryIds(event));
     const msg_title = event.pending ? "Ici un évènement en attente de publication :" : "Regarde cet évènement !";
@@ -541,60 +499,4 @@ Demande:
     }
 }
 
-function handleAccordion(accordion, accordionId) {
-    if (accordion.getAttribute("disabled") === "true") return;
-    const isOpen = accordion.getAttribute("aria-expanded") === "true";
-    const hiddenSection = document.getElementById(accordionId);
-    const searchInput = hiddenSection.querySelector(".data-search");
-
-    accordion.setAttribute("aria-expanded", String(!isOpen));
-
-    if (isOpen) {
-        hiddenSection.hidden = true;
-        accordion.querySelector(".chevron").innerText = "expand_more";
-        if (searchInput) searchInput.value = "";
-
-        /* specific action */
-        if (accordionId == "update-role-form") {
-            selected_profile = null;
-            hiddenSection.querySelector("#profile-email").innerText = "-";
-            hiddenSection.querySelector("#profile-name").innerText = "-";
-            hiddenSection.querySelector("#profile-role").innerText = "-";
-            hiddenSection.querySelector("#roles").value = APP_CONFIG.ROLES[0];
-            hiddenSection.querySelector("#update-role-button").disabled = true; 
-        }
-    } else {
-        /* open this one */
-        hiddenSection.hidden = false;
-        accordion.querySelector(".chevron").innerText = "expand_less";
-    }
-}
-
-
-/* === DEBUG === */
-// Persistent debug log that survives page reloads (PC debug only).
-// Stored in localStorage so it stays available after window.location.reload().
-// After a reload, type showLog() in the console to print it, clearLog() to wipe it.
-const _LOG_KEY = "debug_log";
-
-function fileLog(text) {
-    if (typeof APP_CONFIG === "undefined" || !APP_CONFIG.DEV) return; // debug only
-
-    const line = `[${new Date().toISOString()}] ${text}`;
-    console.log(line);
-    try {
-        const prev = localStorage.getItem(_LOG_KEY) || "";
-        localStorage.setItem(_LOG_KEY, `${prev}${line}\n`);
-    } catch (err) {
-        console.warn("fileLog failed:", err);
-    }
-}
-
-function showLog() {
-    console.log(localStorage.getItem(_LOG_KEY) || "(log empty)");
-}
-
-function clearLog() {
-    localStorage.removeItem(_LOG_KEY);
-}
 

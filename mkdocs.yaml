@@ -68,6 +68,7 @@ extra_javascript:
   - https://unpkg.com/@supabase/supabase-js@2
   - https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js
   - assets/js/global/config.js?v=dev
+  - assets/js/global/logger.js?v=dev
   - assets/js/global/helper.js?v=dev
   - assets/js/global/user_profile.js?v=dev
   - assets/js/global/supabase.js?v=dev

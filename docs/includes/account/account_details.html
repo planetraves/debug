@@ -24,7 +24,42 @@
                         <span id="account-role" class="value detail-user"></span>
                     </div>
 
-                    <div id="detail-permission"></div>
+                    <div id="detail-permission">
+                        <div class="detail-section-list">
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Publier des évènements
+                            </div>
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Editer vos évènements
+                            </div>
+                            <div id="permission-pro" class="permission denied">
+                                <span id="icon" class="material-symbols-outlined">lock</span>
+                                Publier instantanément (sans délais de 3 jours)
+                            </div>
+                        </div>
+                        <div id="permission-admin" class="detail-section-list hidden">
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une nouvelle publication
+                            </div>
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une requête compte pro
+                            </div>
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: supprimer/éditer n'importe quel évènement
+                            </div>
+                        </div>
+                        <div id="permission-super-admin" class="detail-section-list hidden">
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                <span >Admin: changer le role d'un·e contributeur·rice</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <div id="role-request" class="role-request hidden">
                         <p class="notice-text about">

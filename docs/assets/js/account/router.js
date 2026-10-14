@@ -6,7 +6,7 @@ import {
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfileRole, openPendingEvent, openMyEvent, openProfile,
-    searchInput, shareEvent, sharePendingEvent, shareProfile
+    searchInput, shareEvent, sharePendingEvent, shareProfile, handleAccordion
 } from "./account.js?v=dev";
 
 async function handleClick(el) {

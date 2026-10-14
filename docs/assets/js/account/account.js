@@ -22,7 +22,6 @@ const accountContainer = document.getElementById("account-container");
 
 const openModeratorCharterBtn = document.getElementById("open-moderator-charter");
 
-const permissionDetails = document.getElementById("detail-permission");
 const adminSection = document.getElementById("admin-section");
 const superAdminSection = document.getElementById("super-admin-section");
 
@@ -319,7 +318,6 @@ export async function showAccount(user, profile) {
     user_profile = profile;
     console.log("user_profile:", user_profile);
     
-    permissionDetails.innerHTML = renderAccountPermissionDetails();
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
     document.getElementById("account-status").innerText = APP_CONFIG.USER_STATUS[user_profile.status]["label"];
@@ -746,6 +744,35 @@ export async function shareProfile(profileId) {
     if (error) {
         console.error("Share failed:", error);
         openSuccessModal("Lien vers le profile copié !");
+    }
+}
+
+export function handleAccordion(accordion, accordionId) {
+    if (accordion.getAttribute("disabled") === "true") return;
+    const isOpen = accordion.getAttribute("aria-expanded") === "true";
+    const hiddenSection = document.getElementById(accordionId);
+    const searchInput = hiddenSection.querySelector(".data-search");
+
+    accordion.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        hiddenSection.hidden = true;
+        accordion.querySelector(".chevron").innerText = "expand_more";
+        if (searchInput) searchInput.value = "";
+
+        /* specific action */
+        if (accordionId == "update-role-form") {
+            selected_profile = null;
+            hiddenSection.querySelector("#profile-email").innerText = "-";
+            hiddenSection.querySelector("#profile-name").innerText = "-";
+            hiddenSection.querySelector("#profile-role").innerText = "-";
+            hiddenSection.querySelector("#roles").value = APP_CONFIG.ROLES[0];
+            hiddenSection.querySelector("#update-role-button").disabled = true; 
+        }
+    } else {
+        /* open this one */
+        hiddenSection.hidden = false;
+        accordion.querySelector(".chevron").innerText = "expand_less";
     }
 }
 
