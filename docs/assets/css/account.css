@@ -184,20 +184,7 @@
     color: #b0b0b0;
 }
 
-/* .role-request {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-}
-
-.role-request-text {
-    margin: 0;
-    color: #666;
-} */
-
-
-.role-request-btn {
+.request-pro-btn {
     /* margin: 0.2rem auto 0; */
     display: inline-flex;
     align-items: center;
@@ -217,7 +204,7 @@
     white-space: normal;
 }
 
-.role-request-btn .material-symbols-outlined {
+.request-pro-btn .material-symbols-outlined {
     flex-shrink: 0;
     padding-left: 0;
     padding-right: 0;
@@ -225,12 +212,12 @@
     margin-right: 0;
 }
 
-.role-request-btn:hover {
+.request-pro-btn:hover {
     background: transparent;
     color: var(--primary-link--hover);
 }
 
-.role-request-btn:focus-visible {
+.request-pro-btn:focus-visible {
     outline: 2px solid var(--primary-link);
     outline-offset: 3px;
 }

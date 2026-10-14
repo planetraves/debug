@@ -7,7 +7,7 @@ import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/e
 const loading = document.getElementById("loading-screen");
 // keep the spinner outside the .ready-gated content so it stays visible while loading
 document.body.appendChild(loading);
-const form = document.getElementById("event-form");
+const eventForm = document.getElementById("event-form");
 const submitContainer = document.getElementById("submit-container");
 
 let user_profile = null;
@@ -44,9 +44,9 @@ function showSubmit(user, profile) {
     
     /* initialize form */
     initEventForm();
-    form.querySelector("#end_date_container").hidden = false;
-    form.querySelector("#cancel-btn").hidden = true;
-    form.querySelector("#cancel-btn").disabled = true;
+    eventForm.querySelector("#end_date_container").hidden = false;
+    eventForm.querySelector("#cancel-btn").hidden = true;
+    eventForm.querySelector("#cancel-btn").disabled = true;
 
     /* show page */
     submitContainer.hidden = false;
@@ -61,13 +61,9 @@ export async function submitEvent() {
     if (!new_event) return;
 
     pendingEvent = new_event;
-    openPublicationCharterModal(true);
-}
+    // openPublicationCharterModal(true);
 
-export async function confirmPublish() {
-    if (!pendingEvent) return;
-    const new_event = pendingEvent;
-    const publishBtn = document.getElementById("charter-publish-btn");
+    const publishBtn = eventForm.querySelector("#button")
     publishBtn?.setAttribute("aria-busy", "true");
 
     /* upload image if needed */
@@ -82,7 +78,7 @@ export async function confirmPublish() {
     /* push events on database */
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
-        payload.event_date = addDays(form.querySelector("#event_date").value, day).toLocaleDateString("fr-CA")
+        payload.event_date = addDays(eventForm.querySelector("#event_date").value, day).toLocaleDateString("fr-CA")
         payload.pending = user_profile.role == 0
         payload.created_by = user_profile?.id ?? null
         payload.creator_name = user_profile?.name ?? null;
@@ -107,16 +103,16 @@ export async function confirmPublish() {
     publishBtn?.setAttribute("aria-busy", "false");
     pendingEvent = null;
     window.scrollTo(0, 0);
-    form.reset();
+    eventForm.reset();
     
-    const nonOfficialContributor = user_profile.role == 0;
-    openSuccessModal(nonOfficialContributor
+    const basicContributor = user_profile.role == 0;
+    openSuccessModal(basicContributor
         ? "Évènement proposé et en cours de validation. Il sera publié sous 3 jours. Retour à la liste des évènements automatiquement."
         : "Évènement publié ! Retour à la liste des évènements automatiquement.");
 
     setTimeout(function () {
         window.location.href = "..";
-    }, nonOfficialContributor ? 5000 : 3000);
+    }, basicContributor ? 5000 : 3000);
     
 }
 

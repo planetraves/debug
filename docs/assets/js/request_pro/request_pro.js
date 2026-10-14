@@ -49,8 +49,10 @@ export function onFieldEdited(el) {
 
 export async function sendRequestPro() {
 
-    /* reset form custom validity */
+    /* reset form */
     detailsArea.setCustomValidity("");
+    const sendRequestBtn = requestForm.querySelector("#button")
+    sendRequestBtn?.setAttribute("aria-busy", "true");
 
     if (!user_profile) return;
 
@@ -64,30 +66,33 @@ export async function sendRequestPro() {
     if (firstInvalid) {
         openErrorModal("La description doit contenir au moins 100 caractères.");
         focusField(firstInvalid)
+        sendRequestBtn?.setAttribute("aria-busy", "false");
         return;
     };
     
     // SUPABASE UPDATE PROFILES
-    // console.log("Official role request for user", user_profile);
-    // const { error } = await window.supabaseClient
-    //     .from("profiles")
-    //     .update({
-    //         official_request: true,
-    //         official_request_details: officialRequestInput.value
-    //     })
-    //     .eq("id", user_profile.id); // auth.uid()
+    console.log("pro role request for user", user_profile);
+    const { error } = await window.supabaseClient
+        .from("profiles")
+        .update({
+            official_request: true,
+            official_request_details: detailsArea.value
+        })
+        .eq("id", user_profile.id); // auth.uid()
 
-    // if (error) {
-    //     openErrorModal("Un problème est survenu");
-    //     console.error(error);
-    //     return;
-    // }
+    sendRequestBtn?.setAttribute("aria-busy", "false");
+
+    if (error) {
+        openErrorModal("Un problème est survenu");
+        console.error(error);
+        return;
+    }
 
     openSuccessModal("Requête envoyèe ! Vous allez être redirigé automatiquement.");
     
-    // setTimeout(() => {
-    //     window.location.href = `..`;
-    // }, 3000);
+    setTimeout(() => {
+        goBack();
+    }, 3000);
 }
 
 /* === INITIAL LOAD === */

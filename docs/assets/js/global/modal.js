@@ -27,12 +27,7 @@ const confirmBtn = document.getElementById("confirm-btn");
 const confirmBtnIcon = document.getElementById("confirm-btn-icon");
 const confirmReasons = document.getElementById("confirm-reasons");
 const confirmReasonsList = document.getElementById("confirm-reasons-list");
-const confirmReasonText = document.getElementById("confirm-reason-text");
-
-// const officialRequestModal = document.getElementById("official-request-modal");
-// const officialRequestInput = document.getElementById("details-input");
-// const officialRequestCharCount = document.getElementById("request-char-count");
-// const officialRequestSendBtn = document.getElementById("modal-official-request-btn");
+const confirmReasonText = document.getElementById("confirm-reason-text");;
 
 let generatedCode = null;
 let currentEvent = null;
@@ -211,7 +206,7 @@ async function rejectEvent(event, reason = null) {
 }
 
 async function acceptProfile(profile) {
-    console.log("accepting official request from user:", profile.id);
+    console.log("accepting request pro account for user:", profile.id);
     const { error } = await window.supabaseClient
         .from("profiles")
         .update({
@@ -235,7 +230,7 @@ L'équipe Planet Raves`;
 }
 
 async function rejectProfile(profile, reason = null) {
-    console.log("rejecting official request from user:", profile.id, reason);
+    console.log("rejecting request pro account for user:", profile.id, reason);
     const { error } = await window.supabaseClient
         .from("profiles")
         .update({
@@ -462,17 +457,6 @@ export function openEventModal(event, type, user_profile=null) {
     eventModal.scrollTop = 0;
 }
 
-// export function openRoleRequestModal(profile) {
-//     currentProfile = profile;
-//     currentModal = officialRequestModal;
-//     officialRequestInput.value = "";
-//     officialRequestSendBtn.disabled = true;
-//     officialRequestSendBtn.setAttribute("aria-busy", "false");
-
-//     officialRequestModal.classList.remove("hidden");
-//     document.body.style.overflow = "hidden";
-// }
-
 export function openConfirmModal(type, action_type) {
     generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
     confirmCodeEl.textContent = generatedCode;
@@ -509,7 +493,7 @@ export function openConfirmModal(type, action_type) {
                 confirmBtn.dataset.actionType = "accept-event";
             } else {
                 // confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
-                confirmBtn.dataset.actionType = "accept-official-request";
+                confirmBtn.dataset.actionType = "accept-pro-request";
             }
             confirmBtn.innerText = "Accepter";
             confirmBtn.classList.remove("delete");
@@ -523,7 +507,7 @@ export function openConfirmModal(type, action_type) {
                 confirmBtn.dataset.actionType = "reject-event";
                 reasonKind = "event";
             } else {
-                confirmBtn.dataset.actionType = "reject-official-request";
+                confirmBtn.dataset.actionType = "reject-pro-request";
                 reasonKind = "request";
             }
             reasonRequired = true;
@@ -580,13 +564,13 @@ export async function confirm(action) {
             successMsg = "Évènement rejeté ! La page va se rafraichir automatiquement."
             break;
 
-        case "accept-official-request":
+        case "accept-pro-request":
             if (!currentProfile) return;
             error = await acceptProfile(currentProfile);
             successMsg = "Requête acceptée ! La page va se rafraichir automatiquement."
             break;
 
-        case "reject-official-request":
+        case "reject-pro-request":
             if (!currentProfile) return;
             error = await rejectProfile(currentProfile, reason);
             successMsg = "Requête rejetée ! La page va se rafraichir automatiquement."
@@ -630,7 +614,6 @@ export function closeModal(target) {
 
         case "event-modal":
         case "profile-modal":
-        case "official-request-modal":
             closeCurrentModal();
             break;
 
@@ -641,35 +624,7 @@ export function closeModal(target) {
     }
 }
 
-// export async function sendOfficialRequest() {
-//     if (!currentProfile) return;
-
-//     // SUPABASE UPDATE PROFILES
-//     console.log("Official role request for user", currentProfile);
-//     const { error } = await window.supabaseClient
-//         .from("profiles")
-//         .update({
-//             official_request: true,
-//             official_request_details: officialRequestInput.value
-//         })
-//         .eq("id", currentProfile.id); // auth.uid()
-
-//     if (error) {
-//         openErrorModal("Un problème est survenu");
-//         console.error(error);
-//         return;
-//     }
-
-//     openSuccessModal("Requête envoyée !");
-//     closeCurrentModal();
-// }
-
 export function setConfirmBtnState(target) {
     updateConfirmBtnState();
 }
-
-// export function setSendBtnState(target) {
-//     officialRequestSendBtn.disabled = target.value.length < 100;
-//     officialRequestCharCount.innerText = target.value.length;
-// }
 

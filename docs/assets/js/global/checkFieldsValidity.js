@@ -8,7 +8,7 @@ export function clearFieldError(el) {
 }
 
 /* mark every invalid field with an inline message, returns the first one */
-export function markInvalidFields(form, insertMsg=True) {
+export function markInvalidFields(form, insertMsg=true) {
     form.querySelectorAll(".field-invalid").forEach(clearFieldError);
     let first = null;
     Array.from(form.elements).forEach(el => {

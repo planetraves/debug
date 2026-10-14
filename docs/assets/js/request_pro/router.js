@@ -6,8 +6,6 @@ import {
     closeModal
 } from "../global/modal.js?v=dev";
 
-const officialRequestInput = document.getElementById("details-input");
-
 async function handleClick(el) {
     switch (el.dataset.action) {
         case "send-request":

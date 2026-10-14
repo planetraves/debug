@@ -30,7 +30,7 @@
                         <p class="notice-text about">
                             Vous organisez fréquemment des événements et souhaitez publier instantanément ?
                         </p>
-                        <button type="button" id="official-role-request" class="role-request-btn" data-action="open-request-pro">
+                        <button type="button" id="contrib-pro-request" class="request-pro-btn" data-action="open-request-pro">
                             <span class="material-symbols-outlined" aria-hidden="true">send</span>
                             Demandez à être contributeur·rice pro
                         </button>
@@ -135,17 +135,17 @@
         </div>
 
         <div class="account-tile">
-            <div id="official-req-section" class="account-section-title details" data-action="accordion" data-accordion-id="official-requests" aria-expanded="false">
+            <div id="pro-request-section" class="account-section-title details" data-action="accordion" data-accordion-id="contrib-pro-requests" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">send</span>
-                    <span>Req. contrib. officiel·le</span>
+                    <span>Requêtes compte pro</span>
                     <div class="notification">
                         <span class="badge none">0</span>
                     </div>
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="official-requests" class="accordion-container" hidden>
+            <div id="contrib-pro-requests" class="accordion-container" hidden>
                 <div class="autocomplete account">
                     <input
                         type="text"
@@ -158,7 +158,7 @@
 
                     <div class="suggestions hidden"></div>
                 </div>
-                <div id="official-requests-list"></div>
+                <div id="contrib-pro-requests-list"></div>
             </div>
         </div>
 

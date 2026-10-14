@@ -224,7 +224,7 @@ function renderAccountPermissionDetails() {
                 <span id="icon" class="material-symbols-outlined">check</span>
                 Editer vos évènements
             </div>
-            <div id="permission-official" class="permission denied">
+            <div id="permission-pro" class="permission denied">
                 <span id="icon" class="material-symbols-outlined">lock</span>
                 Publier instantanément (sans délais de 3 jours)
             </div>
