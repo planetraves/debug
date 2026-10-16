@@ -1,14 +1,15 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=f52a58d4.5467976";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=f52a58d4.5467976";
+import { openErrorModal } from "./modal.js?v=7118b96a.b3ecfe0";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=7118b96a.b3ecfe0";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=7118b96a.b3ecfe0";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
-const MAX_EVENT_DAYS = 7; // maximum span (in days) allowed for a multi-day event
+const MAX_EVENT_DAYS = 8; // maximum duration including the start date
 
-const form = document.getElementById("event-form");
+const eventForm = document.getElementById("event-form");
 const categoryChoices = document.getElementById("category-choices");
 const parentalGuideList = document.getElementById("pg");
 const priceChoiceList = document.getElementById("price-choice");
@@ -24,37 +25,6 @@ let imageToUpload = null;
 let selectedCategories = new Set();
 
 /* === LOCAL FUNCTIONS === */
-function clearFieldError(el) {
-    el.classList.remove("field-invalid");
-    el.removeAttribute("aria-invalid");
-    const msg = el.parentElement?.querySelector(`.field-error-msg[data-for="${el.id || el.name}"]`);
-    if (msg) msg.remove();
-}
-
-/* mark every invalid field with an inline message, returns the first one */
-function markInvalidFields() {
-    form.querySelectorAll(".field-invalid").forEach(clearFieldError);
-    let first = null;
-    Array.from(form.elements).forEach(el => {
-        if (!el.willValidate || el.validity.valid) return;
-        if (!first) first = el;
-        el.classList.add("field-invalid");
-        el.setAttribute("aria-invalid", "true");
-        const msg = document.createElement("small");
-        msg.className = "field-error-msg";
-        msg.dataset.for = el.id || el.name;
-        msg.textContent = el.validationMessage;
-        el.insertAdjacentElement("afterend", msg);
-    });
-    return first;
-}
-
-function focusField(el) {
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
-    el.focus({ preventScroll: true });
-}
-
 async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -89,9 +59,9 @@ async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
 
 function showImagePreview(image_name, image_src) {
     deleteImageBtn.hidden = false;
-    form.querySelector(".event-image-wrapper").hidden = false;
-    form.querySelector("#event-thumbnail").src = image_src;
-    form.querySelector("#file-name").textContent = image_name;
+    eventForm.querySelector(".event-image-wrapper").hidden = false;
+    eventForm.querySelector("#event-thumbnail").src = image_src;
+    eventForm.querySelector("#file-name").textContent = image_name;
 }
 
 function renderCategoryChoices() {
@@ -109,6 +79,8 @@ function renderCategoryChoices() {
 
 /* restrict the end date picker to the [event_date+1, event_date+MAX_EVENT_DAYS-1] range */
 export function updateEndDateBounds() {
+    endDateInput.setCustomValidity("");
+    clearFieldError(endDateInput);
     if (!eventDateInput.value) {
         endDateInput.disabled = true;
         endDateInput.value = "";
@@ -118,11 +90,24 @@ export function updateEndDateBounds() {
     }
     endDateInput.disabled = false;
     const start = new Date(eventDateInput.value + "T00:00:00");
-    endDateInput.min = addDays(start, 1).toLocaleDateString("fr-CA");
-    endDateInput.max = addDays(start, MAX_EVENT_DAYS - 1).toLocaleDateString("fr-CA");
+    endDateInput.min = formatDateStr(addDays(start, 1));
+    endDateInput.max = formatDateStr(addDays(start, MAX_EVENT_DAYS - 1));
     if (endDateInput.value && (endDateInput.value < endDateInput.min || endDateInput.value > endDateInput.max)) {
         endDateInput.value = "";
     }
+}
+
+export function validateEndDate() {
+    endDateInput.setCustomValidity("");
+    if (!eventDateInput.value || !endDateInput.value || endDateInput.disabled) return 1;
+
+    const nbDays = Math.round((new Date(endDateInput.value + "T00:00:00") - new Date(eventDateInput.value + "T00:00:00")) / 86400000) + 1;
+    if (nbDays <= 1) {
+        endDateInput.setCustomValidity("La date de fin doit être à strictement supérieure à la date de début");
+    } else if (nbDays > MAX_EVENT_DAYS) {
+        endDateInput.setCustomValidity(`Un évènement ne peut pas durer plus de ${MAX_EVENT_DAYS} jours`);
+    }
+    return nbDays;
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -146,8 +131,8 @@ export function toggleCategory(el) {
 
 /* === EXPORTED FUNCTIONS === */
 export function initEventForm(eventData=null) {
-    form.reset()
-    form.querySelectorAll(".field-invalid").forEach(clearFieldError);
+    eventForm.reset()
+    eventForm.querySelectorAll(".field-invalid").forEach(clearFieldError);
     currentImageUrl = null;
     imageToUpload = null;
 
@@ -166,30 +151,31 @@ export function initEventForm(eventData=null) {
     if (!eventData) return;
 
     /* init form with data */
-    form.querySelector("#title").value = eventData.title;
-    form.querySelector("#location_name").value = eventData.location_name;
-    form.querySelector("#location_address").value = eventData.location_address;
-    form.querySelector("#location_address_2").value = eventData.location_address_2 || "";
-    form.querySelector("#location_address_code").value = eventData.location_address_code || "";
-    form.querySelector("#location_address_town").value = eventData.location_address_town || "";
-    if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
+    eventForm.querySelector("#title").value = eventData.title;
+    eventForm.querySelector("#location_name").value = eventData.location_name;
+    eventForm.querySelector("#location_address").value = eventData.location_address;
+    eventForm.querySelector("#location_address_2").value = eventData.location_address_2 || "";
+    eventForm.querySelector("#location_address_code").value = eventData.location_address_code || "";
+    eventForm.querySelector("#location_address_town").value = eventData.location_address_town || "";
+    if (eventData.long_description) eventForm.querySelector("#long_description").value = eventData.long_description;
     eventCategoryIds(eventData).forEach(id => selectedCategories.add(String(id)));
     renderCategoryChoices();
-    form.querySelector("#min_age").value = eventData.min_age;
-    form.querySelector("#max_age").value = eventData.max_age;
-    form.querySelector("#event_date").value = eventData.event_date;
+    eventForm.querySelector("#min_age").value = eventData.min_age;
+    eventForm.querySelector("#max_age").value = eventData.max_age;
+    eventForm.querySelector("#event_date").value = eventData.event_date;
     updateEndDateBounds();
-    if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
+    if (eventData.event_start_time) eventForm.querySelector("#event_start_time").value = eventData.event_start_time;
     if (eventData.tags) eventData.tags.forEach(t => addTag(t));
-    if (eventData.phone) form.querySelector("#phone").value = eventData.phone;
-    if (eventData.email) form.querySelector("#email").value = eventData.email;
-    if (eventData.site_url) form.querySelector("#site_url").value = eventData.site_url;
-    if (eventData.to_eat) form.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
+    if (eventData.phone) eventForm.querySelector("#phone").value = eventData.phone;
+    if (eventData.email) eventForm.querySelector("#email").value = eventData.email;
+    if (eventData.site_url) eventForm.querySelector("#site_url").value = eventData.site_url;
+    if (eventData.to_eat) eventForm.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
+    if (eventData.to_drink) eventForm.querySelector('input[name="to_drink"]').checked = eventData.to_drink;
     priceChoiceList.value = eventData.price;
     if (eventData.price == 2) {
         if (eventData.max_price && (eventData.max_price > 0)) {
-            form.querySelector('#max_price').value = eventData.max_price;
-            if (eventData.min_price && (eventData.min_price > 0)) form.querySelector('#min_price').value = eventData.min_price;
+            eventForm.querySelector('#max_price').value = eventData.max_price;
+            if (eventData.min_price && (eventData.min_price > 0)) eventForm.querySelector('#min_price').value = eventData.min_price;
         }
     }
     priceChoiceList.dispatchEvent(new Event("change", { bubbles: true }));
@@ -258,9 +244,9 @@ export function removeImage() {
     currentImageUrl = null;
     eventImage.value = "";
     deleteImageBtn.hidden = true;
-    form.querySelector(".event-image-wrapper").hidden = true;
-    form.querySelector("#event-thumbnail").src = "";
-    form.querySelector("#file-name").textContent = "aucun fichier choisi";
+    eventForm.querySelector(".event-image-wrapper").hidden = true;
+    eventForm.querySelector("#event-thumbnail").src = "";
+    eventForm.querySelector("#file-name").textContent = "aucun fichier choisi";
 }
 
 export function formatPhoneInput(input) {
@@ -269,20 +255,21 @@ export function formatPhoneInput(input) {
 }
 
 export function getEventFormPayload() {
-    const eventDate = form.querySelector("#event_date");
-    const endDate = form.querySelector("#end_date");
-    const phoneInput = form.querySelector("#phone");
-    const minAgeInput = form.querySelector("#min_age");
-    const maxAgeInput = form.querySelector("#max_age");
-    const long_description = form.querySelector('#long_description').value
-    const start_time = form.querySelector('#event_start_time').value;
-    const toEat = form.querySelector('input[name="to_eat"]').checked;
+    const eventDate = eventForm.querySelector("#event_date");
+    const endDate = eventForm.querySelector("#end_date");
+    const phoneInput = eventForm.querySelector("#phone");
+    const minAgeInput = eventForm.querySelector("#min_age");
+    const maxAgeInput = eventForm.querySelector("#max_age");
+    const long_description = eventForm.querySelector('#long_description').value
+    const start_time = eventForm.querySelector('#event_start_time').value;
+    const toEat = eventForm.querySelector('input[name="to_eat"]').checked;
+    const toDrink = eventForm.querySelector('input[name="to_drink"]').checked;
 
     /* combine address parts (keeps postal code + town in the saved address) */
-    const addressStreet = form.querySelector('#location_address').value.trim();
-    const addressExtra = form.querySelector('#location_address_2').value.trim();
-    const addressCode = form.querySelector('#location_address_code').value.trim();
-    const addressTown = form.querySelector('#location_address_town').value.trim();
+    const addressStreet = eventForm.querySelector('#location_address').value.trim();
+    const addressExtra = eventForm.querySelector('#location_address_2').value.trim();
+    const addressCode = eventForm.querySelector('#location_address_code').value.trim();
+    const addressTown = eventForm.querySelector('#location_address_town').value.trim();
 
     var phoneNumber = null;
 
@@ -297,7 +284,7 @@ export function getEventFormPayload() {
     /* check phone number */
     if (phoneInput.value && (phoneInput.value != "")) {
         try {
-            const numData = libphonenumber.parsePhoneNumber(form.querySelector('#phone').value);
+            const numData = libphonenumber.parsePhoneNumber(eventForm.querySelector('#phone').value);
             if (!numData.isValid()) {
                 phoneInput.setCustomValidity("Numéro invalide");
             } else {
@@ -321,20 +308,9 @@ export function getEventFormPayload() {
     }
 
     // check dates
-    var nb_days = 1;
+    const nb_days = validateEndDate();
     if (new Date(eventDate.value) < today) {
         eventDate.setCustomValidity("La date doit être à partir de aujourd'hui");
-    }
-
-    if (endDate.value && (endDate.value != "")) {
-        if (new Date(endDate.value) <= new Date(eventDate.value)) {
-            endDate.setCustomValidity("La date de fin doit être à strictement supérieure à la date de début");
-        } else {
-            nb_days = Math.round((new Date(endDate.value + "T00:00:00") - new Date(eventDate.value + "T00:00:00")) / 86400000) + 1;  // 86400000ms per day
-            if (nb_days > MAX_EVENT_DAYS) {
-                endDate.setCustomValidity(`Un évènement ne peut pas durer plus de ${MAX_EVENT_DAYS} jours`);
-            }
-        }
     }
 
     /* set price */
@@ -357,7 +333,7 @@ export function getEventFormPayload() {
     }
 
     /* report form validity */
-    const firstInvalid = markInvalidFields();
+    const firstInvalid = markInvalidFields(eventForm);
     if (firstInvalid) {
         openErrorModal("Le formulaire contient des erreurs", null, () => focusField(firstInvalid));
         return;
@@ -371,11 +347,11 @@ export function getEventFormPayload() {
     }
 
     const payload = {
-        title: form.querySelector('#title').value,
+        title: eventForm.querySelector('#title').value,
         long_description: long_description === "" ? null : long_description,
         // event_date: done later
         event_start_time: start_time === "" ? null : start_time,
-        location_name: form.querySelector('#location_name').value,
+        location_name: eventForm.querySelector('#location_name').value,
         location_address: addressStreet,
         location_address_2: addressExtra === "" ? null : addressExtra,
         location_address_code: addressCode,
@@ -391,14 +367,13 @@ export function getEventFormPayload() {
         category: Array.from(selectedCategories).map(Number).sort((a, b) => a - b),
         // image_url: done later
         phone: phoneNumber,
-        email: form.querySelector("#email").value,
-        site_url: form.querySelector('#site_url').value,
+        email: eventForm.querySelector("#email").value,
+        site_url: eventForm.querySelector('#site_url').value,
         min_age: min_age,
         max_age: max_age,
-        to_eat: toEat
+        to_eat: toEat,
+        to_drink: toDrink
     }
 
     return {payload: payload, nb_days: nb_days}
 }
-
-

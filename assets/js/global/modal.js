@@ -8,7 +8,7 @@ const endDateHelpModal = document.getElementById("end-date-help-modal");
 const categoryHelpModal = document.getElementById("category-help-modal");
 const areaHelpModal = document.getElementById("area-help-modal");
 const viewHelpModal = document.getElementById("view-help-modal");
-const contributorCharterModal = document.getElementById("contributor-charter-modal");
+const publicationCharterModal = document.getElementById("publication-charter-modal");
 const moderatorCharterModal = document.getElementById("moderator-charter-modal");
 
 const eventModal = document.getElementById("event-modal");
@@ -27,12 +27,7 @@ const confirmBtn = document.getElementById("confirm-btn");
 const confirmBtnIcon = document.getElementById("confirm-btn-icon");
 const confirmReasons = document.getElementById("confirm-reasons");
 const confirmReasonsList = document.getElementById("confirm-reasons-list");
-const confirmReasonText = document.getElementById("confirm-reason-text");
-
-const officialRequestModal = document.getElementById("official-request-modal");
-const officialRequestInput = document.getElementById("details-input");
-const officialRequestCharCount = document.getElementById("request-char-count");
-const officialRequestSendBtn = document.getElementById("modal-official-request-btn");
+const confirmReasonText = document.getElementById("confirm-reason-text");;
 
 let generatedCode = null;
 let currentEvent = null;
@@ -211,7 +206,7 @@ async function rejectEvent(event, reason = null) {
 }
 
 async function acceptProfile(profile) {
-    console.log("accepting official request from user:", profile.id);
+    console.log("accepting request pro account for user:", profile.id);
     const { error } = await window.supabaseClient
         .from("profiles")
         .update({
@@ -235,7 +230,7 @@ L'équipe Planet Raves`;
 }
 
 async function rejectProfile(profile, reason = null) {
-    console.log("rejecting official request from user:", profile.id, reason);
+    console.log("rejecting request pro account for user:", profile.id, reason);
     const { error } = await window.supabaseClient
         .from("profiles")
         .update({
@@ -304,11 +299,11 @@ export function openViewHelpModal() {
     document.body.style.overflow = "hidden";
 }
 
-export function openContributorCharterModal(withPublish = false) {
+export function openPublicationCharterModal(withPublish = false) {
     // withPublish shows the Annuler/Publier footer (publish confirmation flow)
-    const actions = document.getElementById("contributor-charter-actions");
+    const actions = document.getElementById("publication-charter-actions");
     if (actions) actions.hidden = !withPublish;
-    contributorCharterModal.classList.remove("hidden");
+    publicationCharterModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 
@@ -332,7 +327,7 @@ export function openProfileModal(profile, user_profile = null) {
             <div class="detail-section">
                 <div class="detail-row">
                     <span class="label">Email</span>
-                    <span id="account-email" class="value detail-user">${profile.email}</span>
+                    <a id="account-email" class="value detail-user" href="mailto:${profile.email}">${profile.email}</a>
                 </div>
                 <div class="detail-row">
                     <span class="label">Status</span>
@@ -376,6 +371,9 @@ export function openEventModal(event, type, user_profile=null) {
     eventModal.querySelector("#modal-share-btn").dataset.action = "share-event";
     eventModal.querySelector("#modal-share-btn").disabled = false;
     eventModal.querySelector("#modal-share-btn").dataset.id = currentEvent.id;
+    
+    eventModal.querySelector("#modal-email-event-btn").disabled = false;
+    eventModal.querySelector("#modal-email-event-btn").dataset.id = currentEvent.id;
 
     eventModal.querySelector("#modal-edit-event-btn").dataset.id = currentEvent.id;
 
@@ -384,6 +382,7 @@ export function openEventModal(event, type, user_profile=null) {
             eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-email-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
 
             if (event.pending) eventModal.querySelector("#modal-share-btn").classList.add("hidden");
@@ -393,6 +392,7 @@ export function openEventModal(event, type, user_profile=null) {
             eventModal.querySelector("#modal-share-btn").dataset.action = "share-pending-event";
             eventModal.querySelector("#modal-edit-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-email-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-reject-event-btn").classList.remove("hidden");
             break;
@@ -402,6 +402,15 @@ export function openEventModal(event, type, user_profile=null) {
             {
                 eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
                 eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
+
+                if ((user_profile.id != eventData.created_by) && (user_profile.role >= 2))
+                {
+                    eventModal.querySelector("#modal-email-event-btn").classList.remove("hidden");
+                }
+                else
+                {
+                    eventModal.querySelector("#modal-email-event-btn").classList.add("hidden");
+                }
             }
             else
             {
@@ -441,6 +450,7 @@ export function openEventModal(event, type, user_profile=null) {
                 ${eventData.locationAddressHtml}
             </div>
             ${eventData.eatHtml}
+            ${eventData.drinkHtml}
             ${eventData.siteUrlHtml}
             ${eventData.phoneHtml}
             ${eventData.emailHtml}
@@ -460,17 +470,6 @@ export function openEventModal(event, type, user_profile=null) {
     document.body.style.overflow = "hidden";
     eventModal.classList.remove("hidden");
     eventModal.scrollTop = 0;
-}
-
-export function openRoleRequestModal(profile) {
-    currentProfile = profile;
-    currentModal = officialRequestModal;
-    officialRequestInput.value = "";
-    officialRequestSendBtn.disabled = true;
-    officialRequestSendBtn.setAttribute("aria-busy", "false");
-
-    officialRequestModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
 }
 
 export function openConfirmModal(type, action_type) {
@@ -509,7 +508,7 @@ export function openConfirmModal(type, action_type) {
                 confirmBtn.dataset.actionType = "accept-event";
             } else {
                 // confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
-                confirmBtn.dataset.actionType = "accept-official-request";
+                confirmBtn.dataset.actionType = "accept-pro-request";
             }
             confirmBtn.innerText = "Accepter";
             confirmBtn.classList.remove("delete");
@@ -523,7 +522,7 @@ export function openConfirmModal(type, action_type) {
                 confirmBtn.dataset.actionType = "reject-event";
                 reasonKind = "event";
             } else {
-                confirmBtn.dataset.actionType = "reject-official-request";
+                confirmBtn.dataset.actionType = "reject-pro-request";
                 reasonKind = "request";
             }
             reasonRequired = true;
@@ -580,13 +579,13 @@ export async function confirm(action) {
             successMsg = "Évènement rejeté ! La page va se rafraichir automatiquement."
             break;
 
-        case "accept-official-request":
+        case "accept-pro-request":
             if (!currentProfile) return;
             error = await acceptProfile(currentProfile);
             successMsg = "Requête acceptée ! La page va se rafraichir automatiquement."
             break;
 
-        case "reject-official-request":
+        case "reject-pro-request":
             if (!currentProfile) return;
             error = await rejectProfile(currentProfile, reason);
             successMsg = "Requête rejetée ! La page va se rafraichir automatiquement."
@@ -630,7 +629,6 @@ export function closeModal(target) {
 
         case "event-modal":
         case "profile-modal":
-        case "official-request-modal":
             closeCurrentModal();
             break;
 
@@ -641,35 +639,6 @@ export function closeModal(target) {
     }
 }
 
-export async function sendOfficialRequest() {
-    if (!currentProfile) return;
-
-    // SUPABASE UPDATE PROFILES
-    console.log("Official role request for user", currentProfile);
-    const { error } = await window.supabaseClient
-        .from("profiles")
-        .update({
-            official_request: true,
-            official_request_details: officialRequestInput.value
-        })
-        .eq("id", currentProfile.id); // auth.uid()
-
-    if (error) {
-        openErrorModal("Un problème est survenu");
-        console.error(error);
-        return;
-    }
-
-    openSuccessModal("Requête envoyée !");
-    closeCurrentModal();
-}
-
 export function setConfirmBtnState(target) {
     updateConfirmBtnState();
 }
-
-export function setSendBtnState(target) {
-    officialRequestSendBtn.disabled = target.value.length < 100;
-    officialRequestCharCount.innerText = target.value.length;
-}
-

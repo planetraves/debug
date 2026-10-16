@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=f52a58d4.5467976";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=7118b96a.b3ecfe0";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -22,7 +22,6 @@ const accountContainer = document.getElementById("account-container");
 
 const openModeratorCharterBtn = document.getElementById("open-moderator-charter");
 
-const permissionDetails = document.getElementById("detail-permission");
 const adminSection = document.getElementById("admin-section");
 const superAdminSection = document.getElementById("super-admin-section");
 
@@ -33,9 +32,9 @@ const statVisitors = document.getElementById("stat-visitors");
 const updateRoleForm = document.getElementById("update-role-form");
 const roleList = document.getElementById("roles");
 
-const offReqSection = document.getElementById("official-req-section");
-const officialRequests = document.getElementById("official-requests");
-const officialRequestsList = document.getElementById("official-requests-list");
+const proRequestSection = document.getElementById("pro-request-section");
+const proRequests = document.getElementById("contrib-pro-requests");
+const proRequestsList = document.getElementById("contrib-pro-requests-list");
 
 const pendingEventsSection = document.getElementById("pending-events-section");
 const pendingEvents = document.getElementById("pending-events");
@@ -52,7 +51,7 @@ export let selected_profile = null;
 export let MY_EVENTS = [];
 export let PROFILES = [];
 export let PENDING_EVENTS = [];
-export let OFFICIAL_REQUESTS = [];
+export let PRO_REQUESTS = [];
 
 /* === FUNCTIONS === */
 async function initAccountPage() {
@@ -95,7 +94,7 @@ async function initAccountPage() {
 
 function searchMatches(item, value, container) {
     switch(container) {
-        case "official-requests":
+        case "contrib-pro-requests":
         case "update-role-form":
             return item.email.toLowerCase().includes(value);
 
@@ -195,13 +194,13 @@ async function getPendingEvents() {
     pendingEventsList.innerHTML = data.map(item => renderEventSmallTile(item, "show-pendingevent")).join("")
 }
 
-async function getOfficialRequests() {
+async function getProRequests() {
     /* fetch data */
-    OFFICIAL_REQUESTS = [];
-    officialRequests.hidden = true;
-    offReqSection.querySelector(".badge").classList.add("none");
-    offReqSection.setAttribute("Disabled", true);
-    offReqSection.querySelector(".badge").innerText = 0;
+    PRO_REQUESTS = [];
+    proRequests.hidden = true;
+    proRequestSection.querySelector(".badge").classList.add("none");
+    proRequestSection.setAttribute("Disabled", true);
+    proRequestSection.querySelector(".badge").innerText = 0;
 
     const { data, error } = await window.supabaseClient
         .from("profiles")
@@ -210,20 +209,20 @@ async function getOfficialRequests() {
 
     if (error) {
         console.error(error)
-        officialRequests.hidden = false;
-        offReqSection.querySelector(".badge").innerText = "?";
-        officialRequestsList.innerText = "Erreur survenue durant le chargement des requêtes";
+        proRequests.hidden = false;
+        proRequestSection.querySelector(".badge").innerText = "?";
+        proRequestsList.innerText = "Erreur survenue durant le chargement des requêtes";
         return;
     }
     if (!data || data.length === 0) {
         return;
     }
 
-    OFFICIAL_REQUESTS = data;
-    offReqSection.setAttribute("Disabled", false);
-    offReqSection.querySelector(".badge").classList.remove("none");
-    offReqSection.querySelector(".badge").innerText = data.length;
-    officialRequestsList.innerHTML = data.map(renderOfficialRequests).join("")
+    PRO_REQUESTS = data;
+    proRequestSection.setAttribute("Disabled", false);
+    proRequestSection.querySelector(".badge").classList.remove("none");
+    proRequestSection.querySelector(".badge").innerText = data.length;
+    proRequestsList.innerHTML = data.map(renderProRequests).join("")
 }
 
 function renderEventSmallTile(event, type) {
@@ -255,7 +254,7 @@ function renderEventSmallTile(event, type) {
     return html;
 }
 
-function renderOfficialRequests(profile) {
+function renderProRequests(profile) {
     const html = `
         <div class="event-small-tile" style="--event-color: var(--primary-basic);" role="link" tabindex="0" data-action="show-profile" data-show-profile-id="${profile.id}">
             <div class="event-small-side">
@@ -319,7 +318,6 @@ export async function showAccount(user, profile) {
     user_profile = profile;
     console.log("user_profile:", user_profile);
     
-    permissionDetails.innerHTML = renderAccountPermissionDetails();
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
     document.getElementById("account-status").innerText = APP_CONFIG.USER_STATUS[user_profile.status]["label"];
@@ -327,18 +325,18 @@ export async function showAccount(user, profile) {
 
     /* configure roles */
     const details = document.getElementById("detail-section");
-    const permissionOfficial = details.querySelector("#permission-official");
+    const permissionPro = details.querySelector("#permission-pro");
     const permissionAdmin = details.querySelector("#permission-admin");
     const permissionSuperAdmin = details.querySelector("#permission-super-admin");
     const roleRequest = details.querySelector("#role-request");
 
     switch(user_profile.role) {
 
-        case 0: /* non official */
+        case 0: /* basic */
             // statsSection.classList.add("hidden");
-            permissionOfficial.classList.add("denied");
-            permissionOfficial.classList.remove("granted");
-            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionPro.classList.add("denied");
+            permissionPro.classList.remove("granted");
+            permissionPro.querySelector("#icon").innerText = "lock"
             permissionAdmin.hidden = true;
             permissionSuperAdmin.hidden = true;
             roleRequest.classList.remove("hidden");
@@ -347,11 +345,11 @@ export async function showAccount(user, profile) {
             superAdminSection.hidden = true;
             break;
         
-        case 1: /* official */
+        case 1: /* pro */
             // statsSection.classList.add("hidden");
-            permissionOfficial.classList.remove("denied");
-            permissionOfficial.classList.add("granted");
-            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionPro.classList.remove("denied");
+            permissionPro.classList.add("granted");
+            permissionPro.querySelector("#icon").innerText = "check"
             permissionAdmin.hidden = true;
             permissionSuperAdmin.hidden = true;
             roleRequest.classList.add("hidden");
@@ -360,12 +358,12 @@ export async function showAccount(user, profile) {
             superAdminSection.hidden = true;
             break;
 
-        case 2:
-        case 3: /* moderateur/admin */
+        case 2: /* moderator */
+        case 3: /* admin */
             // statsSection.classList.remove("hidden");
-            permissionOfficial.classList.remove("denied");
-            permissionOfficial.classList.add("granted");
-            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionPro.classList.remove("denied");
+            permissionPro.classList.add("granted");
+            permissionPro.querySelector("#icon").innerText = "check"
             permissionAdmin.hidden = false;
             permissionSuperAdmin.hidden = true;
             roleRequest.classList.add("hidden");
@@ -375,7 +373,7 @@ export async function showAccount(user, profile) {
 
             await getStats();
             await getPendingEvents();
-            await getOfficialRequests();
+            await getProRequests();
 
             if (user_profile.role == 3)
             {
@@ -396,9 +394,9 @@ export async function showAccount(user, profile) {
         
         default:
             // statsSection.classList.add("hidden");
-            permissionOfficial.classList.add("denied");
-            permissionOfficial.classList.remove("granted");
-            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionPro.classList.add("denied");
+            permissionPro.classList.remove("granted");
+            permissionPro.querySelector("#icon").innerText = "lock"
             permissionAdmin.hidden = true;
             permissionSuperAdmin.hidden = true;
             roleRequest.classList.add("hidden");
@@ -420,9 +418,9 @@ export async function showAccount(user, profile) {
         var el = null;
         switch (itemType) {
             case "profile":
-                el = officialRequestsList.querySelector(`[data-show-profile-id="${itemId}"]`);
+                el = proRequestsList.querySelector(`[data-show-profile-id="${itemId}"]`);
                 if (!el) return;
-                offReqSection.click();
+                proRequestSection.click();
                 break;
 
             case "pendingevent":
@@ -526,7 +524,7 @@ export async function logout() {
     PROFILES = [];
     MY_EVENTS = [];
     PENDING_EVENTS = [];
-    OFFICIAL_REQUESTS = [];
+    PRO_REQUESTS = [];
     showLogin();
 }
 
@@ -586,11 +584,6 @@ export async function updateProfileRole() {
     }, 3000);
 }
 
-export function openRoleRequest() {
-    if (!user_profile) return;
-    openRoleRequestModal(user_profile);
-}
-
 export function openPendingEvent(eventId) {
     const event = PENDING_EVENTS.find(e => e.id === eventId);
     if (!event) return;
@@ -604,7 +597,7 @@ export function openMyEvent(eventId) {
 }
 
 export function openProfile(profileId) {
-    const profile = OFFICIAL_REQUESTS.find(e => e.id === profileId);
+    const profile = PRO_REQUESTS.find(e => e.id === profileId);
     if (!profile) return;
     openProfileModal(profile, user_profile);
 }
@@ -619,8 +612,8 @@ export function searchInput(input) {
     var data_list = [];
 
     switch(container.id) {
-        case "official-requests":
-            data_list = OFFICIAL_REQUESTS;
+        case "contrib-pro-requests":
+            data_list = PRO_REQUESTS;
             break;
 
         case "update-role-form":
@@ -657,7 +650,7 @@ export function searchInput(input) {
         span.dataset.id = item.id;
         span.textContent = "";
         switch(container.id) {
-            case "official-requests":
+            case "contrib-pro-requests":
             case "update-role-form":
                 span.textContent = item.email;
                 break;
@@ -676,7 +669,7 @@ export function searchInput(input) {
             var el = null;
 
             switch(container.id) {
-                case "official-requests":
+                case "contrib-pro-requests":
                     el = container.querySelector(`[data-show-profile-id="${item.id}"]`);
                     if (!el) return;
                     el.scrollIntoView();
@@ -730,6 +723,26 @@ export async function shareEvent(eventId) {
     }
 }
 
+export async function emailEvent(eventId) {
+    const event = MY_EVENTS.find(e => e.id === eventId);
+    if (!event) return;
+    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
+    const event_desc = `Bonjour ${event.creator_name} !
+
+Concernant cet évènement :
+ - Titre: ${event.title}
+ - Type: ${categoryLabel(eventCategoryIds(event))}
+ - Lieu: ${event.location_name}
+ - Date: ${formatDateForUI(event.event_date)}
+ - Lien: ${event_url}
+`;
+
+    const subject = encodeURIComponent(event.title);
+    const body = encodeURIComponent(event_desc);
+    const replyTo = encodeURIComponent(user_profile.email);
+    window.location.href = `mailto:${event.creator_email ?? ""}?subject=${subject}&body=${body}&reply-to=${replyTo}`;
+}
+
 export async function sharePendingEvent(eventId) {
     const event = PENDING_EVENTS.find(e => e.id === eventId);
     if (!event) return;
@@ -751,6 +764,35 @@ export async function shareProfile(profileId) {
     if (error) {
         console.error("Share failed:", error);
         openSuccessModal("Lien vers le profile copié !");
+    }
+}
+
+export function handleAccordion(accordion, accordionId) {
+    if (accordion.getAttribute("disabled") === "true") return;
+    const isOpen = accordion.getAttribute("aria-expanded") === "true";
+    const hiddenSection = document.getElementById(accordionId);
+    const searchInput = hiddenSection.querySelector(".data-search");
+
+    accordion.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        hiddenSection.hidden = true;
+        accordion.querySelector(".chevron").innerText = "expand_more";
+        if (searchInput) searchInput.value = "";
+
+        /* specific action */
+        if (accordionId == "update-role-form") {
+            selected_profile = null;
+            hiddenSection.querySelector("#profile-email").innerText = "-";
+            hiddenSection.querySelector("#profile-name").innerText = "-";
+            hiddenSection.querySelector("#profile-role").innerText = "-";
+            hiddenSection.querySelector("#roles").value = APP_CONFIG.ROLES[0];
+            hiddenSection.querySelector("#update-role-button").disabled = true; 
+        }
+    } else {
+        /* open this one */
+        hiddenSection.hidden = false;
+        accordion.querySelector(".chevron").innerText = "expand_less";
     }
 }
 

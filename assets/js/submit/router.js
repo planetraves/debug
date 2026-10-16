@@ -1,23 +1,23 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal, 
-    openContributorCharterModal
-} from "../global/modal.js?v=f52a58d4.5467976";
+    openPublicationCharterModal
+} from "../global/modal.js?v=7118b96a.b3ecfe0";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, onFieldEdited
-} from "../global/eventform.js?v=f52a58d4.5467976"
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, validateEndDate, onFieldEdited
+} from "../global/eventform.js?v=7118b96a.b3ecfe0"
 
 import { 
     addTag, removeLastTag
-} from "../global/tags.js?v=f52a58d4.5467976"
+} from "../global/tags.js?v=7118b96a.b3ecfe0"
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=f52a58d4.5467976"
+} from "../global/address.js?v=7118b96a.b3ecfe0"
 
 import { 
-    submitEvent, confirmPublish
+    submitEvent
 } from "./submit.js"
 
 
@@ -50,10 +50,6 @@ async function handleClick(el, e) {
             await submitEvent();
             break;
 
-        case "confirm-publish":
-            await confirmPublish();
-            break;
-
         case "close-modal":
             closeModal(el);
             break;
@@ -74,8 +70,12 @@ async function handleClick(el, e) {
             openCategoryHelpModal();
             break;
 
-        case "open-contributor-charter":
-            openContributorCharterModal();
+        case "open-publication-charter":
+            openPublicationCharterModal();
+            break;
+
+        case "open-request-pro":
+            window.location.href = `../request_pro`;
             break;
 
         default:
@@ -112,6 +112,11 @@ async function handleChange(el) {
 
         case "event-date":
             updateEndDateBounds();
+            break;
+
+        case "end-date":
+            validateEndDate();
+            el.reportValidity();
             break;
 
         default:

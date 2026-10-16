@@ -20,22 +20,60 @@
                     </div>
 
                     <div class="detail-row">
-                        <span class="label">Contributeur·rice</span>
+                        <span class="label">Role</span>
                         <span id="account-role" class="value detail-user"></span>
                     </div>
 
-                    <div id="detail-permission"></div>
-
-                    <div id="role-request" class="role-request hidden">
-                        <p class="role-request-text">
-                            Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
-                            <a href="#" id="official-role-request" data-action="open-request-modal">Demandez à être contributeur·rice officiel·le</a>
-                        </p>
+                    <div id="detail-permission">
+                        <div class="detail-section-list">
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Publier des évènements
+                            </div>
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Editer vos évènements
+                            </div>
+                            <div id="permission-pro" class="permission denied">
+                                <span id="icon" class="material-symbols-outlined">lock</span>
+                                Publier instantanément (sans délais de 3 jours)
+                            </div>
+                        </div>
+                        <div id="permission-admin" class="detail-section-list hidden">
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une nouvelle publication
+                            </div>
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une requête compte pro
+                            </div>
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: supprimer/éditer n'importe quel évènement
+                            </div>
+                        </div>
+                        <div id="permission-super-admin" class="detail-section-list hidden">
+                            <div class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                <span >Admin: changer le role d'un·e contributeur·rice</span>
+                            </div>
+                        </div>
                     </div>
 
+                    <div id="role-request" class="role-request hidden">
+                        <p class="notice-text about">
+                            Vous organisez fréquemment des événements et souhaitez publier instantanément ?
+                        </p>
+                        <button type="button" id="contrib-pro-request" class="request-pro-btn" data-action="open-request-pro">
+                            <span class="material-symbols-outlined" aria-hidden="true">send</span>
+                            Demandez à être contributeur·rice pro
+                        </button>
+                    </div>
+                    
                     <button id="open-moderator-charter" class="notice-btn hidden" data-action="open-moderator-charter" aria-label="Ouvrir la charte du modérateur·rice">
                         <span class="material-symbols-outlined" aria-hidden="true">description</span>
-                        Charte du.de la modérateur·rice
+                        Charte modérateur·rice
                     </button>
                 </div>
             </div>
@@ -132,17 +170,17 @@
         </div>
 
         <div class="account-tile">
-            <div id="official-req-section" class="account-section-title details" data-action="accordion" data-accordion-id="official-requests" aria-expanded="false">
+            <div id="pro-request-section" class="account-section-title details" data-action="accordion" data-accordion-id="contrib-pro-requests" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">send</span>
-                    <span>Req. contrib. officiel·le</span>
+                    <span>Requêtes compte pro</span>
                     <div class="notification">
                         <span class="badge none">0</span>
                     </div>
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="official-requests" class="accordion-container" hidden>
+            <div id="contrib-pro-requests" class="accordion-container" hidden>
                 <div class="autocomplete account">
                     <input
                         type="text"
@@ -155,7 +193,7 @@
 
                     <div class="suggestions hidden"></div>
                 </div>
-                <div id="official-requests-list"></div>
+                <div id="contrib-pro-requests-list"></div>
             </div>
         </div>
 

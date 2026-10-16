@@ -1,13 +1,13 @@
 import { 
-    closeModal, openConfirmModal, confirm, sendOfficialRequest,
-    setConfirmBtnState, setSendBtnState, openModeratorCharterModal
-} from "../global/modal.js?v=f52a58d4.5467976";
+    closeModal, openConfirmModal, confirm,
+    setConfirmBtnState, openModeratorCharterModal
+} from "../global/modal.js?v=7118b96a.b3ecfe0";
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
-    sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
-    searchInput, shareEvent, sharePendingEvent, shareProfile
-} from "./account.js?v=f52a58d4.5467976";
+    sendResetPasswordRequest, updateProfileRole, openPendingEvent, openMyEvent, openProfile,
+    searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion
+} from "./account.js?v=7118b96a.b3ecfe0";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
@@ -47,8 +47,8 @@ async function handleClick(el) {
             updateProfileRole();
             break;
 
-        case "open-request-modal":
-            openRoleRequest();
+        case "open-request-pro":
+            window.location.href = `../request_pro`;
             break;
 
         case "show-pendingevent":
@@ -79,8 +79,8 @@ async function handleClick(el) {
             window.location.href = `../edit_event#id=${el.dataset.id}`;
             break;
 
-        case "send-official-request":
-            await sendOfficialRequest();
+         case "email-event":
+            emailEvent(el.dataset.id);
             break;
 
         case "open-confirm-modal":
@@ -112,10 +112,6 @@ async function handleInput(el) {
 
         case "confirm-code":
             setConfirmBtnState(el);
-            break;
-
-        case "request-details":
-            setSendBtnState(el);
             break;
 
         default:

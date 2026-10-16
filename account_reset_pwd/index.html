@@ -535,7 +535,7 @@
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Date de fin</h3>
             <p>Indiquez la date de fin de l'évènement si celui-ci s'étend sur plusieurs jours. Un évènement individuel sur chaque jour sera créé automatiquement.</p>
-            <p><strong>Durée maximum</strong> : 7 jours à partir de la date de début.</p>
+            <p><strong>Durée maximum</strong> : 8 jours, date de début incluse.</p>
             <p><strong>Note</strong> : lorsque vous voudrez supprimer ou éditer l'évènement, il faudra ensuite le faire pour chaque jour séparément.</p>
         </div>
     </div>
@@ -598,22 +598,40 @@
     </div>
 </div>
 
-<div id="contributor-charter-modal" class="modal-overlay info hidden" data-action="close-modal">
+<div id="publication-charter-modal" class="modal-overlay info hidden" data-action="close-modal">
     <div class="modal-card long info" data-no-action role="dialog" aria-modal="true">
         <button class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
         <div class="modal-content help">
-            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Charte du.de la contributeur·rice</h3>
-            <p>En publiant un évènement, vous acceptez de respecter la présente charte. Elle vise à garder l'agenda utile, culturel et agréable pour tout le monde.</p>
+            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Charte de publication</h3>
+
+            <p><strong>La charte de publication</strong> a pour but d'éviter de saturer l'agenda avec
+            des événements non-culturels ou hors sujet.</p>
+
+            <p>C'est une première proposition, amenée à évoluer et à être discutée collectivement, au fil des usages,
+            des besoins et des envies des utilisateur·rices de Planet Raves. N'hésitez pas à nous contacter si certains points
+            vous semblent peu clairs, ou si vous avez des questions, des remarques ou des suggestions pour la faire évoluer.
+
+            <p>En publiant un évènement, vous acceptez de respecter la présente charte.</p>
 
             <p><strong>Ce que vous pouvez publier :</strong></p>
-            <p>Des évènements <strong>culturels</strong> ouverts au public : concert, spectacle, projection, exposition, rencontre, atelier, festival, etc.</p>
+            <p>Des évènements qui répondent à l'ensemble des critères suivants :</p>
+            <ul>
+                <li>culturels, artistiques</li>
+                <li>ouverts au public</li>
+                <li>sur les territoires de Rabastens, Coufouleux, Salvagnac et alentours</li>
+                <li>ponctuels (mais ça peut être sur plusieurs jours)</li>
+            </ul>
+
+            <p>Cela concerne donc : <strong>concert</strong>, <strong>spectacle</strong>, <strong>projection</strong>, <strong>exposition</strong>, <strong>rencontre</strong>, 
+            atelier (seulement dans le cadre de la programmation d'un spectacle ou d'un festival), festival (dont la programmation propose des évènements dit de spectacle vivant, etc).</p>
+
 
             <p><strong>Vous vous engagez à :</strong></p>
             <ul>
                 <li>publier des informations <strong>exactes</strong> (titre, date, lieu, tarif, public)</li>
-                <li>ne publier que des évènements dont vous êtes <strong>organisateur·rice</strong> ou que vous êtes autorisé·e à relayer</li>
+                <li>ne publier que des évènements dont vous êtes <strong>organisateur·rice</strong> ou que vous êtes autorisé·e à relayer par le dit organisateur·rice</li>
                 <li>éviter les <strong>doublons</strong> : vérifiez que l'évènement n'est pas déjà en ligne</li>
                 <li>utiliser un contenu et une image <strong>appropriés</strong>, dont vous détenez les droits</li>
                 <li>tenir vos évènements à jour et <strong>supprimer</strong> ceux qui sont annulés</li>
@@ -621,22 +639,16 @@
 
             <p><strong>Ce qui n'est pas accepté :</strong></p>
             <ul>
-                <li>les évènements <strong>non culturels</strong> (par exemple un stage de bien-être ou une activité commerciale)</li>
+                <li>les évènements <strong>non culturels et artistiques</strong>, par exemple : un stage de bien-être, une activité promotionnelle et commerciale, etc...</li>
+                <li>Les activités de pratiques artistiques et culturelles régulières et annuelles, par exemple : un atelier de danse annuel tous les mercredis</li>
                 <li>le <strong>spam</strong>, la publicité et les contenus sans lien avec la vie culturelle locale</li>
-                <li>les contenus <strong>inappropriés</strong>, haineux, trompeurs ou illégaux</li>
+                <li>les contenus haineux, trompeurs, discriminatoires ou illégaux</li>
             </ul>
 
             <p><strong>Publication et modération :</strong></p>
-            <p>Selon votre statut, votre évènement est publié <strong>instantanément</strong> (contributeur·rice officiel·le) ou après un <strong>délai de trois jours</strong> (contributeur·rice non-officiel·le). L'équipe de modération peut à tout moment retirer un évènement qui ne respecte pas cette charte.</p>
+            <p>Selon votre statut, votre évènement est publié <strong>instantanément</strong> (contributeur·rice pro) ou après un <strong>délai de trois jours</strong> (contributeur·rice). L'équipe de modération peut à tout moment retirer un évènement qui ne respecte pas cette charte.</p>
 
-            <p><strong>Note :</strong> tout ceci a pour but d'éviter de saturer l'agenda avec des évènements non-culturels ou hors sujet. Merci de votre participation ! 💚</p>
-        </div>
-        <div id="contributor-charter-actions" class="modal-actions row" data-allow-action hidden>
-            <button class="modal-btn confirm basic" data-action="close-modal">Annuler</button>
-            <button id="charter-publish-btn" class="modal-btn confirm info" data-action="confirm-publish">
-                <span class="material-symbols-outlined" aria-hidden="true">send</span>
-                Publier
-            </button>
+            <p>Merci de votre participation ! 💚</p>
         </div>
     </div>
 </div>
@@ -712,7 +724,7 @@
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/account_reset_pwd/router.js?v=f52a58d4.5467976"></script>
+<script type="module" defer src="../assets/js/account_reset_pwd/router.js?v=7118b96a.b3ecfe0"></script>
 <html data-theme="light">
 
 
@@ -814,13 +826,15 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=f52a58d4.5467976"></script>
+        <script src="../assets/js/global/config.js?v=7118b96a.b3ecfe0"></script>
       
-        <script src="../assets/js/global/helper.js?v=f52a58d4.5467976"></script>
+        <script src="../assets/js/global/logger.js?v=7118b96a.b3ecfe0"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=f52a58d4.5467976"></script>
+        <script src="../assets/js/global/helper.js?v=7118b96a.b3ecfe0"></script>
       
-        <script src="../assets/js/global/supabase.js?v=f52a58d4.5467976"></script>
+        <script src="../assets/js/global/user_profile.js?v=7118b96a.b3ecfe0"></script>
+      
+        <script src="../assets/js/global/supabase.js?v=7118b96a.b3ecfe0"></script>
       
     
   </body>

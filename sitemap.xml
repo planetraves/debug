@@ -2,34 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://planetraves.fr/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/account/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/account_confirmed/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/account_reset_pwd/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/contacts/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/edit_event/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
+    </url>
+    <url>
+         <loc>https://planetraves.fr/request_pro/</loc>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/submit/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
     </url>
     <url>
          <loc>https://planetraves.fr/taches/</loc>
-         <lastmod>2026-10-07</lastmod>
+         <lastmod>2026-10-16</lastmod>
+    </url>
+    <url>
+         <loc>https://planetraves.fr/textes/</loc>
+         <lastmod>2026-10-16</lastmod>
     </url>
 </urlset>

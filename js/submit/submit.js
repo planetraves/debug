@@ -1,16 +1,13 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal, openContributorCharterModal } from "../global/modal.js?v=f52a58d4.5467976";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=f52a58d4.5467976";
+import { openErrorModal, openSuccessModal, openPublicationCharterModal } from "../global/modal.js?v=7118b96a.b3ecfe0";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=7118b96a.b3ecfe0";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
 // keep the spinner outside the .ready-gated content so it stays visible while loading
 document.body.appendChild(loading);
-const form = document.getElementById("event-form");
-const accountDetail = document.getElementById("account-detail");
-const accountRole = document.getElementById("account-role");
-const permissionDetails = document.getElementById("detail-permission");
+const eventForm = document.getElementById("event-form");
 const submitContainer = document.getElementById("submit-container");
 
 let user_profile = null;
@@ -29,7 +26,6 @@ async function initSubmitPage() {
 
 function showLoginWarning() {
     user_profile = null;
-    accountDetail.hidden = true;
     submitContainer.hidden = true;
     window.location.href = `../account/`
 }
@@ -38,49 +34,20 @@ function showSubmit(user, profile) {
     user_profile = profile;
     
     /* configure roles */
-    accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
-    permissionDetails.innerHTML = renderAccountPermissionDetails();
-    const permissionOfficial = permissionDetails.querySelector("#permission-official");
-    const permissionAdmin = permissionDetails.querySelector("#permission-admin");
-
-    switch(user_profile.role) {
-        case 0: /* non official */
-            permissionOfficial.classList.add("denied");
-            permissionOfficial.classList.remove("granted");
-            permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.hidden = true;
-            break;
-        
-        case 1: /* official */
-            permissionOfficial.classList.remove("denied");
-            permissionOfficial.classList.add("granted");
-            permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.hidden = true;
-            break;
-
-        case 2:
-        case 3: /* moderateur/admin */
-            permissionOfficial.classList.remove("denied");
-            permissionOfficial.classList.add("granted");
-            permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.hidden = false;
-            break;
-        
-        default:
-            permissionOfficial.classList.add("denied");
-            permissionOfficial.classList.remove("granted");
-            permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.hidden = true;
+    const basicContribText = document.querySelector(".text-basic-contributor");
+    if (user_profile.role == 0) {
+        basicContribText.classList.remove("hidden");
+    } else {
+        basicContribText.classList.add("hidden");
     }
-
+    
     /* initialize form */
     initEventForm();
-    form.querySelector("#end_date_container").hidden = false;
-    form.querySelector("#cancel-btn").hidden = true;
-    form.querySelector("#cancel-btn").disabled = true;
+    eventForm.querySelector("#end_date_container").hidden = false;
+    eventForm.querySelector("#cancel-btn").hidden = true;
+    eventForm.querySelector("#cancel-btn").disabled = true;
 
     /* show page */
-    accountDetail.hidden = false;
     submitContainer.hidden = false;
     loading.style.display = "none";
     document.documentElement.classList.add("ready");
@@ -93,13 +60,9 @@ export async function submitEvent() {
     if (!new_event) return;
 
     pendingEvent = new_event;
-    openContributorCharterModal(true);
-}
+    // openPublicationCharterModal(true);
 
-export async function confirmPublish() {
-    if (!pendingEvent) return;
-    const new_event = pendingEvent;
-    const publishBtn = document.getElementById("charter-publish-btn");
+    const publishBtn = eventForm.querySelector("#button")
     publishBtn?.setAttribute("aria-busy", "true");
 
     /* upload image if needed */
@@ -114,7 +77,7 @@ export async function confirmPublish() {
     /* push events on database */
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
-        payload.event_date = addDays(form.querySelector("#event_date").value, day).toLocaleDateString("fr-CA")
+        payload.event_date = formatDateStr(addDays(eventForm.querySelector("#event_date").value + "T00:00:00", day))
         payload.pending = user_profile.role == 0
         payload.created_by = user_profile?.id ?? null
         payload.creator_name = user_profile?.name ?? null;
@@ -139,15 +102,18 @@ export async function confirmPublish() {
     publishBtn?.setAttribute("aria-busy", "false");
     pendingEvent = null;
     window.scrollTo(0, 0);
-    form.reset();
-    openSuccessModal("Évènement publié ! Retour à la liste des évènements automatiquement.")
+    eventForm.reset();
+    
+    const basicContributor = user_profile.role == 0;
+    openSuccessModal(basicContributor
+        ? "Évènement proposé et en cours de validation. Il sera publié sous 3 jours. Retour à la liste des évènements automatiquement."
+        : "Évènement publié ! Retour à la liste des évènements automatiquement.");
 
     setTimeout(function () {
         window.location.href = "..";
-    }, 3000);
+    }, basicContributor ? 5000 : 3000);
     
 }
 
 /* === INITIAL LOAD === */
 initSubmitPage().catch(console.error);
-

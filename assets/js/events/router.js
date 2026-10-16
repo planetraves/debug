@@ -1,13 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
-} from "../global/modal.js?v=f52a58d4.5467976";
+} from "../global/modal.js?v=7118b96a.b3ecfe0";
 
 import { 
     openEvent, searchInput, 
     selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
-    handleSwipe, shareEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags
+    handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -69,6 +69,10 @@ async function handleClick(el, e) {
 
         case "edit-event":
             window.location.href = `../edit_event#id=${el.dataset.id}`;
+            break;
+
+        case "email-event":
+            emailEvent(el.dataset.id);
             break;
 
         case "open-confirm-modal":

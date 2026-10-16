@@ -4,23 +4,34 @@
             <span class="material-symbols-outlined" aria-hidden="true">info</span>
             <span id="title">Publier un évènement</span>
         </div>
-        <p id="text" class="notice-text">
-            <strong>Remplissez le formulaire</strong> pour publier un nouvel évènement.<br><br>Selon le type de contributeur·rice que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délai de trois jours.
-        </p>
-    </section>
-    <div id="account-detail" class="account-tile detail-section" hidden>
-        <div class="detail-row">
-            <span class="label">Contributeur·rice</span>
-            <span id="account-role" class="value detail-user"></span>
-        </div>
-
-        <div id="detail-permission"></div>
         
-        <p>
-            Plus d'infos sur
-            <a href="../account/" >Mon compte</a>
+        <p id="text" class="notice-text about">
+            Pour être publié sur Planet Raves, un événement doit être:
+            <strong>Culturel et artistique, ouvert au public, sur les territoires de Rabastens, Salvagnac Couffouleux et alentours</strong>.
+            <br><br>
+            Pour plus d'information sur les critères de publication, nous vous invitons à lire la <strong>charte de publication</strong>. 
+            Elle vise à garder l'agenda utile, culturel et agréable pour tout le monde. 
         </p>
-    </div>
+
+        <button id="open-publication-charter" class="notice-btn" data-action="open-publication-charter" aria-label="Ouvrir la charte de publication">
+            <span class="material-symbols-outlined" aria-hidden="true">description</span>
+            Charte de publication
+        </button>
+    </section>
+
+    <section class="notice-tile text-basic-contributor">
+        <p class="notice-text about">
+            <strong>En tant que contributeur·rice,</strong> vous pouvez proposer un nouvel événement
+            qui sera validé et publié <strong>sous trois jours</strong>.
+            <br>
+            Vous organisez fréquemment des événements et souhaitez publier instantanément ?
+        </p>
+        <button type="button" id="contrib-pro-request" class="request-pro-btn" data-action="open-request-pro">
+            <span class="material-symbols-outlined" aria-hidden="true">send</span>
+            Demandez à être contributeur·rice pro
+        </button>
+        <!-- <hr> -->
+    </section>
 
     <article class="submit-tile" data-allow-action>
         <form id="event-form">
@@ -79,7 +90,7 @@
                         <span class="material-symbols-outlined">help</span>
                     </button>
                 </span>
-                <input type="date" id="end_date" disabled>
+                <input type="date" id="end_date" data-change-type="end-date" disabled>
             </label>
 
             <label class="pico">
@@ -123,6 +134,15 @@
                     <label>
                         <input name="to_eat" type="checkbox" role="switch" />
                         À manger sur place
+                    </label>
+                </fieldset>
+            </label>
+
+            <label class="pico">
+                <fieldset>
+                    <label>
+                        <input name="to_drink" type="checkbox" role="switch" />
+                        Buvette sur place
                     </label>
                 </fieldset>
             </label>
