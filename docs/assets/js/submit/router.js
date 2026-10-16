@@ -5,7 +5,7 @@ import {
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, onFieldEdited
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, validateEndDate, onFieldEdited
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -112,6 +112,11 @@ async function handleChange(el) {
 
         case "event-date":
             updateEndDateBounds();
+            break;
+
+        case "end-date":
+            validateEndDate();
+            el.reportValidity();
             break;
 
         default:

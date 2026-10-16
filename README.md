@@ -74,6 +74,14 @@ Le déploiement génère le site (`mkdocs build`) puis le publie sur GitHub Page
 Le hash du commit courant est injecté dans les URLs des fichiers JS/CSS pour forcer
 le rafraîchissement du cache.
 
+### Dates des évènements
+
+Un évènement peut durer au maximum 8 jours, date de début incluse. Les bornes du
+champ de date de fin utilisent le format ISO `YYYY-MM-DD`, sans dépendre de la
+langue du navigateur. La durée est aussi validée à la sélection et à la publication,
+car certains calendriers natifs mobiles permettent de sélectionner une date hors
+des bornes.
+
 ## sbdb — outil base de données & Supabase
 
 `tools/sbdb/sbdb.py` communique avec Supabase directement (Postgres via `psycopg2`) ou via
@@ -142,8 +150,6 @@ python -m keyring set planetraves.dev.servicerolekey planetraves
 ```
 
 (le mot de passe demandé est la clé `service_role` à coller).
-
-
 
 
 

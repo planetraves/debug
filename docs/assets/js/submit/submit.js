@@ -77,7 +77,7 @@ export async function submitEvent() {
     /* push events on database */
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
-        payload.event_date = addDays(eventForm.querySelector("#event_date").value, day).toLocaleDateString("fr-CA")
+        payload.event_date = formatDateStr(addDays(eventForm.querySelector("#event_date").value + "T00:00:00", day))
         payload.pending = user_profile.role == 0
         payload.created_by = user_profile?.id ?? null
         payload.creator_name = user_profile?.name ?? null;
@@ -117,4 +117,3 @@ export async function submitEvent() {
 
 /* === INITIAL LOAD === */
 initSubmitPage().catch(console.error);
-
