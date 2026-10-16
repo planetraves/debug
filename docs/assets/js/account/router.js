@@ -6,7 +6,7 @@ import {
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfileRole, openPendingEvent, openMyEvent, openProfile,
-    searchInput, shareEvent, sharePendingEvent, shareProfile, handleAccordion
+    searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion
 } from "./account.js?v=dev";
 
 async function handleClick(el) {
@@ -77,6 +77,10 @@ async function handleClick(el) {
 
         case "edit-event":
             window.location.href = `../edit_event#id=${el.dataset.id}`;
+            break;
+
+         case "email-event":
+            emailEvent(el.dataset.id);
             break;
 
         case "open-confirm-modal":

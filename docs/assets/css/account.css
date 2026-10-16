@@ -143,6 +143,22 @@
     min-width: 0;
 }
 
+.account-details .detail-row a.detail-user {
+    color: #1a3fb4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.account-details .detail-row a.detail-user:hover {
+    background: #d5e3fc;
+    color: #15328f;
+}
+
+.account-details .detail-row a.detail-user:active {
+    background: #bdd2f7;
+    color: #10266b;
+}
+
 .detail-section {
     font-size: 0.75rem;
     color: var(--primary-textarea);
@@ -307,4 +323,3 @@
         align-items: center;
     }
 }
-

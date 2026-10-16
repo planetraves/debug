@@ -327,7 +327,7 @@ export function openProfileModal(profile, user_profile = null) {
             <div class="detail-section">
                 <div class="detail-row">
                     <span class="label">Email</span>
-                    <span id="account-email" class="value detail-user">${profile.email}</span>
+                    <a id="account-email" class="value detail-user" href="mailto:${profile.email}">${profile.email}</a>
                 </div>
                 <div class="detail-row">
                     <span class="label">Status</span>
@@ -371,6 +371,9 @@ export function openEventModal(event, type, user_profile=null) {
     eventModal.querySelector("#modal-share-btn").dataset.action = "share-event";
     eventModal.querySelector("#modal-share-btn").disabled = false;
     eventModal.querySelector("#modal-share-btn").dataset.id = currentEvent.id;
+    
+    eventModal.querySelector("#modal-email-event-btn").disabled = false;
+    eventModal.querySelector("#modal-email-event-btn").dataset.id = currentEvent.id;
 
     eventModal.querySelector("#modal-edit-event-btn").dataset.id = currentEvent.id;
 
@@ -379,6 +382,7 @@ export function openEventModal(event, type, user_profile=null) {
             eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-email-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
 
             if (event.pending) eventModal.querySelector("#modal-share-btn").classList.add("hidden");
@@ -388,6 +392,7 @@ export function openEventModal(event, type, user_profile=null) {
             eventModal.querySelector("#modal-share-btn").dataset.action = "share-pending-event";
             eventModal.querySelector("#modal-edit-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-email-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-reject-event-btn").classList.remove("hidden");
             break;
@@ -397,6 +402,15 @@ export function openEventModal(event, type, user_profile=null) {
             {
                 eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
                 eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
+
+                if ((user_profile.id != eventData.created_by) && (user_profile.role >= 2))
+                {
+                    eventModal.querySelector("#modal-email-event-btn").classList.remove("hidden");
+                }
+                else
+                {
+                    eventModal.querySelector("#modal-email-event-btn").classList.add("hidden");
+                }
             }
             else
             {
@@ -628,4 +642,3 @@ export function closeModal(target) {
 export function setConfirmBtnState(target) {
     updateConfirmBtnState();
 }
-

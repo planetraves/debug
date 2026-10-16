@@ -491,6 +491,26 @@ export async function shareEvent(eventId) {
     }
 }
 
+export async function emailEvent(eventId) {
+    const event = EVENTS.find(e => e.id === eventId);
+    if (!event) return;
+    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
+    const event_desc = `Bonjour ${event.creator_name} !
+
+Concernant cet évènement :
+ - Titre: ${event.title}
+ - Type: ${categoryLabel(eventCategoryIds(event))}
+ - Lieu: ${event.location_name}
+ - Date: ${formatDateForUI(event.event_date)}
+ - Lien: ${event_url}
+`;
+
+    const subject = encodeURIComponent(event.title);
+    const body = encodeURIComponent(event_desc);
+    const replyTo = encodeURIComponent(user_profile.email);
+    window.location.href = `mailto:${event.creator_email ?? ""}?subject=${subject}&body=${body}&reply-to=${replyTo}`;
+}
+
 export function searchInput(input) {
     const container = input.closest(".autocomplete");
     const suggestions = container.querySelector(".suggestions");
