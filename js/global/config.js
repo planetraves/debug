@@ -124,3 +124,11 @@ document.documentElement.style.setProperty("--category3--light", APP_CONFIG.CATE
 document.documentElement.style.setProperty("--category4--light", APP_CONFIG.CATEGORIES[4]["color_light"]);
 document.documentElement.style.setProperty("--category5--light", APP_CONFIG.CATEGORIES[5]["color_light"]);
 
+/* mobile debug console, never loaded in release builds */
+if (APP_CONFIG.DEV) {
+    const erudaScript = document.createElement("script");
+    erudaScript.src = "https://cdn.jsdelivr.net/npm/eruda@3";
+    erudaScript.onload = () => eruda.init();
+    document.head.appendChild(erudaScript);
+}
+
