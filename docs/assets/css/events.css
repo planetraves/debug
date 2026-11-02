@@ -37,6 +37,14 @@ body.events-page {
     transition: opacity 0.2s ease;
 }
 
+/* add an non visible transparent tile bellow the last event tile to create spacing at the bottom of the tiles view */
+#tiles-view:has(.section-tab.no-empty:not([hidden]) .event-tile:not(.hidden))::after {
+    content: "";
+    display: block;
+    height: 110px;
+    pointer-events: none;
+}
+
 .section-header {
     display: block;
     border-bottom: 1px solid var(--primary-subtext);
