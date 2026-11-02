@@ -90,7 +90,7 @@ def build():
 
 
 def patch_js_version(hash: str):
-    print("[[[[[[ path .js import with hash ]]]]]]")
+    print("[[[[[[ patch .js/.css imports with hash ]]]]]]")
 
     rand_h = random.getrandbits(32)
     rand_h = f"{rand_h:08x}"

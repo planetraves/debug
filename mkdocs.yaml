@@ -80,18 +80,18 @@ extra_css:
   - https://fonts.googleapis.com/css2?family=Audiowide&display=swap
   - https://fonts.googleapis.com/css2?family=Monoton&display=swap
   - https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.slate.min.css
-  - assets/css/theme.css
-  - assets/css/header.css
-  - assets/css/nav.css
-  - assets/css/toolbar.css
-  - assets/css/tags.css
-  - assets/css/notice.css
-  - assets/css/modal.css
-  - assets/css/events.css
-  - assets/css/calendar.css
-  - assets/css/submit.css
-  - assets/css/account.css
-  - assets/css/contacts.css
+  - assets/css/theme.css?v=dev
+  - assets/css/header.css?v=dev
+  - assets/css/nav.css?v=dev
+  - assets/css/toolbar.css?v=dev
+  - assets/css/tags.css?v=dev
+  - assets/css/notice.css?v=dev
+  - assets/css/modal.css?v=dev
+  - assets/css/events.css?v=dev
+  - assets/css/calendar.css?v=dev
+  - assets/css/submit.css?v=dev
+  - assets/css/account.css?v=dev
+  - assets/css/contacts.css?v=dev
 
 plugins:
     - macros
