@@ -170,6 +170,7 @@ html.ready .md-content {
 
 .page-container {
     margin: 0.4rem;
+    padding-bottom: 1.5rem;
 }
 
 .md-typeset {
@@ -244,6 +245,7 @@ table tr th:last-child {
 
 /* footer */
 .md-footer {
+    display: none;
     position: sticky;
     bottom: 0;
     flex-shrink: 0;
