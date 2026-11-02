@@ -20,20 +20,36 @@ async function initContactsPage() {
     document.documentElement.classList.add("ready");
 }
 
-function renderTeamTile(profile) {
-    var roleLabel = APP_CONFIG.ROLES[profile.role] || "";
-    if (profile.label) roleLabel += ` / ${profile.label}`;
+function renderTeamTile(profile, index) {
+    const name = escapeHtml(profile.name || "");
+    const email = escapeHtml(profile.email || "");
+    const roleLabel = escapeHtml(APP_CONFIG.ROLES[profile.role] || "");
+    const extraLabel = profile.label ? `<span class="team-badge team-badge-extra">${escapeHtml(profile.label)}</span>` : "";
+    const colorIndex = index % Object.keys(APP_CONFIG.CATEGORIES).length;
 
     return `
-        <a class="team-tile" href="mailto:${profile.email}">
-            <span class="team-avatar material-symbols-outlined" aria-hidden="true">person</span>
+        <div class="team-tile" tabindex="0" style="--team-accent: var(--category${colorIndex}); --team-accent-soft: var(--category${colorIndex}--light);">
+            <span class="team-avatar material-symbols-outlined" aria-hidden="true">support_agent</span>
             <span class="team-info">
-                <span class="team-name">${profile.name}</span>
-                <span class="team-role">${roleLabel}</span>
-                <span class="team-email">${profile.email}</span>
+                <span class="team-name">${name}</span>
+                <span class="team-badges">
+                    <span class="team-badge">${roleLabel}</span>
+                    ${extraLabel}
+                </span>
+                <span class="team-email">
+                    <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+                    <span class="team-email-text">${email}</span>
+                </span>
             </span>
-        </a>
+            <a class="team-write-btn" href="mailto:${email}" aria-label="Écrire à ${name}">Écrire</a>
+        </div>
     `;
+}
+
+function closeTeamTiles(except = null) {
+    teamList.querySelectorAll(".team-tile.open").forEach(tile => {
+        if (tile !== except) tile.classList.remove("open");
+    });
 }
 
 async function loadTeam() {
@@ -62,5 +78,26 @@ async function loadTeam() {
 
 
 /* === EXPORTED FUNCTIONS === */
+
+/* === LISTENER === */
+document.addEventListener("click", (e) => {
+    const tile = e.target.closest?.(".team-tile");
+    closeTeamTiles(tile);
+    tile?.classList.add("open");
+});
+
+teamList?.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("team-tile")) {
+        e.preventDefault();
+        e.target.classList.add("open");
+    }
+});
+
+teamList?.addEventListener("focusout", (e) => {
+    const tile = e.target.closest(".team-tile");
+    if (tile && !tile.contains(e.relatedTarget)) tile.classList.remove("open");
+});
+
+/* === MAIN === */
 initContactsPage().catch(console.error);
 
