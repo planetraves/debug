@@ -18,7 +18,7 @@ import {
 
 import { 
     submitEvent
-} from "./submit.js"
+} from "./submit.js?v=dev"
 
 
 /* === LOCAL FUNCTIONS === */

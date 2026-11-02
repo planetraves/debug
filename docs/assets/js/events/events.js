@@ -1,6 +1,7 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=dev";
+import { openErrorModal, openEventModal, openSuccessModal
+} from "../global/modal.js?v=dev";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion

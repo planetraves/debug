@@ -18,7 +18,7 @@ import {
 
 import { 
     editEvent, goBack
-} from "./edit_event.js"
+} from "./edit_event.js?v=dev"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
