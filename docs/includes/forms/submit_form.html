@@ -40,7 +40,7 @@
                 <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
             </label>
 
-            <label class="pico">
+            <div class="pico">
                 <span class="label-help">
                     Catégories *
                     <button type="button" class="help-btn" data-action="open-category-help" aria-label="Aide : catégories">
@@ -48,7 +48,7 @@
                     </button>
                 </span>
                 <div id="category-choices" class="category-choices"></div>
-            </label>
+            </div>
 
             <label for="tag-input" class="pico">
                 <span class="label-help">
@@ -83,7 +83,7 @@
                 <input type="date" id="event_date" data-change-type="event-date" required>
             </label>
 
-            <label id="end_date_container" class="pico" hidden>
+            <label id="end_date_container" for="end_date" class="pico" hidden>
                 <span class="label-help">
                     Date de fin (si plusieurs jours)
                     <button type="button" class="help-btn" data-action="open-end-date-help" aria-label="Aide : fin de l'évènement">
@@ -103,7 +103,7 @@
                 <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
             </label>
 
-            <label class="pico">
+            <label for="min_age" class="pico">
                 <span class="label-help">
                     Âge du public
                     <button type="button" class="help-btn" data-action="open-age-help" aria-label="Aide : âge du public">
