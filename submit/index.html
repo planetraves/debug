@@ -63,29 +63,29 @@
     
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.slate.min.css">
     
-      <link rel="stylesheet" href="../assets/css/theme.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/theme.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/header.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/header.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/nav.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/nav.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/toolbar.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/toolbar.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/tags.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/tags.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/notice.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/notice.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/modal.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/modal.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/events.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/events.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/calendar.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/calendar.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/submit.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/submit.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/account.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/account.css?v=b9bbf400.3115b09">
     
-      <link rel="stylesheet" href="../assets/css/contacts.css?v=08130c83.b181d7d">
+      <link rel="stylesheet" href="../assets/css/contacts.css?v=b9bbf400.3115b09">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -190,12 +190,12 @@
     <div class="subtitle-ticker">
         <div class="subtitle-ticker__track">
             <!-- repet twice for smoother tracking -->
-            <span>Faites la rave, pas la guerre 💚</span>
-            <span>Bienvenue sur l'agenda culturel du Rabastinois 💛</span>
-            <span>A Rabastens, Coufouleux, Salvagnac et aux alentours</span>
-            <span>Faites la rave, pas la guerre 💚</span>
-            <span>Bienvenue sur l'agenda culturel du Rabastinois 💛</span>
-            <span>A Rabastens, Coufouleux, Salvagnac et aux alentours</span>
+            <span data-string="header.md#message1">Faites la rave, pas la guerre 💚</span>
+            <span data-string="header.md#message2">Bienvenue sur l’agenda culturel du Rabastinois 💛</span>
+            <span data-string="header.md#message3">A Rabastens, Coufouleux, Salvagnac et aux alentours</span>
+            <span data-string="header.md#message1">Faites la rave, pas la guerre 💚</span>
+            <span data-string="header.md#message2">Bienvenue sur l’agenda culturel du Rabastinois 💛</span>
+            <span data-string="header.md#message3">A Rabastens, Coufouleux, Salvagnac et aux alentours</span>
         </div>
     </div>
     
@@ -513,12 +513,14 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Âge du public</h3>
-            <p>Indiquez la tranche d'âge à laquelle s'adresse l'évènement (de 0 à 18 ans).</p>
-            <ul>
-                <li><strong>Âge minimum</strong> : âge à partir duquel l'évènement est adapté.</li>
-                <li><strong>Âge maximum</strong> : âge jusqu'auquel l'évènement reste adapté.</li>
-            </ul>
-            <p>Laissez les deux champs vides pour un évènement tout public.</p>
+            <div data-string="help.md#age"><p>Indiquez la tranche d&rsquo;âge à laquelle s&rsquo;adresse l&rsquo;évènement (de 0 à 18 ans).</p>
+
+<ul>
+<li><strong>Âge minimum</strong> : âge à partir duquel l&rsquo;évènement est adapté.</li>
+<li><strong>Âge maximum</strong> : âge jusqu&rsquo;auquel l&rsquo;évènement reste adapté.</li>
+</ul>
+
+<p>Laissez les deux champs vides pour un évènement tout public.</p></div>
         </div>
     </div>
 </div>
@@ -530,13 +532,14 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Tags</h3>
-            <p>Les tags permettent de décrire l'évènement et d'en faciliter la recherche. Vous pouvez indiquer par exemple le style de musique ou le type de spectacle.</p>
-            <ul>
-                <li><strong>Exemple de tag</strong> : rock, jazz, cirque, poesie, etc.</li>
-                <li><strong>Conseil</strong> : utilisez des tags pertinents, précis et cours.</li>
-                <li><strong>Minimum</strong> 1 tag.</li>
-                <li><strong>Maximum</strong> 4 tags.</li>
-            </ul>
+            <div data-string="help.md#tag"><p>Les tags permettent de décrire l&rsquo;évènement et d&rsquo;en faciliter la recherche. Vous pouvez indiquer par exemple le style de musique ou le type de spectacle.</p>
+
+<ul>
+<li><strong>Exemple de tag</strong> : rock, jazz, cirque, poesie, etc.</li>
+<li><strong>Conseil</strong> : utilisez des tags pertinents, précis et cours.</li>
+<li><strong>Minimum</strong> 1 tag.</li>
+<li><strong>Maximum</strong> 4 tags.</li>
+</ul></div>
         </div>
     </div>
 </div>
@@ -548,9 +551,11 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Date de fin</h3>
-            <p>Indiquez la date de fin de l'évènement si celui-ci s'étend sur plusieurs jours. Un évènement individuel sur chaque jour sera créé automatiquement.</p>
-            <p><strong>Durée maximum</strong> : 8 jours, date de début incluse.</p>
-            <p><strong>Note</strong> : lorsque vous voudrez supprimer ou éditer l'évènement, il faudra ensuite le faire pour chaque jour séparément.</p>
+            <div data-string="help.md#end-date"><p>Indiquez la date de fin de l&rsquo;évènement si celui-ci s&rsquo;étend sur plusieurs jours. Un évènement individuel sur chaque jour sera créé automatiquement.</p>
+
+<p><strong>Durée maximum</strong> : 8 jours, date de début incluse.</p>
+
+<p><strong>Note</strong> : lorsque vous voudrez supprimer ou éditer l&rsquo;évènement, il faudra ensuite le faire pour chaque jour séparément.</p></div>
         </div>
     </div>
 </div>
@@ -562,9 +567,11 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Catégories</h3>
-            <p>Chaque évènement est associé à une ou plusieurs catégories définies ici.</p>
-            <p>Veuillez en sélectionner au moins une.</p>
-            <p><strong>Note</strong> : chaque catégorie est associée à une couleur, qui servira de légende pour faciliter la recherche d'évènements.</p>
+            <div data-string="help.md#category"><p>Chaque évènement est associé à une ou plusieurs catégories définies ici.</p>
+
+<p>Veuillez en sélectionner au moins une.</p>
+
+<p><strong>Note</strong> : chaque catégorie est associée à une couleur, qui servira de légende pour faciliter la recherche d&rsquo;évènements.</p></div>
         </div>
     </div>
 </div>
@@ -576,12 +583,13 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Où ?</h3>
-            <p>Filtrez les évènements par zone géographique, déterminée à partir du code postal du lieu.</p>
-            <ul>
-                <li><strong>Rabas/Couf</strong> : évènements situés dans le 81800.</li>
-                <li><strong>Salvagnac</strong> : évènements situés dans le 81630.</li>
-                <li><strong>Ailleurs</strong> : évènements situés dans les autres communes.</li>
-            </ul>
+            <div data-string="help.md#area"><p>Filtrez les évènements par zone géographique, déterminée à partir du code postal du lieu.</p>
+
+<ul>
+<li><strong>Rabas/Couf</strong> : évènements situés dans le 81800.</li>
+<li><strong>Salvagnac</strong> : évènements situés dans le 81630.</li>
+<li><strong>Ailleurs</strong> : évènements situés dans les autres communes.</li>
+</ul></div>
         </div>
     </div>
 </div>
@@ -593,21 +601,30 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Aide</h3>
-            <p><strong>Navigation :</strong></p>
-            <p>Parcourez ici les différents évènements disponibles.</p>
-            <p>Chaque évènement peut être classé en plusieurs catégories (concert, 
-                spectacle, exposition, etc.) et un code couleur fait office de légende.</p>
-            <p>Utilisez les boutons pour choisir le mode d'affichage des évènements :</p>
-            <ul>
-                <li><span class="material-symbols-outlined">view_agenda</span><strong>Liste</strong> : les évènements à venir, regroupés par période.</li>
-                <li><span class="material-symbols-outlined">calendar_month</span><strong>Agenda</strong> : les évènements sur un calendrier mensuel.</li>
-            </ul>
-            <p><strong>Cliquez</strong> sur un évènement pour en voir les détails.</p>
-            <p>Lorsque la carte de l'évènement est ouverte, des boutons sont disponibles en bas pour partager ou éditer/supprimer vos évènements.</p>
-            <p><strong>Filtre :</strong></p>
-            <p>Utilisez les boutons de la barre d'outil pour filtrer par catégorie.</p>
-            <p>Ouvrez « Plus de filtres » pour affiner la recherche par zone, âge du public, prix ou mot-clé.</p>
-            <p>Lorsqu'au moins un filtre est activé, un bouton <strong>Reset</strong> apparaît pour permettre de réinitialiser les filtres.</p>
+            <div data-string="help.md#view"><p><strong>Navigation :</strong></p>
+
+<p>Parcourez ici les différents évènements disponibles.</p>
+
+<p>Chaque évènement peut être classé en plusieurs catégories (concert, spectacle, exposition, etc.) et un code couleur fait office de légende.</p>
+
+<p>Utilisez les boutons pour choisir le mode d&rsquo;affichage des évènements :</p>
+
+<ul>
+<li><span class="material-symbols-outlined">view_agenda</span><strong>Liste</strong> : les évènements à venir, regroupés par période.</li>
+<li><span class="material-symbols-outlined">calendar_month</span><strong>Agenda</strong> : les évènements sur un calendrier mensuel.</li>
+</ul>
+
+<p><strong>Cliquez</strong> sur un évènement pour en voir les détails.</p>
+
+<p>Lorsque la carte de l&rsquo;évènement est ouverte, des boutons sont disponibles en bas pour partager ou éditer/supprimer vos évènements.</p>
+
+<p><strong>Filtre :</strong></p>
+
+<p>Utilisez les boutons de la barre d&rsquo;outil pour filtrer par catégorie.</p>
+
+<p>Ouvrez « Plus de filtres » pour affiner la recherche par zone, âge du public, prix ou mot-clé.</p>
+
+<p>Lorsqu&rsquo;au moins un filtre est activé, un bouton <strong>Reset</strong> apparaît pour permettre de réinitialiser les filtres.</p></div>
         </div>
     </div>
 </div>
@@ -619,50 +636,49 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Charte de publication</h3>
+            <div data-string="charters.md#publication"><p><strong>La charte de publication</strong> a pour but d&rsquo;éviter de saturer l&rsquo;agenda avec des événements non-culturels ou hors sujet.</p>
 
-            <p><strong>La charte de publication</strong> a pour but d'éviter de saturer l'agenda avec
-            des événements non-culturels ou hors sujet.</p>
+<p>C&rsquo;est une première proposition, amenée à évoluer et à être discutée collectivement, au fil des usages, des besoins et des envies des utilisateur·rices de Planet Raves. N&rsquo;hésitez pas à nous contacter si certains points vous semblent peu clairs, ou si vous avez des questions, des remarques ou des suggestions pour la faire évoluer.</p>
 
-            <p>C'est une première proposition, amenée à évoluer et à être discutée collectivement, au fil des usages,
-            des besoins et des envies des utilisateur·rices de Planet Raves. N'hésitez pas à nous contacter si certains points
-            vous semblent peu clairs, ou si vous avez des questions, des remarques ou des suggestions pour la faire évoluer.
+<p>En publiant un évènement, vous acceptez de respecter la présente charte.</p>
 
-            <p>En publiant un évènement, vous acceptez de respecter la présente charte.</p>
+<p><strong>Ce que vous pouvez publier :</strong></p>
 
-            <p><strong>Ce que vous pouvez publier :</strong></p>
-            <p>Des évènements qui répondent à l'ensemble des critères suivants :</p>
-            <ul>
-                <li>culturels, artistiques</li>
-                <li>ouverts au public</li>
-                <li>sur les territoires de Rabastens, Coufouleux, Salvagnac et alentours</li>
-                <li>ponctuels (mais ça peut être sur plusieurs jours)</li>
-            </ul>
+<p>Des évènements qui répondent à l&rsquo;ensemble des critères suivants :</p>
 
-            <p>Cela concerne donc : <strong>concert</strong>, <strong>spectacle</strong>, <strong>projection</strong>, <strong>exposition</strong>, <strong>rencontre</strong>, 
-            atelier (seulement dans le cadre de la programmation d'un spectacle ou d'un festival), festival (dont la programmation propose des évènements dit de spectacle vivant, etc).</p>
+<ul>
+<li>culturels, artistiques</li>
+<li>ouverts au public</li>
+<li>sur les territoires de Rabastens, Coufouleux, Salvagnac et alentours</li>
+<li>ponctuels (mais ça peut être sur plusieurs jours)</li>
+</ul>
 
+<p>Cela concerne donc : <strong>concert</strong>, <strong>spectacle</strong>, <strong>projection</strong>, <strong>exposition</strong>, <strong>rencontre</strong>, atelier (seulement dans le cadre de la programmation d&rsquo;un spectacle ou d&rsquo;un festival), festival (dont la programmation propose des évènements dit de spectacle vivant, etc).</p>
 
-            <p><strong>Vous vous engagez à :</strong></p>
-            <ul>
-                <li>publier des informations <strong>exactes</strong> (titre, date, lieu, tarif, public)</li>
-                <li>ne publier que des évènements dont vous êtes <strong>organisateur·rice</strong> ou que vous êtes autorisé·e à relayer par le dit organisateur·rice</li>
-                <li>éviter les <strong>doublons</strong> : vérifiez que l'évènement n'est pas déjà en ligne</li>
-                <li>utiliser un contenu et une image <strong>appropriés</strong>, dont vous détenez les droits</li>
-                <li>tenir vos évènements à jour et <strong>supprimer</strong> ceux qui sont annulés</li>
-            </ul>
+<p><strong>Vous vous engagez à :</strong></p>
 
-            <p><strong>Ce qui n'est pas accepté :</strong></p>
-            <ul>
-                <li>les évènements <strong>non culturels et artistiques</strong>, par exemple : un stage de bien-être, une activité promotionnelle et commerciale, etc...</li>
-                <li>Les activités de pratiques artistiques et culturelles régulières et annuelles, par exemple : un atelier de danse annuel tous les mercredis</li>
-                <li>le <strong>spam</strong>, la publicité et les contenus sans lien avec la vie culturelle locale</li>
-                <li>les contenus haineux, trompeurs, discriminatoires ou illégaux</li>
-            </ul>
+<ul>
+<li>publier des informations <strong>exactes</strong> (titre, date, lieu, tarif, public)</li>
+<li>ne publier que des évènements dont vous êtes <strong>organisateur·rice</strong> ou que vous êtes autorisé·e à relayer par le dit organisateur·rice</li>
+<li>éviter les <strong>doublons</strong> : vérifiez que l&rsquo;évènement n&rsquo;est pas déjà en ligne</li>
+<li>utiliser un contenu et une image <strong>appropriés</strong>, dont vous détenez les droits</li>
+<li>tenir vos évènements à jour et <strong>supprimer</strong> ceux qui sont annulés</li>
+</ul>
 
-            <p><strong>Publication et modération :</strong></p>
-            <p>Selon votre statut, votre évènement est publié <strong>instantanément</strong> (contributeur·rice pro) ou après un <strong>délai de trois jours</strong> (contributeur·rice). L'équipe de modération peut à tout moment retirer un évènement qui ne respecte pas cette charte.</p>
+<p><strong>Ce qui n&rsquo;est pas accepté :</strong></p>
 
-            <p>Merci de votre participation ! 💚</p>
+<ul>
+<li>les évènements <strong>non culturels et artistiques</strong>, par exemple : un stage de bien-être, une activité promotionnelle et commerciale, etc&hellip;</li>
+<li>Les activités de pratiques artistiques et culturelles régulières et annuelles, par exemple : un atelier de danse annuel tous les mercredis</li>
+<li>le <strong>spam</strong>, la publicité et les contenus sans lien avec la vie culturelle locale</li>
+<li>les contenus haineux, trompeurs, discriminatoires ou illégaux</li>
+</ul>
+
+<p><strong>Publication et modération :</strong></p>
+
+<p>Selon votre statut, votre évènement est publié <strong>instantanément</strong> (contributeur·rice pro) ou après un <strong>délai de trois jours</strong> (contributeur·rice). L&rsquo;équipe de modération peut à tout moment retirer un évènement qui ne respecte pas cette charte.</p>
+
+<p>Merci de votre participation ! 💚</p></div>
         </div>
     </div>
 </div>
@@ -674,29 +690,34 @@
         </button>
         <div class="modal-content help">
             <h3 class="help-title"><span class="notice-icon">ℹ️</span> Charte du modérateur·rice</h3>
-            <p>Veuillez lire attentivement la charte avant de modérer un évènement ou une requête utilisateur·rice.</p>
-            <p><strong>Évènements :</strong></p>
-            <p>Quand vous en avez le temps, modérez les évènements (en attente de publication ou déjà publiés).
-            Un évènement peut être rejeté ou supprimé si :</p>
-            <ul>
-                <li>le contenu est inapproprié</li>
-                <li>il y a doublon</li>
-                <li>il n'est pas culturel (un stage de massage n'est pas culturel par exemple)</li>
-                <li>il est un spam ou une publicité</li>
-            </ul>
-            <p><strong>Requête contributeur·rice officiel·le :</strong></p>
-            <p>Un·e utilisateur·rice "non-officiel·le" peut faire la demande à devenir un·e contributeur·rice "officiel·le".
-            Il·elle pourra ainsi publier un nouvel évènement instantanément.
-            Quand vous en avez le temps, modérez ces requêtes.
-            Une requête peut être rejetée si :</p>
-            <ul>
-                <li>la demande est non justifiée</li>
-                <li>les informations concernant l'utilisateur·rice sont incorrectes ou insuffisantes</li>
-                <li>l'activité du contributeur·rice ne le justifie pas</li>
-            </ul>
-            <p>Veuillez vous assurer que le·la contributeur·rice semble une personne/association/groupe qui a l'habitude de poster des évènements culturels, et ne sera pas sujet à poster d'autres évènements d'un autre type.</p>
-            <p><strong>Note :</strong> Gardez en tête que tout ceci a pour but de ne pas spammer l'agenda d'évènements non-culturels et impertinents.</p>
-            <p><strong>Conseil :</strong> En case de doute, vous pouvez partager l'évènement ou la requête sur le groupe WhatsApp <strong>Planet Raves Moderation</strong> et demander de l'avis des autres modérateur·rice·s.</p>
+            <div data-string="charters.md#moderation"><p>Veuillez lire attentivement la charte avant de modérer un évènement ou une requête utilisateur·rice.</p>
+
+<p><strong>Évènements :</strong></p>
+
+<p>Quand vous en avez le temps, modérez les évènements (en attente de publication ou déjà publiés). Un évènement peut être rejeté ou supprimé si :</p>
+
+<ul>
+<li>le contenu est inapproprié</li>
+<li>il y a doublon</li>
+<li>il n&rsquo;est pas culturel (un stage de massage n&rsquo;est pas culturel par exemple)</li>
+<li>il est un spam ou une publicité</li>
+</ul>
+
+<p><strong>Requête contributeur·rice officiel·le :</strong></p>
+
+<p>Un·e utilisateur·rice &ldquo;non-officiel·le&rdquo; peut faire la demande à devenir un·e contributeur·rice &ldquo;officiel·le&rdquo;. Il·elle pourra ainsi publier un nouvel évènement instantanément. Quand vous en avez le temps, modérez ces requêtes. Une requête peut être rejetée si :</p>
+
+<ul>
+<li>la demande est non justifiée</li>
+<li>les informations concernant l&rsquo;utilisateur·rice sont incorrectes ou insuffisantes</li>
+<li>l&rsquo;activité du contributeur·rice ne le justifie pas</li>
+</ul>
+
+<p>Veuillez vous assurer que le·la contributeur·rice semble une personne/association/groupe qui a l&rsquo;habitude de poster des évènements culturels, et ne sera pas sujet à poster d&rsquo;autres évènements d&rsquo;un autre type.</p>
+
+<p><strong>Note :</strong> Gardez en tête que tout ceci a pour but de ne pas spammer l&rsquo;agenda d&rsquo;évènements non-culturels et impertinents.</p>
+
+<p><strong>Conseil :</strong> En case de doute, vous pouvez partager l&rsquo;évènement ou la requête sur le groupe WhatsApp <strong>Planet Raves Moderation</strong> et demander de l&rsquo;avis des autres modérateur·rice·s.</p></div>
         </div>
     </div>
 </div>
@@ -713,15 +734,11 @@
             <span class="material-symbols-outlined" aria-hidden="true">add_circle</span>
             <span id="title">Publier un évènement</span>
         </div>
+        <div id="text" class="notice-text about" data-string="submit.md#submit-form"><p>Pour être publié sur Planet Raves, un événement doit être:
+<strong>Culturel et artistique, ouvert au public, sur les territoires de Rabastens, Salvagnac Couffouleux et alentours</strong>.</p>
 
-        <p id="text" class="notice-text about">
-            Pour être publié sur Planet Raves, un événement doit être:
-            <strong>Culturel et artistique, ouvert au public, sur les territoires de Rabastens, Salvagnac Couffouleux et alentours</strong>.
-            <br><br>
-            Pour plus d'information sur les critères de publication, nous vous invitons à lire la <strong>charte de publication</strong>. 
-            Elle vise à garder l'agenda utile, culturel et agréable pour tout le monde. 
-        </p>
-
+<p>Pour plus d&rsquo;information sur les critères de publication, nous vous invitons à lire la <strong>charte de publication</strong>. 
+Elle vise à garder l&rsquo;agenda utile, culturel et agréable pour tout le monde. </p></div>
         <button id="open-publication-charter" class="notice-btn" data-action="open-publication-charter" aria-label="Ouvrir la charte de publication">
             <span class="material-symbols-outlined" aria-hidden="true">description</span>
             Charte de publication
@@ -729,17 +746,14 @@
     </section>
 
     <section class="notice-tile text-basic-contributor">
-        <p class="notice-text about">
-            <strong>En tant que contributeur·rice,</strong> vous pouvez proposer un nouvel événement
-            qui sera validé et publié <strong>sous trois jours</strong>.
-            <br>
-            Vous organisez <strong>fréquemment</strong> des événements et souhaitez publier instantanément ?
-        </p>
+        <div class="notice-text about" data-string="submit.md#pro-request-tip"><p><strong>En tant que contributeur·rice</strong>, vous pouvez proposer un nouvel événement
+qui sera validé et publié <strong>sous trois jours</strong>.</p>
+
+<p>Vous organisez <strong>fréquemment</strong> des événements et souhaitez publier instantanément ?</p></div>
         <button type="button" id="contrib-pro-request" class="notice-btn" data-action="open-request-pro">
             <span class="material-symbols-outlined" aria-hidden="true">electric_bolt</span>
             Demandez à être contributeur·rice pro
         </button>
-        <!-- <hr> -->
     </section>
 
     <article class="submit-tile" data-allow-action>
@@ -897,7 +911,7 @@
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/submit/router.js?v=08130c83.b181d7d"></script>
+<script type="module" defer src="../assets/js/submit/router.js?v=b9bbf400.3115b09"></script>
 <html data-theme="light">
 
 
@@ -999,15 +1013,15 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=08130c83.b181d7d"></script>
+        <script src="../assets/js/global/config.js?v=b9bbf400.3115b09"></script>
       
-        <script src="../assets/js/global/logger.js?v=08130c83.b181d7d"></script>
+        <script src="../assets/js/global/logger.js?v=b9bbf400.3115b09"></script>
       
-        <script src="../assets/js/global/helper.js?v=08130c83.b181d7d"></script>
+        <script src="../assets/js/global/helper.js?v=b9bbf400.3115b09"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=08130c83.b181d7d"></script>
+        <script src="../assets/js/global/user_profile.js?v=b9bbf400.3115b09"></script>
       
-        <script src="../assets/js/global/supabase.js?v=08130c83.b181d7d"></script>
+        <script src="../assets/js/global/supabase.js?v=b9bbf400.3115b09"></script>
       
     
   </body>
