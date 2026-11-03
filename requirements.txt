@@ -7,4 +7,5 @@ mkdocs<2.0
 mkdocs-material>=9.5
 mkdocs-minify-plugin
 mkdocs-macros-plugin
+beautifulsoup4
 pyyaml

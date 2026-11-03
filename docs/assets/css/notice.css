@@ -42,10 +42,19 @@
 
 .notice-text {
     margin: 0.6rem 0 0.2rem;
-    font-size: 0.9rem;
+    /* font-size: 0.9rem;
     line-height: 1.5;
-    color: var(--primary-notice--text);
+    color: var(--primary-notice--text); */
 }
+/* 
+.md-typeset .notice-text > p {
+    margin: 0;
+    font-size: inherit;
+}
+
+.md-typeset .notice-text > p + p {
+    margin-top: 1.5em;
+} */
 
 .notice-text.hidden {
     display: none;

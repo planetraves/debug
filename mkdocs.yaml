@@ -1,8 +1,8 @@
 
 site_name: Planet Raves
-site_subtitle1: "Faites la rave, pas la guerre 💚"
-site_subtitle2: "Bienvenue sur l'agenda culturel du Rabastinois 💛"
-site_subtitle3: "A Rabastens, Coufouleux, Salvagnac et aux alentours"
+# site_subtitle1: "Faites la rave, pas la guerre 💚"
+# site_subtitle2: "Bienvenue sur l'agenda culturel du Rabastinois 💛"
+# site_subtitle3: "A Rabastens, Coufouleux, Salvagnac et aux alentours"
 site_url: https://planetraves.fr
 
 theme:
@@ -98,3 +98,4 @@ plugins:
 
 hooks:
   - hooks/supabase_env.py
+  - hooks/markdown_strings.py

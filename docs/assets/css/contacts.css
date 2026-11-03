@@ -11,11 +11,8 @@
 
 .team-text {
     margin: 0.6rem 0 0.2rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
-        text-align: justify;
+    text-align: justify;
     text-justify: newspaper;
-    color: var(--md-default-fg-color);
 }
 
 .team-grid {

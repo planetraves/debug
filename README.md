@@ -74,6 +74,42 @@ Le déploiement génère le site (`mkdocs build`) puis le publie sur GitHub Page
 Le hash du commit courant est injecté dans les URLs des fichiers JS/CSS pour forcer
 le rafraîchissement du cache.
 
+### Textes Markdown partages
+
+Le hook `hooks/markdown_strings.py` rassemble tous les fichiers `.md` de
+`docs/assets/strings/` (sous-dossiers inclus) dans `site/assets/strings.json`
+lors de `mkdocs build` et `mkdocs serve`. Ce JSON contient du HTML rendu avec
+les extensions Markdown du site. Les sources ne deviennent pas des pages du site.
+
+Chaque fichier fournit une cle (`about.md`) pour son contenu complet et une cle
+par titre (`about.md#about`, `about.md#extra`). Une section exclut son propre
+titre et se termine au prochain titre de niveau egal ou superieur ; elle inclut
+donc ses sous-sections. Les identifiants suivent les regles du sommaire Markdown.
+
+Dans un include HTML, utiliser un conteneur acceptant des paragraphes :
+
+```html
+<div id="about" data-string="about.md#about"></div>
+```
+
+Le hook remplit ces conteneurs pendant le build, apres le traitement des includes.
+Le texte est deja present dans le HTML servi, sans JavaScript ni requete JSON.
+Une cle inconnue fait echouer le build avec le nom de la page concernee.
+
+Le JSON reste disponible pour JavaScript et n'est charge que sur demande.
+Dans un module situe dans `assets/js/contacts/`, par exemple :
+
+```javascript
+import { getString, applyStrings } from "../global/strings.js?v=dev";
+
+const aboutHtml = await getString("about.md#about");
+document.getElementById("about").innerHTML = aboutHtml;
+```
+
+Pour du HTML ajoute dynamiquement, appeler `await applyStrings(container)` apres
+insertion. Les valeurs sont du HTML, pas du texte brut ; n'utiliser que des
+sources Markdown de confiance. Seuls ces textes dynamiques necessitent JavaScript.
+
 ### Dates des évènements
 
 Un évènement peut durer au maximum 8 jours, date de début incluse. Les bornes du
