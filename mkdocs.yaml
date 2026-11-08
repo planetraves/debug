@@ -69,6 +69,7 @@ extra_css:
   - https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap
   - https://fonts.googleapis.com/css2?family=Audiowide&display=swap
   - https://fonts.googleapis.com/css2?family=Monoton&display=swap
+  - https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap
   - https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.slate.min.css
   - assets/css/theme.css?v=dev
   - assets/css/header.css?v=dev

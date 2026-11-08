@@ -25,12 +25,18 @@
     color: var(--primary-title);
 }
 
+.md-header__button.md-icon.drawer svg {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
 /* Big logo row above the title; collapses when the header gets .md-header--logo-hidden */
 .md-header__logo-top {
+    --logo-top-height: 120px;
     display: flex;
     justify-content: center;
     overflow: hidden;
-    max-height: 6rem;
+    max-height: calc(var(--logo-top-height) + 0.4rem);
     padding-top: 0.4rem;
     opacity: 1;
     transition: max-height 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
@@ -60,7 +66,7 @@ body {
    --logo-detail : carved highlight lines (defaults to header bg so they read as cut-outs)
    --logo-weight : extra outline thickness in screen px (0 = original shape) */
 .md-header__brand-logo {
-    height: 80px;
+    height: var(--logo-top-height, 120px);
     width: auto;
     flex-shrink: 0;
 
@@ -84,9 +90,9 @@ body {
 
 /* Title text */
 .site-title {
-    font-family: "Audiowide", cursive;
-    font-size: 1.2rem;
-    font-weight: 400; /* Monoton only ships weight 400 */
+    font-family: "Barlow Semi Condensed", cursive;
+    font-size: 2rem;
+    font-weight: 800; /* Monoton only ships weight 400 */
     text-transform: uppercase;
     color: var(--primary-title);
     white-space: nowrap;
