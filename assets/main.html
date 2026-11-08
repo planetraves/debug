@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+    {% set site_root = config.site_url.rstrip("/") %}
+    {% set share_title = config.site_name if (not page or page.is_homepage) else (page.title | striptags) ~ " - " ~ config.site_name %}
+    {% set share_url = page.canonical_url if page and page.canonical_url else site_root ~ "/" %}
+    {% set share_image = site_root ~ "/assets/images/share-image-raves.jpg" %}
+
+    <!-- Link previews (WhatsApp, Signal, ...) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ config.site_name }}">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="{{ share_title }}">
+    <meta property="og:description" content="{{ config.site_description }}">
+    <meta property="og:url" content="{{ share_url }}">
+    <meta property="og:image" content="{{ share_image }}">
+    <meta property="og:image:secure_url" content="{{ share_image }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1201">
+    <meta property="og:image:height" content="961">
+    <meta property="og:image:alt" content="{{ config.site_name }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ share_image }}">
+{% endblock %}
