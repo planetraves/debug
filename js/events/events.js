@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal, openSuccessModal
-} from "../global/modal.js?v=d55a67d8.8d7c4d7";
+} from "../global/modal.js?v=ebda1e57.c2876f6";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=d55a67d8.8d7c4d7";
+} from "./renderevents.js?v=ebda1e57.c2876f6";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -17,6 +17,9 @@ const loading = document.getElementById("loading-screen");
 const tilesView = document.getElementById("tiles-view");
 const agendaView = document.getElementById("agenda-view");
 const calendarEl = document.getElementById("calendar");
+const eventsMain = document.querySelector(".events-main");
+const CALENDAR_BOTTOM_GAP = 12; // px kept free under the calendar
+const CALENDAR_MIN_HEIGHT = 220; // below this, let the view scroll rather than crush the cells
 
 const toolbar = document.getElementById("toolbar");
 const switchViewArea = document.getElementById("switch-view-btns");
@@ -357,6 +360,15 @@ function renderCalendar(events=EVENTS) {
     loading.style.display = "none";
     // the tiles empty-state message doesn't apply to the calendar (empty grid speaks for itself)
     emptyState.classList.add("hidden");
+    eventsMain.scrollTop = 0;
+    fitCalendar();
+}
+
+// Size the calendar to the remaining screen height so the whole month is visible without scrolling
+function fitCalendar() {
+    if (agendaView.hidden) return;
+    const available = window.innerHeight - calendarEl.getBoundingClientRect().top - CALENDAR_BOTTOM_GAP;
+    calendarEl.style.height = `${Math.max(available, CALENDAR_MIN_HEIGHT)}px`;
 }
 
 function animateSwipe(direction) {
@@ -817,6 +829,12 @@ calendarEl?.addEventListener("touchmove", (e) => {
         e.preventDefault(); // prevent vertical scroll while swiping
     }
 }, { passive: false });
+
+// header (logo collapse) and toolbar (filters panel) change the space left for the calendar
+window.addEventListener("resize", fitCalendar);
+const calendarSpaceObserver = new ResizeObserver(fitCalendar);
+calendarSpaceObserver.observe(document.querySelector(".md-header"));
+calendarSpaceObserver.observe(toolbar);
 
 
 /* === MAIN === */

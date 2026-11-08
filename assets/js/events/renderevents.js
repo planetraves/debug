@@ -75,15 +75,15 @@ export function renderEventTile(event) {
 export function renderDots(dayEvents) {
     if (!dayEvents || !dayEvents.length) return "";
 
-    const MAX = 5; // one dot per event, cap to keep the cell readable
-    const shown = dayEvents.slice(0, MAX);
+    const MAX = 4; // 2x2 slots per cell; when over, the last slot becomes "+N"
+    const shown = dayEvents.length > MAX ? dayEvents.slice(0, MAX - 1) : dayEvents;
 
     let html = shown.map(ids => {
         const background = categoryPieBackground(ids);
         return `<span class="calendar-dot" style="background:${background}"></span>`;
     }).join("");
 
-    const extra = dayEvents.length - MAX;
+    const extra = dayEvents.length - shown.length;
     if (extra > 0) {
         html += `<span class="calendar-dot calendar-dot-more">+${extra}</span>`;
     }
