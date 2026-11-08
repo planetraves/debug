@@ -9,7 +9,7 @@
     top: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    flex-direction: row;  /* logo on the left, title on its right */
+    flex-direction: row;
     align-items: center;
     gap: 0rem;
     text-decoration: none;
@@ -25,18 +25,44 @@
     color: var(--primary-title);
 }
 
-/* Logo icon (sits to the left of the title) — inline SVG, colored via CSS.
+/* Big logo row above the title; collapses when the header gets .md-header--logo-hidden */
+.md-header__logo-top {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    max-height: 6rem;
+    padding-top: 0.4rem;
+    opacity: 1;
+    transition: max-height 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+}
+
+.md-header--logo-hidden .md-header__logo-top {
+    max-height: 0;
+    padding-top: 0;
+    opacity: 0;
+}
+
+/* Header height changes on scroll; disable scroll anchoring so the browser
+   doesn't compensate by jumping back to the top (which would re-show the logo). */
+html {
+    overflow-anchor: none;
+    /* Overscroll area (e.g. pull-to-refresh) shows the root background: match the header */
+    background-color: var(--primary-fg);
+}
+
+body {
+    background-color: var(--md-default-bg-color);
+}
+
+/* Logo icon — inline SVG, colored via CSS.
    Tweak the three knobs below:
    --logo-color  : main emblem color (defaults to the title color)
    --logo-detail : carved highlight lines (defaults to header bg so they read as cut-outs)
    --logo-weight : extra outline thickness in screen px (0 = original shape) */
 .md-header__brand-logo {
-    height: 42px;
+    height: 80px;
     width: auto;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0.1rem;
+    flex-shrink: 0;
 
     --logo-color: var(--primary-title);
     --logo-detail: var(--primary-fg);
@@ -64,14 +90,4 @@
     text-transform: uppercase;
     color: var(--primary-title);
     white-space: nowrap;
-}
-
-.site-title.left {
-    padding-right: 0;
-    margin-right: 0;
-}
-
-.site-title.right {
-    padding-left: 0;
-    margin-left: 0;
 }
