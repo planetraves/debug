@@ -126,6 +126,11 @@
             }, { capture: true, passive: true });
             window.addEventListener("load", function () { update(document.scrollingElement); });
             update(document.scrollingElement);
+
+            // Exposed for elements positioned below the header (e.g. #loading-screen)
+            new ResizeObserver(function () {
+                document.documentElement.style.setProperty("--header-height", header.offsetHeight + "px");
+            }).observe(header);
         })();
     </script>
 </header>
