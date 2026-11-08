@@ -8,6 +8,16 @@
 
 <!-- Header -->
 <header class="{{ class }}" data-md-component="header">
+    <!-- Big logo above the title (collapsed once the page is scrolled) -->
+    <a
+        href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
+        class="md-header__logo-top"
+        aria-label="{{ config.site_name }}"
+        tabindex="-1"
+    >
+        {% include "images/logo-v.svg" %}
+    </a>
+
     <nav
         class="md-header__inner md-grid"
         aria-label="{{ lang.t('header') }}"
@@ -18,7 +28,7 @@
             {% include ".icons/" ~ icon ~ ".svg" %}
         </label>
 
-        <!-- Centered brand: logo2 + site title -->
+        <!-- Centered brand: site title -->
         <a
             href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
             title="{{ config.site_name | e }}"
@@ -26,15 +36,7 @@
             aria-label="{{ config.site_name }}"
             data-md-component="logo"
         >
-            <span class="md-header__brand-title site-title left">
-                Planet
-            </span>
-
-            {% include "images/logo-v.svg" %}
-            
-            <span class="md-header__brand-title site-title right">
-                Raves
-            </span>
+            <span class="md-header__brand-title site-title">Planet Raves</span>
         </a>
 
         <!-- Color palette toggle -->
@@ -92,4 +94,38 @@
             {% include "partials/tabs.html" %}
         {% endif %}
     {% endif %}
+
+    <!-- Hide the big logo as soon as the page scrolls; show it again only at the very top -->
+    <script>
+        (function () {
+            var header = document.currentScript.closest("header");
+            var logo = header.querySelector(".md-header__logo-top");
+            var hidden = false;
+
+            function update(scroller) {
+                var y = scroller.scrollTop;
+                if (!hidden && y > 0) {
+                    // Page too short to stay scrolled once the logo collapses: keep it to avoid flicker
+                    var maxScroll = scroller.scrollHeight - scroller.clientHeight;
+                    if (maxScroll <= logo.offsetHeight) return;
+                    hidden = true;
+                    header.classList.add("md-header--logo-hidden");
+                } else if (hidden && y <= 0) {
+                    hidden = false;
+                    header.classList.remove("md-header--logo-hidden");
+                }
+            }
+
+            // Capture phase: the events page scrolls inside .events-main, whose scroll events don't bubble
+            document.addEventListener("scroll", function (e) {
+                if (e.target === document) {
+                    update(document.scrollingElement);
+                } else if (e.target.classList && e.target.classList.contains("events-main")) {
+                    update(e.target);
+                }
+            }, { capture: true, passive: true });
+            window.addEventListener("load", function () { update(document.scrollingElement); });
+            update(document.scrollingElement);
+        })();
+    </script>
 </header>

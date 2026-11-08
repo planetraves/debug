@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal, openSuccessModal
-} from "../global/modal.js?v=b9bbf400.3115b09";
+} from "../global/modal.js?v=4b7d84b5.dc2a44f";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=b9bbf400.3115b09";
+} from "./renderevents.js?v=4b7d84b5.dc2a44f";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -136,7 +136,7 @@ function initHeader() {
     /* init category options */
     catOptions.innerHTML = ""
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        catOptions.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key]); 
+        catOptions.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key], false); 
     });
 
     /* init areas options */
