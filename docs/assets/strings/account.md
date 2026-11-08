@@ -4,15 +4,13 @@ Vous organisez **fréquemment** des événements et souhaitez publier instantan�
 
 # pro-request
 
-Vous souhaitez devenir contributeur·rice **pro** et publier instantanément.
-Nous vous rassurons, c'est gratuit.
+Vous souhaitez devenir contributeur·rice **pro** et publier instantanément. Nous vous rassurons, c'est gratuit.
 
-Un contributeur pro est un professionnel du secteur culturel ou tout autre type d'organisme qui produit au moins 3 événements artistiques & culturels distincts annuels sur le territoire et aux alentours.
+Un.e contributeur·rice **pro** est un.e professionnel·le du secteur culturel ou tout autre type d’organisme qui produit au moins 3 événements artistiques & culturels annuels et distincts  sur le territoire et aux alentours. 
 
-**Présentez-nous** votre structure et les événements que vous organisez en quelques lignes : quels genre d'évènements avez vous l'habitude de programmer, pour quel type de public, à quelle fréquence, etc...
+**Présentez-nous** votre structure et les événements que vous organisez en quelques lignes : quels genre d'évènements avez vous l'habitude de programmer, pour quel type de public, à quelle fréquence, etc…
 
-Pensez à préciser votre **raison sociale** et le lieu de **siège social**,
-et n'hésitez pas à partager des exemples d'événements !
+Pensez à préciser votre **raison sociale** et le lieu de votre **siège social**, et n’hésitez pas à partager des exemples d’événements
 
 # signin-form
 
