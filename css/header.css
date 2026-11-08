@@ -60,7 +60,7 @@ body {
    --logo-detail : carved highlight lines (defaults to header bg so they read as cut-outs)
    --logo-weight : extra outline thickness in screen px (0 = original shape) */
 .md-header__brand-logo {
-    height: 80px;
+    height: 120px;
     width: auto;
     flex-shrink: 0;
 
@@ -86,7 +86,7 @@ body {
 .site-title {
     font-family: "Barlow Semi Condensed", cursive;
     font-size: 2rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     font-weight: 800; /* Monoton only ships weight 400 */
     text-transform: uppercase;
     color: var(--primary-title);
