@@ -136,7 +136,7 @@ function initHeader() {
     /* init category options */
     catOptions.innerHTML = ""
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        catOptions.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key]); 
+        catOptions.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key], false); 
     });
 
     /* init areas options */

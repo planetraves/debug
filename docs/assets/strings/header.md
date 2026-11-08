@@ -1,11 +1,11 @@
 # message1
 
-Faites la rave, pas la guerre 💚
+Bienvenue sur l'agenda culturel du Rabastinois 💛
 
 # message2
 
-Bienvenue sur l'agenda culturel du Rabastinois 💛
+A Rabastens, Coufouleux, Salvagnac et aux alentours
 
 # message3
 
-A Rabastens, Coufouleux, Salvagnac et aux alentours
+Faites la rave, pas la guerre 💚
