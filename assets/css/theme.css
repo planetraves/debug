@@ -125,10 +125,24 @@
     font-size: 0.65rem;
 }
 
-.subtitle-ticker__track span {
+.subtitle-ticker__track > span {
     padding-right: 2rem;
     white-space: nowrap;
     color: var(--primary-subtext)
+}
+
+.subtitle-ticker .heart {
+    font-size: 1.4em;
+    line-height: 1;
+    vertical-align: -0.1em;
+}
+
+.subtitle-ticker .heart--pink {
+    color: var(--category0);
+}
+
+.subtitle-ticker .heart--green {
+    color: var(--category2);
 }
 
 @keyframes ticker {
