@@ -84,9 +84,10 @@ body {
 
 /* Title text */
 .site-title {
-    font-family: "Audiowide", cursive;
-    font-size: 1.2rem;
-    font-weight: 400; /* Monoton only ships weight 400 */
+    font-family: "Barlow Semi Condensed", cursive;
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    font-weight: 800; /* Monoton only ships weight 400 */
     text-transform: uppercase;
     color: var(--primary-title);
     white-space: nowrap;
