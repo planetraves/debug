@@ -104,3 +104,47 @@ body {
     color: var(--primary-title);
     white-space: nowrap;
 }
+
+/* Desktop menu (title row) */
+.md-header__nav {
+    display: none;
+}
+
+@media screen and (min-width: 76.25em) {
+    .md-tabs,
+    .md-header__inner > .md-header__button[for="__drawer"] {
+        display: none;
+    }
+
+    .md-header__nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0 0.8rem;
+    }
+
+    .md-header__nav--left {
+        margin-right: auto;
+    }
+
+    .md-header__nav--right {
+        margin-left: auto;
+    }
+
+    .md-header__nav-link {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--primary-subtext);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.15s ease;
+    }
+
+    .md-header__nav-link:hover,
+    .md-header__nav-link--active {
+        color: var(--primary-text);
+    }
+}

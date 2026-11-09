@@ -454,6 +454,55 @@
     color: white;
 }
 
+/* Desktop: [more filters + reset] [categories] [views] on one row, filter panel below */
+@media screen and (min-width: 76.25em) {
+    .toolbar {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-areas:
+            "filters cats views"
+            "more    more more";
+        align-items: center;
+        column-gap: 0.8rem;
+    }
+
+    .toolbar-btn {
+        display: contents;
+    }
+
+    .filter-btns {
+        grid-area: filters;
+        justify-self: start;
+        width: auto;
+    }
+
+    .cat-filters {
+        grid-area: cats;
+        margin: 0;
+        padding: 0;
+    }
+
+    .filter-options.category {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .option-btn.category {
+        flex: 0 0 7rem;
+        width: 7rem;
+    }
+
+    .switch-view-btns {
+        grid-area: views;
+        justify-self: end;
+    }
+
+    .more-filters {
+        grid-area: more;
+    }
+}
+
 @media (max-width: 340px) {
     .option-btn .text {
         white-space: nowrap;

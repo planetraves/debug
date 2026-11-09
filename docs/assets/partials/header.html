@@ -28,6 +28,16 @@
             {% include ".icons/" ~ icon ~ ".svg" %}
         </label>
 
+        <!-- Desktop menu: these pages go left of the title, the others right -->
+        {% set left_pages = ["contacts.md", "guide.md"] %}
+        <ul class="md-header__nav md-header__nav--left">
+            {% for nav_item in nav if nav_item.file and nav_item.file.src_uri in left_pages %}
+                <li>
+                    <a href="{{ nav_item.url | url }}" class="md-header__nav-link{% if nav_item.active %} md-header__nav-link--active{% endif %}"{% if nav_item.active %} aria-current="page"{% endif %}>{{ nav_item.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
         <!-- Centered brand: site title -->
         <a
             href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
@@ -38,6 +48,14 @@
         >
             <span class="md-header__brand-title site-title">Planet Raves</span>
         </a>
+
+        <ul class="md-header__nav md-header__nav--right">
+            {% for nav_item in nav if not (nav_item.file and nav_item.file.src_uri in left_pages) %}
+                <li>
+                    <a href="{{ nav_item.url | url }}" class="md-header__nav-link{% if nav_item.active %} md-header__nav-link--active{% endif %}"{% if nav_item.active %} aria-current="page"{% endif %}>{{ nav_item.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
 
         <!-- Color palette toggle -->
         {% if config.theme.palette %}
