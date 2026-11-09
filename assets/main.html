@@ -4,7 +4,7 @@
     {% set site_root = config.site_url.rstrip("/") %}
     {% set share_title = config.site_name if (not page or page.is_homepage) else (page.title | striptags) ~ " - " ~ config.site_name %}
     {% set share_url = site_root ~ "/" %}
-    {% set share_image = site_root ~ "/assets/images/share-image-raves.jpg?v=cdd80e11.de399c9" %}
+    {% set share_image = site_root ~ "/assets/images/share-image-raves.jpg?v=e9eb175d.503c78a" %}
 
     <!-- Link previews (WhatsApp, Signal, ...), same layout as nasa.gov -->
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
@@ -24,4 +24,8 @@
     <meta name="twitter:title" content="{{ share_title }}">
     <meta name="twitter:description" content="{{ config.site_description }}">
     <meta name="twitter:image" content="{{ share_image }}">
+
+    <!-- iOS home screen: Safari ignores the favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ config.extra.apple_touch_icon | url }}">
+    <meta name="apple-mobile-web-app-title" content="{{ config.site_name }}">
 {% endblock %}
