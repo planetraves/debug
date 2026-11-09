@@ -117,6 +117,12 @@
     font-size: 0.7rem;
 }
 
+.filter-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
 .filter-age {
     display: flex;
     flex-direction: column;
@@ -500,6 +506,35 @@
 
     .more-filters {
         grid-area: more;
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 1.2rem;
+        padding: 0.4rem 0 0;
+        border-top: 1px solid var(--primary-subtext);
+        margin-top: 0.4rem;
+    }
+
+    .more-filters hr.filter-line {
+        display: none;
+    }
+
+    .filter-area {
+        flex: 3 1 0;
+    }
+
+    .filter-age {
+        flex: 2 1 0;
+        padding-top: 0;
+    }
+
+    .filter-switch {
+        flex: 0 0 auto;
+        padding-bottom: 0.3rem;
+    }
+
+    .more-filters .autocomplete {
+        flex: 3 1 0;
+        padding: 0;
     }
 }
 
