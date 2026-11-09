@@ -110,7 +110,7 @@ body {
     display: none;
 }
 
-@media screen and (min-width: 76.25em) {
+@media screen and (min-width: 70em) {
     .md-tabs,
     .md-header__inner > .md-header__button[for="__drawer"] {
         display: none;

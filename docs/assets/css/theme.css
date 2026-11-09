@@ -357,7 +357,7 @@ table tr th:last-child {
     }
 }
 
-@media screen and (min-width: 76.25em) {
+@media screen and (min-width: 70em) {
     .subtitle-ticker__track > span {
         padding-right: 5rem;
     }
