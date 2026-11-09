@@ -94,8 +94,8 @@ Une question, un problème ou une suggestion ? Contactez [l'équipe](contacts.md
 
     // APP_CONFIG comes from config.js, loaded after the page content
     document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("guide-categories").innerHTML = Object.values(APP_CONFIG.CATEGORIES).map(cat => `
-            <span class="guide-category" style="--cat-color: ${cat.color}; --cat-color-light: ${cat.color_light};">
+        document.getElementById("guide-categories").innerHTML = Object.entries(APP_CONFIG.CATEGORIES).map(([id, cat]) => `
+            <span class="guide-category" style="--cat-color: ${categoryColor(id)}; --cat-color-light: ${categoryColorLight(id)};">
                 <span class="guide-category-badge material-symbols-outlined">${escapeHtml(cat.icon)}</span>
                 <span class="guide-category-label">${escapeHtml(cat.label)}</span>
             </span>
