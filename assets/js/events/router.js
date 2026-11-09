@@ -1,16 +1,18 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
-} from "../global/modal.js?v=50b1c37a.387a62c";
+} from "../global/modal.js?v=53821708.770d457";
 
 import { 
     openEvent, searchInput, 
     selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
-    handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags
-} from "./events.js?v=50b1c37a.387a62c"
+    handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
+    fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove
+} from "./events.js?v=53821708.770d457"
 
 const container = document.getElementById("events");
+const calendarEl = document.getElementById("calendar");
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -167,4 +169,14 @@ document.addEventListener("submit", (event) => {
 window.addEventListener("load", () => {
     document.documentElement.classList.add("ready");
 });
+
+calendarEl?.addEventListener("touchstart", calendarTouchStart);
+calendarEl?.addEventListener("touchend", calendarTouchEnd);
+calendarEl?.addEventListener("touchmove", calendarTouchMove, { passive: false });
+
+// header (logo collapse) and toolbar (filters panel) change the space left for the calendar
+window.addEventListener("resize", fitCalendar);
+const calendarSpaceObserver = new ResizeObserver(fitCalendar);
+calendarSpaceObserver.observe(document.querySelector(".md-header"));
+calendarSpaceObserver.observe(document.getElementById("toolbar"));
 

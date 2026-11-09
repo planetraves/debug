@@ -1,11 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=50b1c37a.387a62c";
+} from "../global/modal.js?v=53821708.770d457";
 
 import { 
+    selectTeamTile, teamTileKeydown, teamTileFocusout
+} from "./contacts.js?v=53821708.770d457";
 
-} from "./contacts.js?v=50b1c37a.387a62c";
+const teamList = document.getElementById("team-list");
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -52,3 +54,7 @@ document.addEventListener("change", (event) => {
 document.addEventListener("submit", (event) => {
   event.preventDefault();
 });
+
+document.addEventListener("click", (event) => selectTeamTile(event.target));
+teamList?.addEventListener("keydown", teamTileKeydown);
+teamList?.addEventListener("focusout", teamTileFocusout);

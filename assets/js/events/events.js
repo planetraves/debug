@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal, openSuccessModal
-} from "../global/modal.js?v=50b1c37a.387a62c";
+} from "../global/modal.js?v=53821708.770d457";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=50b1c37a.387a62c";
+} from "./renderevents.js?v=53821708.770d457";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -368,7 +368,7 @@ function renderCalendar(events=EVENTS) {
 
 // Size the calendar to the remaining screen height so the whole month is visible without scrolling.
 // The "more filters" panel is ignored: when open, it pushes the calendar down instead of shrinking it.
-function fitCalendar() {
+export function fitCalendar() {
     if (agendaView.hidden) return;
     const top = calendarEl.getBoundingClientRect().top + eventsMain.scrollTop - moreFiltersArea.offsetHeight;
     const available = window.innerHeight - top - CALENDAR_BOTTOM_GAP;
@@ -819,30 +819,22 @@ export function handleSwipe() {
 
 }
 
-/* === LISTENER === */
-calendarEl?.addEventListener("touchstart", (e) => {
+export function calendarTouchStart(e) {
     touchStartX = e.changedTouches[0].screenX;
-});
+}
 
-calendarEl?.addEventListener("touchend", (e) => {
+export function calendarTouchEnd(e) {
     touchEndX = e.changedTouches[0].screenX;
     handleSwipe();
-});
+}
 
-
-calendarEl?.addEventListener("touchmove", (e) => {
+export function calendarTouchMove(e) {
     const deltaX = e.touches[0].clientX - touchStartX;
 
     if (Math.abs(deltaX) > 10) {
         e.preventDefault(); // prevent vertical scroll while swiping
     }
-}, { passive: false });
-
-// header (logo collapse) and toolbar (filters panel) change the space left for the calendar
-window.addEventListener("resize", fitCalendar);
-const calendarSpaceObserver = new ResizeObserver(fitCalendar);
-calendarSpaceObserver.observe(document.querySelector(".md-header"));
-calendarSpaceObserver.observe(toolbar);
+}
 
 
 /* === MAIN === */

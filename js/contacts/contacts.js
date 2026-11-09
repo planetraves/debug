@@ -78,25 +78,23 @@ async function loadTeam() {
 
 
 /* === EXPORTED FUNCTIONS === */
-
-/* === LISTENER === */
-document.addEventListener("click", (e) => {
-    const tile = e.target.closest?.(".team-tile");
+export function selectTeamTile(target) {
+    const tile = target.closest?.(".team-tile");
     closeTeamTiles(tile);
     tile?.classList.add("open");
-});
+}
 
-teamList?.addEventListener("keydown", (e) => {
+export function teamTileKeydown(e) {
     if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("team-tile")) {
         e.preventDefault();
         e.target.classList.add("open");
     }
-});
+}
 
-teamList?.addEventListener("focusout", (e) => {
+export function teamTileFocusout(e) {
     const tile = e.target.closest(".team-tile");
     if (tile && !tile.contains(e.relatedTarget)) tile.classList.remove("open");
-});
+}
 
 /* === MAIN === */
 initContactsPage().catch(console.error);
