@@ -5,13 +5,19 @@
 
 .calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    /* 5 week rows share the height set by fitCalendar() in events.js */
+    grid-template-rows: repeat(5, minmax(0, 1fr));
     gap: 6px;
     padding: 0.4rem;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .calendar-header-bar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--primary-event-background);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -86,7 +92,8 @@
     position: relative;
     border-radius: 10px;
     padding: 6px;
-    min-height: 80px;
+    min-height: 0;
+    overflow: hidden;
     background: white;
     border: 1px solid #eee;
     font-size: 0.75rem;
@@ -163,4 +170,37 @@
     width: auto;
     background: var(--md-default-fg-color--lighter, #ccc);
     color: var(--md-default-fg-color, #333);
+}
+
+/* Phones: tighter grid so the full month fits on screen */
+@media (max-width: 600px) {
+    .calendar {
+        gap: 4px;
+        padding: 0.3rem;
+    }
+
+    .calendar-header-bar {
+        padding: 0.2rem 0.4rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .calendar-day {
+        padding: 4px;
+        border-radius: 8px;
+    }
+
+    .calendar-header {
+        margin-bottom: 2px;
+    }
+
+    .calendar-dots {
+        gap: 3px;
+        margin-top: 2px;
+    }
+
+    .calendar-dot {
+        width: 10px;
+        height: 10px;
+        font-size: 0.5rem;
+    }
 }

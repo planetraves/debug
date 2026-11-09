@@ -17,6 +17,9 @@ const loading = document.getElementById("loading-screen");
 const tilesView = document.getElementById("tiles-view");
 const agendaView = document.getElementById("agenda-view");
 const calendarEl = document.getElementById("calendar");
+const eventsMain = document.querySelector(".events-main");
+const CALENDAR_BOTTOM_GAP = 12; // px kept free under the calendar
+const CALENDAR_MIN_HEIGHT = 220; // below this, let the view scroll rather than crush the cells
 
 const toolbar = document.getElementById("toolbar");
 const switchViewArea = document.getElementById("switch-view-btns");
@@ -172,6 +175,7 @@ function renderTiles() {
 
     tilesView.hidden = false;
     agendaView.hidden = true;
+    document.body.classList.remove("calendar-view");
     switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
     switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
     loading.style.display = "none";
@@ -352,11 +356,26 @@ function renderCalendar(events=EVENTS) {
 
     tilesView.hidden = true;
     agendaView.hidden = false;
+    document.body.classList.add("calendar-view");
     switchViewArea.querySelector('[data-view="tiles"]').classList.remove("active");
     switchViewArea.querySelector('[data-view="agenda"]').classList.add("active");
     loading.style.display = "none";
     // the tiles empty-state message doesn't apply to the calendar (empty grid speaks for itself)
     emptyState.classList.add("hidden");
+    eventsMain.scrollTop = 0;
+    fitCalendar();
+}
+
+// Size the calendar to the remaining screen height so the whole month is visible without scrolling.
+// The "more filters" panel is ignored: when open, it pushes the calendar down instead of shrinking it.
+function fitCalendar() {
+    if (agendaView.hidden) return;
+    const top = calendarEl.getBoundingClientRect().top + eventsMain.scrollTop - moreFiltersArea.offsetHeight;
+    const available = window.innerHeight - top - CALENDAR_BOTTOM_GAP;
+    calendarEl.style.height = `${Math.max(available, CALENDAR_MIN_HEIGHT)}px`;
+    // .events-main extends below the viewport; pad so the pushed-down calendar can be scrolled fully into view
+    const hiddenBelow = eventsMain.getBoundingClientRect().bottom - window.innerHeight;
+    agendaView.style.paddingBottom = `${Math.max(hiddenBelow, 0) + CALENDAR_BOTTOM_GAP}px`;
 }
 
 function animateSwipe(direction) {
@@ -817,6 +836,12 @@ calendarEl?.addEventListener("touchmove", (e) => {
         e.preventDefault(); // prevent vertical scroll while swiping
     }
 }, { passive: false });
+
+// header (logo collapse) and toolbar (filters panel) change the space left for the calendar
+window.addEventListener("resize", fitCalendar);
+const calendarSpaceObserver = new ResizeObserver(fitCalendar);
+calendarSpaceObserver.observe(document.querySelector(".md-header"));
+calendarSpaceObserver.observe(toolbar);
 
 
 /* === MAIN === */
