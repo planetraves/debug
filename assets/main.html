@@ -4,7 +4,7 @@
     {% set site_root = config.site_url.rstrip("/") %}
     {% set share_title = config.site_name if (not page or page.is_homepage) else (page.title | striptags) ~ " - " ~ config.site_name %}
     {% set share_url = page.canonical_url if page and page.canonical_url else site_root ~ "/" %}
-    {% set share_image = site_root ~ "/assets/images/share-image-raves.jpg" %}
+    {% set share_image = site_root ~ "/assets/images/share-image-raves.jpg?v=c2887b9d.9b199c6" %}
 
     <!-- Link previews (WhatsApp, Signal, ...), same layout as nasa.gov -->
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">

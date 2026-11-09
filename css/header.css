@@ -27,7 +27,7 @@
 
 /* Big logo row above the title; collapses when the header gets .md-header--logo-hidden */
 .md-header__logo-top {
-    --logo-top-height: 96px;
+    --logo-top-height: 120px;
     display: flex;
     justify-content: center;
     overflow: hidden;
