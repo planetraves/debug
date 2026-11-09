@@ -7,11 +7,13 @@
 
         <section id="more-filters" class="more-filters hidden">
             <hr class="filter-line">
-            <span class="filter-title">
-                Où ?
-                <span class="material-symbols-outlined" data-action="open-area-help" aria-label="Aide : zone géographique">help</span>
-            </span>
-            <section id="area-options" class="filter-options area"></section>
+            <div class="filter-area">
+                <span class="filter-title">
+                    Où ?
+                    <span class="material-symbols-outlined" data-action="open-area-help" aria-label="Aide : zone géographique">help</span>
+                </span>
+                <section id="area-options" class="filter-options area"></section>
+            </div>
             <div class="filter-age">
                 <span class="filter-title">
                     Age du public ?
@@ -19,12 +21,12 @@
                 </span>
                 <div class="age-inputs">
                     <div class="age-field">
-                        <input type="text" name="filter-min-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age minimum" autocomplete="off" data-input-type="filter-age" />
+                        <input type="text" name="filter-min-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age min." autocomplete="off" data-input-type="filter-age" />
                         <span class="age-suffix">an(s)</span>
                     </div>
                     <span class="age-sep">–</span>
                     <div class="age-field">
-                        <input type="text" name="filter-max-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age maximum" autocomplete="off" data-input-type="filter-age" />
+                        <input type="text" name="filter-max-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age max." autocomplete="off" data-input-type="filter-age" />
                         <span class="age-suffix">an(s)</span>
                     </div>
                 </div>

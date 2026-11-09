@@ -566,6 +566,25 @@ body.events-page {
 
 
 /* === SCREEN RESPONSIVE === */
+/* Desktop: tiles list grouped in a centered card, like the contacts container */
+@media screen and (min-width: 70em) {
+    #tiles-view {
+        max-width: 760px;
+        margin: 1.2rem auto 2rem;
+        background: var(--primary-event-background);
+        border: 1px solid rgba(13, 44, 135, 0.15);
+        border-radius: 14px;
+        box-shadow:
+            0 1px 2px rgba(13, 44, 135, 0.06),
+            0 8px 24px rgba(13, 44, 135, 0.12);
+        overflow: hidden;
+    }
+
+    #tiles-view:has(.section-tab.no-empty:not([hidden]) .event-tile:not(.hidden))::after {
+        height: 0;
+    }
+}
+
 @media (max-width: 550px) {
     /* .event-tile {
         flex-direction: column;

@@ -117,6 +117,12 @@
     font-size: 0.7rem;
 }
 
+.filter-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
 .filter-age {
     display: flex;
     flex-direction: column;
@@ -452,6 +458,84 @@
 .option-btn.category-5.active {
     background: var(--category5);
     color: white;
+}
+
+/* Desktop: [more filters + reset] [categories] [views] on one row, filter panel below */
+@media screen and (min-width: 70em) {
+    .toolbar {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-areas:
+            "filters cats views"
+            "more    more more";
+        align-items: center;
+        column-gap: 0.8rem;
+    }
+
+    .toolbar-btn {
+        display: contents;
+    }
+
+    .filter-btns {
+        grid-area: filters;
+        justify-self: start;
+        width: auto;
+    }
+
+    .cat-filters {
+        grid-area: cats;
+        margin: 0;
+        padding: 0;
+    }
+
+    .filter-options.category {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .option-btn.category {
+        flex: 0 0 7rem;
+        width: 7rem;
+    }
+
+    .switch-view-btns {
+        grid-area: views;
+        justify-self: end;
+    }
+
+    .more-filters {
+        grid-area: more;
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 1.2rem;
+        padding: 0.4rem 0 0;
+        border-top: 1px solid var(--primary-subtext);
+        margin-top: 0.4rem;
+    }
+
+    .more-filters hr.filter-line {
+        display: none;
+    }
+
+    .filter-area {
+        flex: 3 1 0;
+    }
+
+    .filter-age {
+        flex: 2 1 0;
+        padding-top: 0;
+    }
+
+    .filter-switch {
+        flex: 0 0 auto;
+        padding-bottom: 0.3rem;
+    }
+
+    .more-filters .autocomplete {
+        flex: 3 1 0;
+        padding: 0;
+    }
 }
 
 @media (max-width: 340px) {

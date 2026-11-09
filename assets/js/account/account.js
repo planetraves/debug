@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=52613a5e.96f0ffb";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=cdd80e11.de399c9";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -587,13 +587,13 @@ export async function updateProfileRole() {
 export function openPendingEvent(eventId) {
     const event = PENDING_EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    openEventModal(event, "pending-event");
+    openEventModal(event, "pending-event", user_profile);
 }
 
 export function openMyEvent(eventId) {
     const event = MY_EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    openEventModal(event, "my-event");
+    openEventModal(event, "my-event", user_profile);
 }
 
 export function openProfile(profileId) {

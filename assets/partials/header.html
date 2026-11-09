@@ -8,6 +8,21 @@
 
 <!-- Header -->
 <header class="{{ class }}" data-md-component="header">
+    <!-- Desktop menu, top corners, in the order listed (independent of mkdocs nav order) -->
+    {% macro header_nav(pages, side) %}
+        <ul class="md-header__nav md-header__nav--{{ side }}">
+            {% for src in pages %}
+                {% for nav_item in nav if nav_item.file and nav_item.file.src_uri == src %}
+                    <li>
+                        <a href="{{ nav_item.url | url }}" class="md-header__nav-link{% if nav_item.active %} md-header__nav-link--active{% endif %}"{% if nav_item.active %} aria-current="page"{% endif %}>{{ nav_item.title }}</a>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endmacro %}
+    {{ header_nav(["index.md", "submit.md"], "left") }}
+    {{ header_nav(["contacts.md", "guide.md", "account.md"], "right") }}
+
     <!-- Big logo above the title (collapsed once the page is scrolled) -->
     <a
         href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
@@ -78,7 +93,13 @@
     <!-- Subtitle -->
     <div class="subtitle-ticker">
         <div class="subtitle-ticker__track">
-            <!-- repet twice for smoother tracking -->
+            <!-- two identical halves (2 iterations each) for seamless looping on any screen width -->
+            <span data-string="header.md#message1"></span>
+            <span data-string="header.md#message2"></span>
+            <span data-string="header.md#message3"></span>
+            <span data-string="header.md#message1"></span>
+            <span data-string="header.md#message2"></span>
+            <span data-string="header.md#message3"></span>
             <span data-string="header.md#message1"></span>
             <span data-string="header.md#message2"></span>
             <span data-string="header.md#message3"></span>

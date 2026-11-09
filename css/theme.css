@@ -92,7 +92,7 @@
     color: var(--primary-text) !important;
 }
 
-body:has(.page-container.guide) .md-sidebar--primary .md-nav__item--active > label .md-nav__icon {
+body:has(.guide-container) .md-sidebar--primary .md-nav__item--active > label .md-nav__icon {
     display: none;
 }
 
@@ -125,7 +125,7 @@ body:has(.page-container.guide) .md-sidebar--primary .md-nav__item--active > lab
 .subtitle-ticker__track {
     display: flex;
     width: max-content;
-    animation: ticker 20s linear infinite;
+    animation: ticker 40s linear infinite;
     font-size: 0.65rem;
 }
 
@@ -354,6 +354,31 @@ table tr th:last-child {
 @media (prefers-color-scheme: dark) {
     :root {
         color-scheme: light;
+    }
+}
+
+@media screen and (min-width: 70em) {
+    .subtitle-ticker__track > span {
+        padding-right: 5rem;
+    }
+}
+
+/* Wider screens: shorter loop so messages cross the screen at a similar pace */
+@media screen and (min-width: 48em) {
+    .subtitle-ticker__track {
+        animation-duration: 32s;
+    }
+}
+
+@media screen and (min-width: 76.25em) {
+    .subtitle-ticker__track {
+        animation-duration: 26s;
+    }
+}
+
+@media screen and (min-width: 100em) {
+    .subtitle-ticker__track {
+        animation-duration: 22s;
     }
 }
 
