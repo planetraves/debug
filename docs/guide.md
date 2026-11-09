@@ -4,17 +4,27 @@ hide:
   - toc
 ---
 
-<div class="page-container guide" markdown>
+<div class="guide-container" markdown>
 
-#### Bienvenue sur planetraves.fr
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">waving_hand</span>
+    <span>Bienvenue sur planetraves.fr</span>
+</div>
 
 Planet Raves est l'agenda culturel du Rabastinois : concerts, spectacles, expositions et autres évènements à **Rabastens, Couffouleux, Salvagnac et alentours**.
 
 Ce guide présente rapidement comment utiliser le site.
 
----
+</section>
 
-#### Trouver un évènement
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+    <span>Trouver un évènement</span>
+</div>
 
 Sur la page [Évènements](index.md), deux affichages sont disponibles :
 
@@ -23,21 +33,40 @@ Sur la page [Évènements](index.md), deux affichages sont disponibles :
 
 Touchez un évènement pour ouvrir sa fiche : description, horaires, prix, lieu (cliquable pour ouvrir la carte), contact et bouton de **partage**.
 
-#### Les catégories
+</section>
+
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">category</span>
+    <span>Les catégories</span>
+</div>
 
 Chaque catégorie a sa propre icône et sa couleur, utilisées sur les fiches et dans l'agenda :
 
 <div id="guide-categories" class="guide-categories"></div>
 
-#### Filtrer les évènements
+</section>
+
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">filter_alt</span>
+    <span>Filtrer les évènements</span>
+</div>
 
 - Touchez une **catégorie** dans la barre d'outils pour n'afficher qu'elle, puis d'autres pour les ajouter.
 - Ouvrez **Plus de filtres** pour affiner par zone géographique, âge du public, évènements gratuits / prix libre, ou rechercher par titre, lieu ou tag.
 - Le bouton **Reset** réinitialise tous les filtres.
 
----
+</section>
 
-#### Publier un évènement
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">edit_calendar</span>
+    <span>Publier un évènement</span>
+</div>
 
 1. Créez un compte ou connectez-vous depuis [Mon compte](account.md).
 2. Rendez-vous sur [Publier un évènement](submit.md) et remplissez le formulaire.
@@ -50,9 +79,14 @@ Pour être publié, un évènement doit être **culturel et artistique, ouvert a
 
 Pour modifier ou supprimer un de vos évènements, ouvrez sa fiche : les boutons d'édition apparaissent en bas.
 
----
+</section>
 
-#### Installer l'application
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">install_mobile</span>
+    <span>Installer l'application</span>
+</div>
 
 Planet Raves peut être ajouté à l'écran d'accueil de votre téléphone ou ordinateur pour s'ouvrir comme une application, sans passer par le navigateur.
 
@@ -81,11 +115,18 @@ Planet Raves peut être ajouté à l'écran d'accueil de votre téléphone ou or
 
 L'icône Planet Raves apparaît alors avec vos autres applications.
 
----
+</section>
 
-#### Besoin d'aide ?
+<section class="account-tile" markdown>
+
+<div class="account-section-title">
+    <span class="material-symbols-outlined" aria-hidden="true">help</span>
+    <span>Besoin d'aide ?</span>
+</div>
 
 Une question, un problème ou une suggestion ? Contactez [l'équipe](contacts.md).
+
+</section>
 
 </div>
 

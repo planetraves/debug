@@ -92,7 +92,7 @@
     color: var(--primary-text) !important;
 }
 
-body:has(.page-container.guide) .md-sidebar--primary .md-nav__item--active > label .md-nav__icon {
+body:has(.guide-container) .md-sidebar--primary .md-nav__item--active > label .md-nav__icon {
     display: none;
 }
 

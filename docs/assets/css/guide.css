@@ -2,21 +2,31 @@
    guide.css — Guide page
    ============================================================ */
 
-.page-container.guide {
-    margin-left: 1.2rem;
-    margin-right: 1.2rem;
+.guide-container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 0.5rem 2rem;
+}
+
+.guide-container a {
+    color: var(--primary-link);
+    text-decoration: none;
+}
+
+.guide-container a:hover {
+    color: var(--primary-link--hover);
 }
 
 /* theme.css shrinks paragraphs to 0.85em; match list items to them */
-.md-typeset .guide li {
+.md-typeset .guide-container li {
     font-size: 0.85em;
 }
 
-.md-typeset .guide li p {
+.md-typeset .guide-container li p {
     font-size: inherit;
 }
 
-.md-typeset .guide li .material-symbols-outlined {
+.md-typeset .guide-container li .material-symbols-outlined {
     font-size: 1.3em;
     vertical-align: middle;
 }
