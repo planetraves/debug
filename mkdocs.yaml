@@ -5,8 +5,9 @@ site_description: L'agenda culturel du Rabastinois
 
 theme:
   name: material
-  favicon: assets/images/favicon.ico
-  logo: assets/images/logo.png
+  # Production defaults; hooks/supabase_env.py switches these to rose in dev.
+  favicon: assets/images/ico-raves-bleu.ico
+  logo: assets/images/ico-raves-bleu.png
   custom_dir: docs/assets
   palette:
     - scheme: default

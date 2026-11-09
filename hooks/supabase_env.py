@@ -1,12 +1,22 @@
-"""MkDocs hook: inject Supabase credentials into the built JS from env vars.
+"""MkDocs hook: select environment assets and inject Supabase config.
 
-Runs on every `mkdocs build` and `mkdocs serve`. By default it injects the DEV
-credentials; when DEPLOY_ENV=prod (set by deploy.py --release) it injects the
-PROD credentials. All values come from planetraves.env, loaded by activate.bat.
+Runs on every `mkdocs build` and `mkdocs serve`. By default it selects DEV
+assets and credentials; when DEPLOY_ENV=prod (set by deploy.py --release) it
+selects PROD assets and credentials. Credentials come from planetraves.env,
+loaded by activate.bat.
 """
 import os
 
 _TARGET = os.path.join("assets", "js", "global", "config.js")
+
+
+def on_config(config, **kwargs):
+    dev = os.environ.get("DEPLOY_ENV") != "prod"
+    color = "rose" if dev else "bleu"
+    theme = config["theme"]
+    theme["favicon"] = f"assets/images/ico-raves-{color}.ico"
+    theme["logo"] = f"assets/images/ico-raves-{color}.png"
+    return config
 
 
 def on_post_build(config, **kwargs):
