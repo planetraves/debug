@@ -1,14 +1,14 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
-} from "../global/modal.js?v=9eb8eb02.017da3f";
+} from "../global/modal.js?v=7bfb74b2.017da3f";
 
 import { 
     openEvent, searchInput, 
     selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags
-} from "./events.js?v=9eb8eb02.017da3f"
+} from "./events.js?v=7bfb74b2.017da3f"
 
 const container = document.getElementById("events");
 
