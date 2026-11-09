@@ -28,7 +28,7 @@ function renderTeamTile(profile, index) {
     const colorIndex = index % Object.keys(APP_CONFIG.CATEGORIES).length;
 
     return `
-        <div class="team-tile" tabindex="0" style="--team-accent: var(--category${colorIndex}); --team-accent-soft: var(--category${colorIndex}--light);">
+        <div class="team-tile" tabindex="0" data-action="select-team-tile" style="--team-accent: var(--category${colorIndex}); --team-accent-soft: var(--category${colorIndex}--light);">
             <span class="team-avatar material-symbols-outlined" aria-hidden="true">support_agent</span>
             <span class="team-info">
                 <span class="team-name">${name}</span>
@@ -41,12 +41,12 @@ function renderTeamTile(profile, index) {
                     <span class="team-email-text">${email}</span>
                 </span>
             </span>
-            <a class="team-write-btn" href="mailto:${email}" aria-label="Écrire à ${name}">Écrire</a>
+            <a class="team-write-btn" href="mailto:${email}" aria-label="Écrire à ${name}" data-no-action>Écrire</a>
         </div>
     `;
 }
 
-function closeTeamTiles(except = null) {
+export function closeTeamTiles(except = null) {
     teamList.querySelectorAll(".team-tile.open").forEach(tile => {
         if (tile !== except) tile.classList.remove("open");
     });
@@ -78,17 +78,9 @@ async function loadTeam() {
 
 
 /* === EXPORTED FUNCTIONS === */
-export function selectTeamTile(target) {
-    const tile = target.closest?.(".team-tile");
+export function selectTeamTile(tile) {
     closeTeamTiles(tile);
-    tile?.classList.add("open");
-}
-
-export function teamTileKeydown(e) {
-    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("team-tile")) {
-        e.preventDefault();
-        e.target.classList.add("open");
-    }
+    tile.classList.add("open");
 }
 
 export function teamTileFocusout(e) {
