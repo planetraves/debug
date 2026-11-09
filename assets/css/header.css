@@ -89,7 +89,7 @@ body {
 .site-title {
     font-family: "Barlow Semi Condensed", cursive;
     font-size: 1.5rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.16em;
     font-weight: 800; /* Monoton only ships weight 400 */
     text-transform: uppercase;
     color: var(--primary-title);
