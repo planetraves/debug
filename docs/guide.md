@@ -31,7 +31,7 @@ Sur la page [Évènements](index.md), deux affichages sont disponibles :
 - <span class="material-symbols-outlined">view_agenda</span> **Liste** : les évènements à venir, regroupés par période (*Aujourd'hui*, *Prochainement*).
 - <span class="material-symbols-outlined">calendar_month</span> **Agenda** : un calendrier mensuel. Chaque point coloré représente un évènement. Changez de mois avec les flèches ou en glissant le doigt vers la gauche / la droite, et touchez un jour pour voir ses évènements.
 
-Touchez un évènement pour ouvrir sa fiche : description, horaires, prix, lieu (cliquable pour ouvrir la carte), contact et bouton de **partage**.
+Touchez ou cliquez un évènement pour ouvrir sa fiche : description, horaires, prix, lieu (cliquable pour ouvrir la carte), contact et bouton de **partage**.
 
 </section>
 
@@ -71,11 +71,12 @@ Chaque catégorie a sa propre icône et sa couleur, utilisées sur les fiches et
 1. Créez un compte ou connectez-vous depuis [Mon compte](account.md).
 2. Rendez-vous sur [Publier un évènement](submit.md) et remplissez le formulaire.
 3. Validez : en tant que contributeur·rice, votre évènement est vérifié puis publié **sous trois jours**.
+4. Vous recevrez un email seulement si votre évènement est refusé ou supprimé (vérifiez les emails indésirables).
 
 Pour être publié, un évènement doit être **culturel et artistique, ouvert au public, sur le territoire de Rabastens, Couffouleux, Salvagnac et alentours**.
 
 !!! info "Vous organisez souvent des évènements ?"
-    Depuis [Mon compte](account.md), demandez à devenir **contributeur·rice officiel·le** pour publier instantanément, sans attendre la validation.
+    Depuis [Mon compte](account.md), demandez à devenir **contributeur·rice pro** pour publier instantanément, sans attendre la validation.
 
 Pour modifier ou supprimer un de vos évènements, ouvrez sa fiche : les boutons d'édition apparaissent en bas.
 
@@ -113,7 +114,7 @@ Planet Raves peut être ajouté à l'écran d'accueil de votre téléphone ou or
     - **Chrome** : menu **⋮** → **Caster, enregistrer et partager** → **Créer un raccourci…**, cochez **Ouvrir dans une fenêtre**, puis **Créer**.
     - **Edge** : menu **…** → **Applications** → **Installer ce site en tant qu'application**.
 
-L'icône Planet Raves apparaît alors avec vos autres applications.
+L'icône Planet Raves <img src="../assets/images/ico-raves-bleu.png?v=dev" alt="Planet raves" class="mini-logo"> apparaît alors avec vos autres applications.
 
 </section>
 
@@ -137,7 +138,6 @@ Une question, un problème ou une suggestion ? Contactez [l'équipe](contacts.md
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("guide-categories").innerHTML = Object.entries(APP_CONFIG.CATEGORIES).map(([id, cat]) => `
             <span class="guide-category" style="--cat-color: ${categoryColor(id)}; --cat-color-light: ${categoryColorLight(id)};">
-                <span class="guide-category-badge material-symbols-outlined">${escapeHtml(cat.icon)}</span>
                 <span class="guide-category-label">${escapeHtml(cat.label)}</span>
             </span>
         `).join("");

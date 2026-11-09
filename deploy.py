@@ -100,7 +100,7 @@ def patch_js_version(hash: str):
 
     for root, _, files in os.walk(os.path.join(PROJECT_ROOT_FOLDER, "site")):
         for filename in files:
-            if not filename.lower().endswith((".js", ".yaml", ".html")):
+            if not filename.lower().endswith((".js", ".yaml", ".html", ".md")):
                 continue
 
             path = os.path.join(root, filename)
