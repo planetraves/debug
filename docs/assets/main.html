@@ -24,4 +24,8 @@
     <meta name="twitter:title" content="{{ share_title }}">
     <meta name="twitter:description" content="{{ config.site_description }}">
     <meta name="twitter:image" content="{{ share_image }}">
+
+    <!-- iOS home screen: Safari ignores the favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ config.extra.apple_touch_icon | url }}">
+    <meta name="apple-mobile-web-app-title" content="{{ config.site_name }}">
 {% endblock %}

@@ -16,6 +16,7 @@ def on_config(config, **kwargs):
     theme = config["theme"]
     theme["favicon"] = f"assets/images/ico-raves-{color}.ico?v=dev"
     theme["logo"] = f"assets/images/ico-raves-{color}.png?v=dev"
+    config["extra"]["apple_touch_icon"] = f"assets/images/apple-touch-icon-{color}.png"
     return config
 
 
