@@ -14,8 +14,8 @@ def on_config(config, **kwargs):
     dev = os.environ.get("DEPLOY_ENV") != "prod"
     color = "rose" if dev else "bleu"
     theme = config["theme"]
-    theme["favicon"] = f"assets/images/ico-raves-{color}.ico"
-    theme["logo"] = f"assets/images/ico-raves-{color}.png"
+    theme["favicon"] = f"assets/images/ico-raves-{color}.ico?v=dev"
+    theme["logo"] = f"assets/images/ico-raves-{color}.png?v=dev"
     return config
 
 
