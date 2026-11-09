@@ -32,6 +32,7 @@ markdown_extensions:
   - smarty
   - sane_lists
   - attr_list
+  - md_in_html
   - toc:
       permalink: true
       toc_depth: 2-4
@@ -49,6 +50,7 @@ nav:
   - Publier un évènement: submit.md
   - Mon compte: account.md
   - L'Équipe: contacts.md
+  - Guide: guide.md
 
 # Hidden redirect page (kept out of nav/tabs/menus on purpose)
 not_in_nav: |
@@ -84,6 +86,7 @@ extra_css:
   - assets/css/submit.css?v=dev
   - assets/css/account.css?v=dev
   - assets/css/contacts.css?v=dev
+  - assets/css/guide.css?v=dev
 
 plugins:
     - macros
