@@ -1,11 +1,11 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=c2887b9d.9b199c6";
+} from "../global/modal.js?v=cb81439a.96f0ffb";
 
 import { 
     selectTeamTile, closeTeamTiles, teamTileFocusout
-} from "./contacts.js?v=c2887b9d.9b199c6";
+} from "./contacts.js?v=cb81439a.96f0ffb";
 
 const teamList = document.getElementById("team-list");
 
