@@ -117,21 +117,24 @@ body {
     }
 
     .md-header__nav {
+        position: absolute;
+        top: 0.6rem;
+        z-index: 1;
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 1.2rem;
         list-style: none;
         margin: 0;
-        padding: 0 0.8rem;
+        padding: 0;
     }
 
     .md-header__nav--left {
-        margin-right: auto;
+        left: 1.2rem;
     }
 
     .md-header__nav--right {
-        margin-left: auto;
+        right: 1.2rem;
     }
 
     .md-header__nav-link {

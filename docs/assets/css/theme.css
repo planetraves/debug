@@ -357,6 +357,12 @@ table tr th:last-child {
     }
 }
 
+@media screen and (min-width: 76.25em) {
+    .subtitle-ticker__track > span {
+        padding-right: 5rem;
+    }
+}
+
 /* declaration de couleur P3 */
 @supports (color: color(display-p3 1 1 1)) {
   html {
