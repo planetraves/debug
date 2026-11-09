@@ -1,0 +1,57 @@
+/* ============================================================
+   guide.css — Guide page
+   ============================================================ */
+
+/* theme.css shrinks paragraphs to 0.85em; match list items to them */
+.md-typeset .guide li {
+    font-size: 0.85em;
+}
+
+.md-typeset .guide li p {
+    font-size: inherit;
+}
+
+.md-typeset .guide li .material-symbols-outlined {
+    font-size: 1.3em;
+    vertical-align: middle;
+}
+
+.guide-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: 0.4rem;
+    margin: 0.6rem 0 1rem;
+}
+
+.guide-category {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 999px;
+    background: var(--cat-color);
+    border: 1px solid var(--cat-color);
+    
+}
+
+.guide-category-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: var(--cat-color);
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.guide-category-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    /* typeset line-height (1.6) would offset the text from the icon */
+    line-height: 1;
+    color: #fff;
+}

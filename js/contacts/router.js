@@ -1,11 +1,11 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=eb65ff06.b4f71a5";
+} from "../global/modal.js?v=74194c8e.017da3f";
 
 import { 
 
-} from "./contacts.js?v=eb65ff06.b4f71a5";
+} from "./contacts.js?v=74194c8e.017da3f";
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {

@@ -2,23 +2,23 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal,
     openPublicationCharterModal
-} from "../global/modal.js?v=eb65ff06.b4f71a5";
+} from "../global/modal.js?v=74194c8e.017da3f";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited
-} from "../global/eventform.js?v=eb65ff06.b4f71a5"
+} from "../global/eventform.js?v=74194c8e.017da3f"
 
 import { 
     addTag, removeLastTag
-} from "../global/tags.js?v=eb65ff06.b4f71a5"
+} from "../global/tags.js?v=74194c8e.017da3f"
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=eb65ff06.b4f71a5"
+} from "../global/address.js?v=74194c8e.017da3f"
 
 import { 
     editEvent, goBack
-} from "./edit_event.js?v=eb65ff06.b4f71a5"
+} from "./edit_event.js?v=74194c8e.017da3f"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
