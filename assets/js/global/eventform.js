@@ -1,8 +1,8 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=91c65f67.387a62c";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=91c65f67.387a62c";
-import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=91c65f67.387a62c";
+import { openErrorModal } from "./modal.js?v=50b1c37a.387a62c";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=50b1c37a.387a62c";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=50b1c37a.387a62c";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -70,7 +70,7 @@ function renderCategoryChoices() {
         const cat = APP_CONFIG.CATEGORIES[key];
         const isSelected = selectedCategories.has(key);
         categoryChoices.innerHTML += `
-            <button type="button" class="category-chip ${isSelected ? "selected" : ""}" data-action="toggle-category" data-category="${key}" style="--chip-color: ${cat.color};" aria-pressed="${isSelected}">
+            <button type="button" class="category-chip ${isSelected ? "selected" : ""}" data-action="toggle-category" data-category="${key}" style="--chip-color: ${categoryColor(key)};" aria-pressed="${isSelected}">
                 <span class="material-symbols-outlined">${cat.icon}</span>
                 ${cat.label}
             </button>`;

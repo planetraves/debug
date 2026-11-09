@@ -110,13 +110,13 @@ APP_CONFIG = {
     API_TIMEOUT_MS: 5000
 };
 
-/* create color variables for CSS */
-document.documentElement.style.setProperty("--category0", `${APP_CONFIG.CATEGORIES[0]["color"]} !important`);
-document.documentElement.style.setProperty("--category1", `${APP_CONFIG.CATEGORIES[1]["color"]} !important`);
-document.documentElement.style.setProperty("--category2", `${APP_CONFIG.CATEGORIES[2]["color"]} !important`);
-document.documentElement.style.setProperty("--category3", `${APP_CONFIG.CATEGORIES[3]["color"]} !important`);
-document.documentElement.style.setProperty("--category4", `${APP_CONFIG.CATEGORIES[4]["color"]} !important`);
-document.documentElement.style.setProperty("--category5", `${APP_CONFIG.CATEGORIES[5]["color"]} !important`);
+/* create color variables for CSS (theme.css overrides the main ones with display-p3 values when supported) */
+document.documentElement.style.setProperty("--category0", APP_CONFIG.CATEGORIES[0]["color"]);
+document.documentElement.style.setProperty("--category1", APP_CONFIG.CATEGORIES[1]["color"]);
+document.documentElement.style.setProperty("--category2", APP_CONFIG.CATEGORIES[2]["color"]);
+document.documentElement.style.setProperty("--category3", APP_CONFIG.CATEGORIES[3]["color"]);
+document.documentElement.style.setProperty("--category4", APP_CONFIG.CATEGORIES[4]["color"]);
+document.documentElement.style.setProperty("--category5", APP_CONFIG.CATEGORIES[5]["color"]);
 document.documentElement.style.setProperty("--category0--light", APP_CONFIG.CATEGORIES[0]["color_light"]);
 document.documentElement.style.setProperty("--category1--light", APP_CONFIG.CATEGORIES[1]["color_light"]);
 document.documentElement.style.setProperty("--category2--light", APP_CONFIG.CATEGORIES[2]["color_light"]);

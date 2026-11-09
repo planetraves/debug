@@ -156,8 +156,8 @@ function renderEventData(event, details = false) {
     eventData.categoryPrimaryId = categoryPrimaryId(eventData.categoryIds);
     eventData.categoryLabel = categoryLabel(eventData.categoryIds);
     eventData.categoryPie = categoryPieBackground(eventData.categoryIds);
-    eventData.categoryColor = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["color"];
-    eventData.categoryColorLight = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["color_light"];
+    eventData.categoryColor = categoryColor(eventData.categoryPrimaryId);
+    eventData.categoryColorLight = categoryColorLight(eventData.categoryPrimaryId);
     eventData.categoryIcon = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["icon"];
 
     /* area derived from the postal code */
@@ -172,10 +172,10 @@ function renderEventData(event, details = false) {
         const catRows = eventData.categoryIds.map(id => {
             const cat = APP_CONFIG.CATEGORIES[id];
             return `<span class="category-row">
-                <span class="category-badge" style="background: ${cat["color"]};" title="${cat["label"]}">
+                <span class="category-badge" style="background: ${categoryColor(id)};" title="${cat["label"]}">
                     <span class="material-symbols-outlined">${cat["icon"]}</span>
                 </span>
-                <span class="category-row-label" style="color: ${cat["color"]};">${cat["label"]}</span>
+                <span class="category-row-label" style="color: ${categoryColor(id)};">${cat["label"]}</span>
             </span>`;
         }).join("");
 
@@ -352,12 +352,21 @@ function categoryPrimaryId(ids) {
     return (ids && ids.length) ? ids[0] : 0;
 }
 
+// CSS variables carry the display-p3 versions defined in theme.css; hex is the fallback
+function categoryColor(id) {
+    return `var(--category${id}, ${APP_CONFIG.CATEGORIES[id]["color"]})`;
+}
+
+function categoryColorLight(id) {
+    return `var(--category${id}--light, ${APP_CONFIG.CATEGORIES[id]["color_light"]})`;
+}
+
 function categoryPieBackground(ids) {
-    if (!ids || ids.length === 0) return APP_CONFIG.CATEGORIES[0]["color"];
-    if (ids.length === 1) return APP_CONFIG.CATEGORIES[ids[0]]["color"];
+    if (!ids || ids.length === 0) return categoryColor(0);
+    if (ids.length === 1) return categoryColor(ids[0]);
     const slice = 360 / ids.length;
     const stops = ids.map((id, i) =>
-        `${APP_CONFIG.CATEGORIES[id]["color"]} ${i * slice}deg ${(i + 1) * slice}deg`
+        `${categoryColor(id)} ${i * slice}deg ${(i + 1) * slice}deg`
     );
     // start at 45° so 2/4-way splits land on diagonals, not the vertical/horizontal axes
     return `conic-gradient(from 45deg, ${stops.join(", ")})`;
@@ -365,10 +374,9 @@ function categoryPieBackground(ids) {
 
 function categoryTextStyle(ids) {
     if (!ids || ids.length <= 1) {
-        const color = APP_CONFIG.CATEGORIES[(ids && ids[0]) || 0]["color"];
-        return `color: ${color};`;
+        return `color: ${categoryColor((ids && ids[0]) || 0)};`;
     }
-    const stops = ids.map(id => APP_CONFIG.CATEGORIES[id]["color"]).join(", ");
+    const stops = ids.map(id => categoryColor(id)).join(", ");
     return `background: linear-gradient(90deg, ${stops}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;`;
 }
 
