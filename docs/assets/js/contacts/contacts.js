@@ -26,6 +26,7 @@ function renderTeamTile(profile, index) {
     const roleLabel = escapeHtml(APP_CONFIG.ROLES[profile.role] || "");
     const extraLabel = profile.label ? `<span class="team-badge team-badge-extra">${escapeHtml(profile.label)}</span>` : "";
     const colorIndex = index % Object.keys(APP_CONFIG.CATEGORIES).length;
+    // const colorIndex = profile.color != null? profile.color : 999
 
     return `
         <div class="team-tile" tabindex="0" data-action="select-team-tile" style="--team-accent: var(--category${colorIndex}); --team-accent-soft: var(--category${colorIndex}--light);">
@@ -57,7 +58,7 @@ async function loadTeam() {
 
     const { data, error } = await window.supabaseClient
         .from("profiles")
-        .select("name, email, role, label")
+        .select("name, email, role, label, color")
         .gte("role", 2) /* modérateurs (2) et admins (3) */
         .order("role", { ascending: false })
         .order("name", { ascending: true });
