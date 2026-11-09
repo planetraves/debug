@@ -27,12 +27,14 @@
 
 /* Big logo row above the title; collapses when the header gets .md-header--logo-hidden */
 .md-header__logo-top {
-    --logo-top-height: 120px;
+    --logo-top-height: 96px;
     display: flex;
     justify-content: center;
     overflow: hidden;
     max-height: calc(var(--logo-top-height) + 0.4rem);
     padding-top: 0.4rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
     opacity: 1;
     transition: max-height 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
 }
