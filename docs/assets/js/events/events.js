@@ -742,6 +742,7 @@ export function selectFilterOption(optionBtn) {
 export function toggleAdditionalFilter(filterBtn) {
     const isOpen = filterBtn.getAttribute("aria-expanded") === "true";
     filterBtn.setAttribute("aria-expanded", String(!isOpen));
+    document.body.classList.toggle("filters-open", !isOpen);
 
     if (isOpen) {
         moreFiltersArea.classList.add("hidden");
