@@ -17,8 +17,10 @@ const loading = document.getElementById("loading-screen");
 const backBtn = document.getElementById("back-btn");
 const form = document.getElementById("event-form");
 const submitContainer = document.getElementById("submit-container");
+const creatorTile = document.getElementById("creator-tile");
 
 let user_profile = null;
+let PROFILES = [];
 
 /* === LOCAL FUNCTIONS === */
 async function initEditEventPage() {
@@ -51,6 +53,25 @@ function showLoginWarning() {
     window.location.href = `../account/`;
 }
 
+async function loadProfiles() {
+    const { data, error } = await window.supabaseClient
+        .from("profiles")
+        .select("id, name, email");
+
+    if (error) {
+        console.error(error);
+        openErrorModal("Erreur survenue durant le chargement des utilisateur·rice·s");
+        return;
+    }
+    PROFILES = data ?? [];
+}
+
+function setCreatorFields(id, name, email) {
+    form.querySelector("#created_by").value = id ?? "";
+    form.querySelector("#creator_name").value = name ?? "";
+    form.querySelector("#creator_email").value = email ?? "";
+}
+
 function showEdit(user, profile, event) {
     user_profile = profile;
     
@@ -59,6 +80,15 @@ function showEdit(user, profile, event) {
     form.querySelector("#end_date_container").hidden = true;
     form.querySelector("#cancel-btn").hidden = false;
     form.querySelector("#cancel-btn").disabled = false;
+
+    document.querySelector(".text-basic-contributor").classList.toggle("hidden", profile.role != 0);
+
+    /* creator section (super admins only) */
+    creatorTile.hidden = profile.role <= 2;
+    if (profile.role > 2) {
+        setCreatorFields(event.created_by, event.creator_name, event.creator_email);
+        loadProfiles();
+    }
 
     /* show page */
     noticeTitle.innerText = "Editer votre évènement";
@@ -72,6 +102,37 @@ function showEdit(user, profile, event) {
 }
 
 /* === EXPORTED FUNCTIONS === */
+export function searchCreator(input) {
+    const suggestions = input.parentElement.querySelector(".suggestions");
+    const value = input.value.toLowerCase().trim();
+    suggestions.innerHTML = "";
+
+    const matches = value.length < 2 ? [] : PROFILES.filter(p =>
+        (p.email ?? "").toLowerCase().includes(value) || (p.name ?? "").toLowerCase().includes(value)
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+        input.classList.remove("looking");
+        suggestions.classList.add("hidden");
+        return;
+    }
+
+    for (const p of matches) {
+        const span = document.createElement("span");
+        span.textContent = `${p.name ?? "-"} (${p.email ?? "-"})`;
+        span.addEventListener("click", () => {
+            setCreatorFields(p.id, p.name, p.email);
+            input.value = "";
+            input.classList.remove("looking");
+            suggestions.classList.add("hidden");
+        });
+        suggestions.appendChild(span);
+    }
+
+    input.classList.add("looking");
+    suggestions.classList.remove("hidden");
+}
+
 export function goBack(){
     const currentPage = new URL(window.location.href);
     const referrer = previousPage ? new URL(previousPage) : null;
@@ -107,9 +168,12 @@ export async function editEvent() {
     var payload = new_event.payload;
     payload.event_date = form.querySelector("#event_date").value;
     payload.pending = user_profile.role == 0;
-    // payload.created_by = user_profile?.id ?? null;
-    // payload.creator_name = user_profile?.name ?? null;
-    // payload.creator_email = user_profile?.email ?? null;
+    if (user_profile.role > 2) {
+        const createdBy = form.querySelector("#created_by").value;
+        if (createdBy) payload.created_by = createdBy;
+        payload.creator_name = form.querySelector("#creator_name").value.trim() || null;
+        payload.creator_email = form.querySelector("#creator_email").value.trim() || null;
+    }
     payload.image_url = imageUrl;
     console.log("submit event payload (for edit):", payload);
 

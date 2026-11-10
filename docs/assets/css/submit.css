@@ -159,6 +159,28 @@
     color: #ccc;
 }
 
+/* Event creator tile (edit_event page, role >= 2) */
+.creator-tile {
+    margin: 1rem 0;
+    padding: 0.8rem;
+    border: 1px dashed var(--primary-link);
+    border-radius: 10px;
+    background: var(--primary-notice--bg);
+}
+
+.creator-tile-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--primary-notice--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.creator-tile-title .material-symbols-outlined {
+    font-size: 1.2rem;
+}
+
 /* Address autocomplete (Google Places) */
 .address-autocomplete {
     position: relative;

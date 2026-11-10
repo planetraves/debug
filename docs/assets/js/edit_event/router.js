@@ -17,7 +17,7 @@ import {
 } from "../global/address.js?v=dev"
 
 import { 
-    editEvent, goBack
+    editEvent, goBack, searchCreator
 } from "./edit_event.js?v=dev"
 
 /* === LOCAL FUNCTIONS === */
@@ -99,6 +99,10 @@ async function handleInput(el) {
 
         case "address-search":
             searchAddress(el);
+            break;
+
+        case "creator-search":
+            searchCreator(el);
             break;
 
         default:
