@@ -66,6 +66,7 @@ extra_javascript:
   - assets/js/global/helper.js?v=dev
   - assets/js/global/user_profile.js?v=dev
   - assets/js/global/supabase.js?v=dev
+  - assets/js/global/notifications.js?v=dev
 
 extra_css:
   - https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,1,0

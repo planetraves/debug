@@ -7,6 +7,7 @@ const hash = window.location.hash.substring(1);
 const params = new URLSearchParams(hash);
 let itemId = params.get("id");
 let itemType = params.get("type");
+let focusPendingRequests = hash === "pending-requests";
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
 const loading = document.getElementById("loading-screen");
@@ -422,6 +423,8 @@ export async function showAccount(user, profile) {
     loading.style.display = "none";
     document.documentElement.classList.add("ready");
 
+    focusPendingRequestSection();
+
     if (itemId) {
         var el = null;
         switch (itemType) {
@@ -448,6 +451,23 @@ export async function showAccount(user, profile) {
         el.click();
         itemId = null;
     }
+}
+
+function focusPendingRequestSection() {
+    if (!focusPendingRequests || !(user_profile?.role >= 2)) return;
+    const section = PENDING_EVENTS.length > 0
+        ? pendingEventsSection
+        : PRO_REQUESTS.length > 0 ? proRequestSection : null;
+    if (!section) return;
+
+    focusPendingRequests = false;
+    section.scrollIntoView({ block: "start" });
+}
+
+export function goToPendingRequests() {
+    focusPendingRequests = true;
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+    focusPendingRequestSection();
 }
 
 export function showResetPassword() {
@@ -513,6 +533,7 @@ export async function login() {
         console.error("sign-in failed:", error);
         return;
     }
+    window.refreshPendingNotifications();
 }
 
 export async function logout() {
@@ -533,6 +554,7 @@ export async function logout() {
     MY_EVENTS = [];
     PENDING_EVENTS = [];
     PRO_REQUESTS = [];
+    window.refreshPendingNotifications();
     showLogin();
 }
 

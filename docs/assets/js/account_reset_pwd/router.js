@@ -19,6 +19,9 @@ async function handleClick(el) {
     }
 }
 
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
+
 /* === LISTENERS === */
 document.addEventListener("click", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;

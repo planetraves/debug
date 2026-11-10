@@ -128,6 +128,9 @@ async function handleChange(el) {
     }
 }
 
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
+
 /* === LISTENERS === */
 window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
 

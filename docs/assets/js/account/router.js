@@ -6,7 +6,8 @@ import {
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfile, openPendingEvent, openMyEvent, openProfile,
-    searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion
+    searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion,
+    goToPendingRequests
 } from "./account.js?v=dev";
 
 async function handleClick(el) {
@@ -130,6 +131,9 @@ async function handleChange(el) {
     }
 }
 
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
+
 /* === LISTENERS === */
 document.addEventListener("click", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
@@ -158,4 +162,9 @@ document.addEventListener("change", (event) => {
     const el = event.target.closest("[data-change-type]");
     if (!el) return;
     handleChange(el);
+});
+
+window.addEventListener("hashchange", () => {
+    if (window.location.hash !== "#pending-requests") return;
+    goToPendingRequests();
 });
