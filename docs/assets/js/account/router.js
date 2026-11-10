@@ -5,7 +5,7 @@ import {
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
-    sendResetPasswordRequest, updateProfileRole, openPendingEvent, openMyEvent, openProfile,
+    sendResetPasswordRequest, updateProfile, openPendingEvent, openMyEvent, openProfile,
     searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion
 } from "./account.js?v=dev";
 
@@ -43,8 +43,8 @@ async function handleClick(el) {
             handleAccordion(el, el.dataset.accordionId);
             break;
 
-        case "update-profile-role":
-            updateProfileRole();
+        case "update-profile":
+            await updateProfile();
             break;
 
         case "open-request-pro":

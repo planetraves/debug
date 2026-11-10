@@ -5,6 +5,7 @@ hide:
 ---
 
 {% include 'includes/modals/profile_modal.html' %}
+{% include 'includes/modals/update_role_modal.html' %}
 {% include 'includes/modals/event_modal.html' %}
 {% include 'includes/modals/confirm_modal.html' %}
 {% include 'includes/modals/popup.html' %}

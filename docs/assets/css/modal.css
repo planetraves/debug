@@ -373,6 +373,23 @@ label.event-categories-body {
     max-width: 420px;
 }
 
+.modal-form-title {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.modal-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.modal-form-actions button {
+    width: auto;
+    margin: 0;
+}
+
 .confirm-code-row {
     display: flex;
     align-items: stretch;
