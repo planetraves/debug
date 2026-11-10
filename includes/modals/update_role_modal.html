@@ -1,0 +1,66 @@
+<div id="update-role-modal" class="modal-overlay hidden" data-action="close-modal">
+    <div class="modal-card long" data-no-action role="dialog" aria-modal="true">
+        <button class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <form id="update-profile-form" class="modal-content pico">
+            <div class="account-section-title modal-form-title">
+                <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+                <span>Config. contributeur·rice</span>
+            </div>
+
+            <label>
+                Identifiant
+                <input type="text" id="profile-id" readonly>
+            </label>
+
+            <label>
+                Créé le
+                <input type="text" id="profile-created-at" readonly>
+            </label>
+
+            <label>
+                Nom *
+                <input type="text" id="profile-name" required>
+            </label>
+
+            <label>
+                Email
+                <input type="email" id="profile-email" readonly>
+            </label>
+
+            <label>
+                Role
+                <select id="roles" required></select>
+            </label>
+
+            <label>
+                Status
+                <select id="profile-status" required></select>
+            </label>
+
+            <label>
+                Label
+                <input type="text" id="profile-label">
+            </label>
+
+            <fieldset>
+                <label>
+                    <input type="checkbox" role="switch" id="profile-official-request">
+                    Requête compte pro en cours
+                </label>
+            </fieldset>
+
+            <label>
+                Détails de la requête
+                <textarea id="profile-official-request-details"></textarea>
+            </label>
+
+            <div class="modal-form-actions">
+                <button type="button" class="secondary" data-allow-action data-action="close-modal">Annuler</button>
+                <button type="button" id="update-profile-button" data-allow-action data-action="update-profile">Changer</button>
+            </div>
+        </form>
+    </div>
+</div>

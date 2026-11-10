@@ -1,13 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openModeratorCharterModal
-} from "../global/modal.js?v=5fef1698.3b2c8e5";
+} from "../global/modal.js?v=509da5f2.ce878d1";
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
-    sendResetPasswordRequest, updateProfileRole, openPendingEvent, openMyEvent, openProfile,
+    sendResetPasswordRequest, updateProfile, openPendingEvent, openMyEvent, openProfile,
     searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion
-} from "./account.js?v=5fef1698.3b2c8e5";
+} from "./account.js?v=509da5f2.ce878d1";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
@@ -43,8 +43,8 @@ async function handleClick(el) {
             handleAccordion(el, el.dataset.accordionId);
             break;
 
-        case "update-profile-role":
-            updateProfileRole();
+        case "update-profile":
+            await updateProfile();
             break;
 
         case "open-request-pro":

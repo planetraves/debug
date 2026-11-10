@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=5fef1698.3b2c8e5";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal} from "../global/modal.js?v=509da5f2.ce878d1";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -30,7 +30,9 @@ const statEvents = document.getElementById("stat-events");
 const statVisitors = document.getElementById("stat-visitors");
 
 const updateRoleForm = document.getElementById("update-role-form");
+const updateProfileForm = document.getElementById("update-profile-form");
 const roleList = document.getElementById("roles");
+const statusList = document.getElementById("profile-status");
 
 const proRequestSection = document.getElementById("pro-request-section");
 const proRequests = document.getElementById("contrib-pro-requests");
@@ -382,13 +384,19 @@ export async function showAccount(user, profile) {
 
                 await getProfiles();
 
-                /* configure role select list */
+                /* configure role & status select lists */
                 Object.keys(APP_CONFIG.ROLES).forEach(key => {
                     const opt = document.createElement("option");
-                    opt.innerText = APP_CONFIG.ROLES[key]
+                    opt.value = key;
+                    opt.innerText = APP_CONFIG.ROLES[key];
                     roleList.appendChild(opt);
                 });
-                roleList.value = APP_CONFIG.ROLES[0];
+                Object.keys(APP_CONFIG.USER_STATUS).forEach(key => {
+                    const opt = document.createElement("option");
+                    opt.value = key;
+                    opt.innerText = APP_CONFIG.USER_STATUS[key]["label"];
+                    statusList.appendChild(opt);
+                });
             }
             break;
         
@@ -557,22 +565,45 @@ export async function sendResetPasswordRequest() {
     }, 3000);
 }
 
-export async function updateProfileRole() {
-    const new_role = roleId(roleList.value);
+function openUpdateProfileModal(profile) {
+    selected_profile = profile;
+    updateProfileForm.querySelector("#profile-id").value = profile.id;
+    updateProfileForm.querySelector("#profile-created-at").value = formatDateForUI(profile.created_at);
+    updateProfileForm.querySelector("#profile-name").value = profile.name ?? "";
+    updateProfileForm.querySelector("#profile-email").value = profile.email ?? "";
+    roleList.value = String(profile.role);
+    statusList.value = String(profile.status);
+    updateProfileForm.querySelector("#profile-label").value = profile.label ?? "";
+    updateProfileForm.querySelector("#profile-official-request").checked = !!profile.official_request;
+    updateProfileForm.querySelector("#profile-official-request-details").value = profile.official_request_details ?? "";
+    openUpdateRoleModal();
+}
 
-    if (!selected_profile || (new_role == selected_profile.role)) {
-        return;
-    }
+export async function updateProfile() {
+    if (!selected_profile) return;
+    if (!updateProfileForm.reportValidity()) return;
 
-    console.log("updating profile role:", selected_profile.id, new_role);
+    const button = updateProfileForm.querySelector("#update-profile-button");
+    const payload = {
+        name: updateProfileForm.querySelector("#profile-name").value.trim(),
+        email: updateProfileForm.querySelector("#profile-email").value.trim(),
+        role: Number(roleList.value),
+        status: Number(statusList.value),
+        label: updateProfileForm.querySelector("#profile-label").value.trim() || null,
+        official_request: updateProfileForm.querySelector("#profile-official-request").checked,
+        official_request_details: updateProfileForm.querySelector("#profile-official-request-details").value
+    };
+
+    console.log("updating profile:", selected_profile.id, payload);
+    button.setAttribute("aria-busy", "true");
     const { error } = await window.supabaseClient
         .from("profiles")
-        .update({
-            role: new_role
-        })
+        .update(payload)
         .eq("id", selected_profile.id);
+    button.setAttribute("aria-busy", "false");
 
     if (error) {
+        console.error(error);
         openErrorModal("Un problème est survenu");
         return;
     }
@@ -678,12 +709,7 @@ export function searchInput(input) {
                     break;
 
                 case "update-role-form":
-                    selected_profile = item;
-                    container.querySelector("#profile-email").innerText = item.email;
-                    container.querySelector("#profile-name").innerText = item.name;
-                    container.querySelector("#profile-role").innerText = APP_CONFIG.ROLES[item.role];
-                    container.querySelector("#roles").value = APP_CONFIG.ROLES[item.role];
-                    container.querySelector("#update-role-button").disabled = false;
+                    openUpdateProfileModal(item);
                     break;
 
                 case "pending-events":
@@ -783,11 +809,6 @@ export function handleAccordion(accordion, accordionId) {
         /* specific action */
         if (accordionId == "update-role-form") {
             selected_profile = null;
-            hiddenSection.querySelector("#profile-email").innerText = "-";
-            hiddenSection.querySelector("#profile-name").innerText = "-";
-            hiddenSection.querySelector("#profile-role").innerText = "-";
-            hiddenSection.querySelector("#roles").value = APP_CONFIG.ROLES[0];
-            hiddenSection.querySelector("#update-role-button").disabled = true; 
         }
     } else {
         /* open this one */

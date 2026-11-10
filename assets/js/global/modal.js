@@ -629,6 +629,7 @@ export function closeModal(target) {
 
         case "event-modal":
         case "profile-modal":
+        case "update-role-modal":
             closeCurrentModal();
             break;
 
