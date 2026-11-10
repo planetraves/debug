@@ -117,12 +117,14 @@ document.documentElement.style.setProperty("--category2", APP_CONFIG.CATEGORIES[
 document.documentElement.style.setProperty("--category3", APP_CONFIG.CATEGORIES[3]["color"]);
 document.documentElement.style.setProperty("--category4", APP_CONFIG.CATEGORIES[4]["color"]);
 document.documentElement.style.setProperty("--category5", APP_CONFIG.CATEGORIES[5]["color"]);
+document.documentElement.style.setProperty("--category999", "#0D2C87");
 document.documentElement.style.setProperty("--category0--light", APP_CONFIG.CATEGORIES[0]["color_light"]);
 document.documentElement.style.setProperty("--category1--light", APP_CONFIG.CATEGORIES[1]["color_light"]);
 document.documentElement.style.setProperty("--category2--light", APP_CONFIG.CATEGORIES[2]["color_light"]);
 document.documentElement.style.setProperty("--category3--light", APP_CONFIG.CATEGORIES[3]["color_light"]);
 document.documentElement.style.setProperty("--category4--light", APP_CONFIG.CATEGORIES[4]["color_light"]);
 document.documentElement.style.setProperty("--category5--light", APP_CONFIG.CATEGORIES[5]["color_light"]);
+document.documentElement.style.setProperty("--category999--light", "#818FBA");
 
 /* mobile debug console, never loaded in release builds */
 if (APP_CONFIG.DEV) {
