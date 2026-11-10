@@ -1,11 +1,11 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=509da5f2.ce878d1";
+} from "../global/modal.js?v=76e0822a.09d2c1d";
 
 import { 
     selectTeamTile, closeTeamTiles, teamTileFocusout
-} from "./contacts.js?v=509da5f2.ce878d1";
+} from "./contacts.js?v=76e0822a.09d2c1d";
 
 const teamList = document.getElementById("team-list");
 
@@ -27,6 +27,9 @@ async function handleChange(el) {
             console.warn("unknown 'change' action:", el.dataset.changeType)
     }
 }
+
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
 
 /* === LISTENERS === */
 document.addEventListener("click", async (event) => {

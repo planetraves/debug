@@ -25,6 +25,39 @@
     color: var(--primary-title);
 }
 
+.md-header__notification {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    color: var(--primary-error);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+}
+
+.md-header__notification:hover {
+    opacity: 0.7;
+}
+
+.md-header__notification svg {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+}
+
+.md-header__notification[hidden] {
+    display: none;
+}
+
+#pro-request-section,
+#pending-events-section {
+    scroll-margin-top: calc(var(--md-header-height, 8rem) + 1rem);
+}
+
 /* Big logo row above the title; collapses when the header gets .md-header--logo-hidden */
 .md-header__logo-top {
     --logo-top-height: 120px;

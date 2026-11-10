@@ -88,6 +88,16 @@
                 {% include "partials/source.html" %}
             </div>
         {% endif %}
+        <a
+            id="pending-notification"
+            class="md-header__notification"
+            href="{{ 'account/' | url }}#pending-requests"
+            title="Demandes en attente"
+            aria-label="Demandes en attente"
+            hidden
+        >
+            {% include ".icons/material/bell-badge.svg" %}
+        </a>
     </nav>
 
     <!-- Subtitle -->

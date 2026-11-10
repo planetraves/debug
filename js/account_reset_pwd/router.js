@@ -1,8 +1,8 @@
 import {
     resetPassword
-} from "./account_reset_pwd.js?v=509da5f2.ce878d1";
+} from "./account_reset_pwd.js?v=76e0822a.09d2c1d";
 
-import {closeModal} from "../global/modal.js?v=509da5f2.ce878d1";
+import {closeModal} from "../global/modal.js?v=76e0822a.09d2c1d";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
@@ -18,6 +18,9 @@ async function handleClick(el) {
             console.warn("unknown 'click' action:", el.dataset.action)
     }
 }
+
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
 
 /* === LISTENERS === */
 document.addEventListener("click", async (event) => {

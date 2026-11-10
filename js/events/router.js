@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
-} from "../global/modal.js?v=509da5f2.ce878d1";
+} from "../global/modal.js?v=76e0822a.09d2c1d";
 
 import { 
     openEvent, searchInput, 
@@ -9,7 +9,7 @@ import {
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
     fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove
-} from "./events.js?v=509da5f2.ce878d1"
+} from "./events.js?v=76e0822a.09d2c1d"
 
 const container = document.getElementById("events");
 const calendarEl = document.getElementById("calendar");
@@ -127,6 +127,9 @@ async function handleChange(el) {
             console.warn("unknown 'change' action:", el.dataset.changeType)
     }
 }
+
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
 
 /* === LISTENERS === */
 window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));

@@ -1,13 +1,14 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openModeratorCharterModal
-} from "../global/modal.js?v=509da5f2.ce878d1";
+} from "../global/modal.js?v=76e0822a.09d2c1d";
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfile, openPendingEvent, openMyEvent, openProfile,
-    searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion
-} from "./account.js?v=509da5f2.ce878d1";
+    searchInput, shareEvent, emailEvent, sharePendingEvent, shareProfile, handleAccordion,
+    goToPendingRequests
+} from "./account.js?v=76e0822a.09d2c1d";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
@@ -130,6 +131,9 @@ async function handleChange(el) {
     }
 }
 
+/* === INITIAL LOAD === */
+window.refreshPendingNotifications();
+
 /* === LISTENERS === */
 document.addEventListener("click", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
@@ -158,4 +162,9 @@ document.addEventListener("change", (event) => {
     const el = event.target.closest("[data-change-type]");
     if (!el) return;
     handleChange(el);
+});
+
+window.addEventListener("hashchange", () => {
+    if (window.location.hash !== "#pending-requests") return;
+    goToPendingRequests();
 });
