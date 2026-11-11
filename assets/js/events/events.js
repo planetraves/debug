@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal, openSuccessModal
-} from "../global/modal.js?v=81d4755c.1f8b124";
+} from "../global/modal.js?v=522e9949.de4fa2a";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=81d4755c.1f8b124";
+} from "./renderevents.js?v=522e9949.de4fa2a";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -296,13 +296,13 @@ function renderCalendar(events=EVENTS) {
     const startDay = (firstDay.getDay() + 6) % 7; 
     // converts Sunday=0 → Sunday=6 (Monday-first calendar)
     const totalDays = lastDay.getDate();
+    const weekCount = Math.max(5, Math.ceil((startDay + totalDays) / 7));
     const monthStr = String(month + 1).padStart(2, "0");
     const grouped = groupByDateEvents(events);
     calendarDayEvents = grouped;
     var html = '';
 
-    // Loop 35 cells (5 weeks)
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < weekCount * 7; i++) {
         const dayNumber = i - startDay + 1;
 
         let date;
@@ -346,6 +346,7 @@ function renderCalendar(events=EVENTS) {
         `;
     }
 
+    calendarEl.style.setProperty("--calendar-weeks", weekCount);
     calendarEl.innerHTML = html;
 
     if (thisMonthStr == monthStr) {
@@ -380,7 +381,8 @@ export function fitCalendar() {
     const minimumDayHeight = firstDay
         ? firstDay.querySelector(".calendar-dots").offsetTop + dotSize + parseFloat(getComputedStyle(firstDay).paddingBottom) + 2
         : 0;
-    const minimumHeight = minimumDayHeight * 5 + parseFloat(calendarStyle.rowGap) * 4
+    const weekCount = Number(calendarStyle.getPropertyValue("--calendar-weeks")) || 5;
+    const minimumHeight = minimumDayHeight * weekCount + parseFloat(calendarStyle.rowGap) * (weekCount - 1)
         + parseFloat(calendarStyle.paddingTop) + parseFloat(calendarStyle.paddingBottom);
     calendarEl.style.height = `${Math.max(available, CALENDAR_MIN_HEIGHT, minimumHeight)}px`;
     const preferredColumns = Number(calendarStyle.getPropertyValue("--calendar-dot-columns")) || 2;

@@ -8,8 +8,7 @@
     --calendar-dot-size: 12px;
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    /* 5 week rows share the height set by fitCalendar() in events.js */
-    grid-template-rows: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--calendar-weeks, 5), minmax(0, 1fr));
     gap: 6px;
     padding: 0.4rem;
     transition: transform 0.2s ease, opacity 0.2s ease;
