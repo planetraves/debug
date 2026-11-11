@@ -22,8 +22,11 @@
     <article class="submit-tile" data-allow-action>
         <form id="event-form">
             <label class="pico">
-                Titre de l'évènement *
-                <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
+                <span class="label-help">
+                    Titre de l'évènement *
+                </span>
+                <small id="title-hint" class="field-hint">Evitez les informations de lieu ou de genre dans le titre, utilisez les autres champs et tags pour cela.</small>
+                <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" aria-describedby="title-hint" required>
             </label>
 
             <div class="pico">

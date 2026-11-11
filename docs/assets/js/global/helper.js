@@ -435,14 +435,16 @@ function configureSelectList(configList, selectList, defaultValue=null) {
 
 /* === SHARE === */
 async function navigatorShareEvent(event, event_url) {
-    const event_title = categoryLabel(eventCategoryIds(event));
+    const event_category = categoryLabel(eventCategoryIds(event));
+    const event_tags = event.tags?.join(", ") ?? "";
     const msg_title = event.pending ? "Ici un évènement en attente de publication :" : "Regarde cet évènement !";
     const event_desc = `${msg_title}
 
-Titre: ${event.title}
-Type: ${event_title}
-Lieu: ${event.location_name}
-Date: ${formatDateForUI(event.event_date)}
+${event.title}
+- ${event_category}${event_tags ? ` (${event_tags})` : ""}
+- ${event.location_name}
+- Le ${formatDateForUI(event.event_date)}
+
 `;
     
     const clipBoardText = `${event_desc}\n${event_url}`;
@@ -462,7 +464,7 @@ Date: ${formatDateForUI(event.event_date)}
             
             if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
-                    title: event_title,
+                    title: event_category,
                     text: event_desc,
                     url: event_url,
                     files: [file]
