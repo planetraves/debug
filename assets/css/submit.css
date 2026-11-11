@@ -95,6 +95,14 @@
     gap: 0.3rem;
 }
 
+.field-hint {
+    display: block;
+    margin: 0.2rem 0 0.4rem;
+    color: var(--primary-subtext);
+    font-size: 0.65rem;
+    line-height: 1.4;
+}
+
 /* .pico scopes Pico's conditional button theme; override it here */
 .pico .help-btn {
     display: inline-flex;
