@@ -168,6 +168,13 @@ body {
 
     .md-header__nav--right {
         right: 1.2rem;
+        transition: right 0.25s ease;
+    }
+
+    .md-header--logo-hidden:has(.md-header__notification:not([hidden])) .md-header__nav--right,
+    body.calendar-view .md-header:has(.md-header__notification:not([hidden])) .md-header__nav--right,
+    body.filters-open .md-header:has(.md-header__notification:not([hidden])) .md-header__nav--right {
+        right: 3.2rem;
     }
 
     .md-header__nav-link {
