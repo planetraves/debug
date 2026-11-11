@@ -4,6 +4,8 @@
    ============================================================ */
 
 .calendar {
+    --calendar-dot-columns: 2;
+    --calendar-dot-size: 12px;
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     /* 5 week rows share the height set by fitCalendar() in events.js */
@@ -143,15 +145,16 @@
 
 .calendar-dots {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(var(--calendar-dot-columns), minmax(0, 1fr));
+    justify-items: start;
     gap: 4px;
     margin-top: 4px;
 }
 
 .calendar-dot {
-    width: 12px;
-    height: 12px;
-    padding: 0 3px;
+    box-sizing: border-box;
+    width: var(--calendar-dot-size);
+    height: var(--calendar-dot-size);
 
     border-radius: 999px;
 
@@ -163,18 +166,39 @@
     font-weight: 600;
     color: white;
 
-    pointer-events: no
+    pointer-events: none;
 }
 
 .calendar-dot-more {
-    width: auto;
+    width: max-content;
+    min-width: var(--calendar-dot-size);
+    padding: 0 3px;
     background: var(--md-default-fg-color--lighter, #ccc);
     color: var(--md-default-fg-color, #333);
+}
+
+@media (min-width: 601px) {
+    .calendar {
+        --calendar-dot-columns: 4;
+        --calendar-dot-size: 16px;
+    }
+
+    .calendar-dot {
+        font-size: 0.65rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .calendar {
+        --calendar-dot-columns: 6;
+        --calendar-dot-size: 18px;
+    }
 }
 
 /* Phones: tighter grid so the full month fits on screen */
 @media (max-width: 600px) {
     .calendar {
+        --calendar-dot-size: 10px;
         gap: 4px;
         padding: 0.3rem;
     }
@@ -199,8 +223,6 @@
     }
 
     .calendar-dot {
-        width: 10px;
-        height: 10px;
         font-size: 0.5rem;
     }
 }

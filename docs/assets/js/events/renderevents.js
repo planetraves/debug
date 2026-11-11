@@ -72,11 +72,10 @@ export function renderEventTile(event) {
     `;
 }
 
-export function renderDots(dayEvents) {
+export function renderDots(dayEvents, maxDots = 4) {
     if (!dayEvents || !dayEvents.length) return "";
 
-    const MAX = 4; // 2x2 slots per cell; when over, the last slot becomes "+N"
-    const shown = dayEvents.length > MAX ? dayEvents.slice(0, MAX - 1) : dayEvents;
+    const shown = dayEvents.length > maxDots ? dayEvents.slice(0, maxDots - 1) : dayEvents;
 
     let html = shown.map(ids => {
         const background = categoryPieBackground(ids);

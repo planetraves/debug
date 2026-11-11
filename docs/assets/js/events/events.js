@@ -50,6 +50,7 @@ let touchEndX = 0;
 
 let user_profile = null;
 let EVENTS = [];
+let calendarDayEvents = {};
 let activeFilters = {
     category: new Set(Object.keys(APP_CONFIG.CATEGORIES)),
     area: new Set(Object.keys(APP_CONFIG.AREAS)),
@@ -297,6 +298,7 @@ function renderCalendar(events=EVENTS) {
     const totalDays = lastDay.getDate();
     const monthStr = String(month + 1).padStart(2, "0");
     const grouped = groupByDateEvents(events);
+    calendarDayEvents = grouped;
     var html = '';
 
     // Loop 35 cells (5 weeks)
@@ -372,7 +374,28 @@ export function fitCalendar() {
     if (agendaView.hidden) return;
     const top = calendarEl.getBoundingClientRect().top + eventsMain.scrollTop - moreFiltersArea.offsetHeight;
     const available = window.innerHeight - top - CALENDAR_BOTTOM_GAP;
-    calendarEl.style.height = `${Math.max(available, CALENDAR_MIN_HEIGHT)}px`;
+    const calendarStyle = getComputedStyle(calendarEl);
+    const dotSize = parseFloat(calendarStyle.getPropertyValue("--calendar-dot-size"));
+    const firstDay = calendarEl.querySelector(".calendar-day");
+    const minimumDayHeight = firstDay
+        ? firstDay.querySelector(".calendar-dots").offsetTop + dotSize + parseFloat(getComputedStyle(firstDay).paddingBottom) + 2
+        : 0;
+    const minimumHeight = minimumDayHeight * 5 + parseFloat(calendarStyle.rowGap) * 4
+        + parseFloat(calendarStyle.paddingTop) + parseFloat(calendarStyle.paddingBottom);
+    calendarEl.style.height = `${Math.max(available, CALENDAR_MIN_HEIGHT, minimumHeight)}px`;
+    const preferredColumns = Number(calendarStyle.getPropertyValue("--calendar-dot-columns")) || 2;
+    calendarEl.querySelectorAll(".calendar-day").forEach(day => {
+        const dots = day.querySelector(".calendar-dots");
+        const dot = dots.querySelector(".calendar-dot");
+        if (!dot) return;
+        const gap = parseFloat(getComputedStyle(dots).gap) || 0;
+        const columns = Math.max(1, Math.min(preferredColumns, Math.floor((dots.clientWidth + gap) / (dotSize + gap))));
+        const paddingBottom = parseFloat(getComputedStyle(day).paddingBottom) || 0;
+        const availableHeight = day.clientHeight - dots.offsetTop - paddingBottom;
+        const rows = Math.max(1, Math.min(2, Math.floor((availableHeight + gap) / (dotSize + gap))));
+        dots.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+        dots.innerHTML = renderDots(calendarDayEvents[day.dataset.date], columns * rows);
+    });
     // .events-main extends below the viewport; pad so the pushed-down calendar can be scrolled fully into view
     const hiddenBelow = eventsMain.getBoundingClientRect().bottom - window.innerHeight;
     agendaView.style.paddingBottom = `${Math.max(hiddenBelow, 0) + CALENDAR_BOTTOM_GAP}px`;
