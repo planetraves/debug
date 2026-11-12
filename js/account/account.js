@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal} from "../global/modal.js?v=69571c20.4acfa35";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal} from "../global/modal.js?v=5c159498.7aed374";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -481,6 +481,8 @@ export function showResetPassword() {
 }
 
 export async function signup() {
+    if (!signUpForm.reportValidity()) return;
+
     const displayName = signUpForm.querySelector("#display_name").value.trim();
     const email = signUpForm.querySelector("#email").value.trim();
     const password = signUpForm.querySelector("#password").value;
@@ -514,6 +516,8 @@ export async function signup() {
 }
 
 export async function login() {
+    if (!signInForm.reportValidity()) return;
+
     const email = signInForm.querySelector("#email").value.trim();
     const password = signInForm.querySelector("#password").value;
     const button = signInForm.querySelector("#button");
@@ -559,6 +563,8 @@ export async function logout() {
 }
 
 export async function sendResetPasswordRequest() {
+    if (!rstPwdForm.reportValidity()) return;
+
     const email = rstPwdForm.querySelector("#email").value.trim();
     const button = rstPwdForm.querySelector("#button");
 
