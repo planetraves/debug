@@ -597,7 +597,7 @@ export async function confirm(action) {
     }
 
     if (error) {
-        openErrorModal(localizeAuthError(error, as_is=true));
+        openErrorModal(localizeAuthError(error, true));
         console.error(error);
         return;
     }

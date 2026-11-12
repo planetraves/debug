@@ -1,24 +1,46 @@
 console.log("executing:", "helper.js");
 
 /* === ERRORS/MESSAGES === */
+// Supabase Auth only answers in English (no language option): translate from the stable
+// `error.code`, or `error.name` for client-side errors, never from `error.message`.
+// Codes: https://supabase.com/docs/guides/auth/debugging/error-codes
 function localizeAuthError(error, as_is = false) {
   // error is typically an object with { name, message, code, status, ... }
   const code = error?.code || error?.name;
 
+  if (code === "weak_password") {
+    // which reasons can occur depends on the password rules set in Supabase Auth
+    const hints = {
+      "length": "il est trop court",
+      "characters": "il doit contenir plus de types de caractères (minuscules, majuscules, chiffres, symboles)",
+      "pwned": "il apparaît dans des fuites de données connues",
+    };
+    const details = (error.reasons ?? []).map(reason => hints[reason]).filter(Boolean);
+    return details.length
+      ? `Mot de passe trop faible : ${details.join(" et ")}.`
+      : "Mot de passe trop faible.";
+  }
+
   const dict = {
-    // common examples (codes vary by case/provider)
     "invalid_credentials": "Email ou mot de passe incorrect.",
-    "invalid_grant": "Connexion impossible. Veuillez réessayer.",
-    "user_already_exists": "Un compte existe déjà avec cet email.",
-    "weak_password": "Mot de passe trop faible. Utilisez au moins 8 caractères.",
     "email_not_confirmed": "Veuillez confirmer votre email avant de vous connecter.",
+    "user_banned": "Ce compte est suspendu.",
+    "user_already_exists": "Un compte existe déjà avec cet email.",
+    "email_exists": "Un compte existe déjà avec cet email.",
+    "email_address_invalid": "Adresse email invalide. Veuillez en utiliser une autre.",
+    "validation_failed": "Informations invalides. Vérifiez votre adresse email.",
+    "signup_disabled": "Les inscriptions sont actuellement fermées.",
     "same_password": "Le nouveau mot de passe doit être différent de l'ancien.",
-    "invalid_password": "Mot de passe incorrect.",
-    "invalid_email": "Email invalide.",
+    "over_email_send_rate_limit": "Trop d'emails envoyés. Veuillez réessayer plus tard.",
+    "over_request_rate_limit": "Trop de tentatives. Veuillez patienter quelques minutes avant de réessayer.",
+    // client-side errors carry no code, only a name
+    "AuthRetryableFetchError": "Impossible de joindre le serveur. Vérifiez votre connexion internet.",
+    "AuthSessionMissingError": "Session expirée ou lien invalide. Veuillez recommencer.",
   };
-  console.log("ERROR:", code)
 
   if (dict[code]) return dict[code];
+
+  console.warn("untranslated error:", code, error?.message);
   // as_is surfaces the raw provider message instead of the generic fallback
   if (as_is && error?.message) return error.message;
   return "Une erreur est survenue. Veuillez réessayer.";

@@ -7,6 +7,8 @@ const resetPwdForm = document.getElementById("reset-pwd-form");
 
 /* === LOCAL FUNCTIONS === */
 export async function resetPassword() {
+    if (!resetPwdForm.reportValidity()) return;
+
     const passwordValue = resetPwdForm.querySelector("#password").value;
     const passwordConfirm = resetPwdForm.querySelector("#passwordConfirm");
     const passwordConfirmValue = passwordConfirm.value;
