@@ -1,8 +1,8 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=5c159498.7aed374";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=5c159498.7aed374";
-import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=5c159498.7aed374";
+import { openErrorModal } from "./modal.js?v=69f290a2.b91ece4";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=69f290a2.b91ece4";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=69f290a2.b91ece4";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -317,9 +317,9 @@ export function getEventFormPayload() {
     var min_price = null;
     var max_price = null;
     if (priceChoiceList.value == 2) {
-        min_price = minPrice.value.trim() === "" ? null: Number(minPrice.value);
-        max_price = maxPrice.value.trim() === "" ? null: Number(maxPrice.value);
-        if (min_price && max_price && (min_price > max_price))
+        min_price = minPrice.value.trim() === "" ? 0.0: Number(minPrice.value);
+        max_price = maxPrice.value.trim() === "" ? 0.0: Number(maxPrice.value);
+        if ((min_price !== null) && (max_price !== null) && (min_price > max_price))
         {
             minPrice.setCustomValidity("Le prix réduit doit être inférieur au prix normal");
         }

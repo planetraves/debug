@@ -233,11 +233,13 @@ function renderEventData(event, details = false) {
 
     eventData.priceLabel = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
     if (eventData.price == 2) {
-        if (eventData.min_price) {
+        if (eventData.min_price && eventData.max_price) {
             eventData.priceLabel = eventData.min_price + " à " + eventData.max_price + " €";
-        } else  {
+        } else if (eventData.max_price) {
             eventData.priceLabel = eventData.max_price + " €";
-        }
+        } else if (eventData.min_price) {
+            eventData.priceLabel = eventData.min_price + " €";
+        }  
     }
 
     eventData.ageLabel = "Tout public";
