@@ -1,8 +1,8 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=b07d1782.b97c010";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=b07d1782.b97c010";
-import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=b07d1782.b97c010";
+import { openErrorModal } from "./modal.js?v=41b52d38.530037b";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=41b52d38.530037b";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=41b52d38.530037b";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -23,6 +23,7 @@ const endDateInput = document.getElementById("end_date");
 let currentImageUrl = null;
 let imageToUpload = null;
 let selectedCategories = new Set();
+let PROFILES = [];  // accounts searchable in the creator tile (super admins only)
 
 /* === LOCAL FUNCTIONS === */
 async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
@@ -376,4 +377,55 @@ export function getEventFormPayload() {
     }
 
     return {payload: payload, nb_days: nb_days}
+}
+
+/* creator tile (super admins only): publish or edit an event on behalf of another account */
+export async function loadProfiles() {
+    const { data, error } = await window.supabaseClient
+        .from("profiles")
+        .select("id, name, email");
+
+    if (error) {
+        console.error(error);
+        openErrorModal("Erreur survenue durant le chargement des utilisateur·rice·s");
+        return;
+    }
+    PROFILES = data ?? [];
+}
+
+export function setCreatorFields(id, name, email) {
+    eventForm.querySelector("#created_by").value = id ?? "";
+    eventForm.querySelector("#creator_name").value = name ?? "";
+    eventForm.querySelector("#creator_email").value = email ?? "";
+}
+
+export function searchCreator(input) {
+    const suggestions = input.parentElement.querySelector(".suggestions");
+    const value = input.value.toLowerCase().trim();
+    suggestions.innerHTML = "";
+
+    const matches = value.length < 2 ? [] : PROFILES.filter(p =>
+        (p.email ?? "").toLowerCase().includes(value) || (p.name ?? "").toLowerCase().includes(value)
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+        input.classList.remove("looking");
+        suggestions.classList.add("hidden");
+        return;
+    }
+
+    for (const p of matches) {
+        const span = document.createElement("span");
+        span.textContent = `${p.name ?? "-"} (${p.email ?? "-"})`;
+        span.addEventListener("click", () => {
+            setCreatorFields(p.id, p.name, p.email);
+            input.value = "";
+            input.classList.remove("looking");
+            suggestions.classList.add("hidden");
+        });
+        suggestions.appendChild(span);
+    }
+
+    input.classList.add("looking");
+    suggestions.classList.remove("hidden");
 }
