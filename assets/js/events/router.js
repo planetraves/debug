@@ -1,7 +1,8 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
-} from "../global/modal.js?v=41b52d38.530037b";
+    setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal,
+    copyShareLink, shareEventNatively
+} from "../global/modal.js?v=1e3f400c.530037b";
 
 import { 
     openEvent, searchInput, 
@@ -9,7 +10,7 @@ import {
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
     fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove
-} from "./events.js?v=41b52d38.530037b"
+} from "./events.js?v=1e3f400c.530037b"
 
 const container = document.getElementById("events");
 const calendarEl = document.getElementById("calendar");
@@ -67,6 +68,14 @@ async function handleClick(el, e) {
 
         case "share-event":
             shareEvent(el.dataset.id);
+            break;
+
+        case "share-copy-link":
+            await copyShareLink();
+            break;
+
+        case "share-native":
+            await shareEventNatively();
             break;
 
         case "edit-event":
