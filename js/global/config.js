@@ -85,7 +85,7 @@ APP_CONFIG = {
     },
     AREAS: {
         0: {
-            "label": "Rabas/Couff",
+            "label": "Rabas/Couf",
             "icon": "explore_nearby",
             "codes": ["81800"]
         },
