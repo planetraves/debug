@@ -25,6 +25,8 @@ async function ensureValidSession() {
 // Cookieless visit tracking: one row per (visitor, month) so repeated views by the
 // same device in a month are not counted twice. Skips the DB call if already logged
 // this month on this device.
+// Plain insert on purpose: visitors may insert into "visits" but not read it (RLS), and
+// both .select() and upsert (INSERT ... ON CONFLICT) need read access to the row.
 async function trackVisit() {
     try {
         const now = new Date();
@@ -44,14 +46,14 @@ async function trackVisit() {
         }
 
         console.log("trackVisit: inserting", { visitorId, period });
-        const { data, error } = await window.supabaseClient
+        const { error } = await window.supabaseClient
             .from("visits")
-            .upsert({ visitor_id: visitorId, period }, { onConflict: "visitor_id,period", ignoreDuplicates: true })
-            .select();
+            .insert({ visitor_id: visitorId, period });
 
-        console.log("trackVisit: result", { data, error });
+        console.log("trackVisit: result", { error });
 
-        if (error) {
+        // 23505 (unique violation): this device is already counted for this month
+        if (error && error.code !== "23505") {
             console.warn("trackVisit insert failed:", error);
             return; // don't mark done, so it retries next load
         }

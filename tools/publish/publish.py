@@ -508,7 +508,6 @@ def load_env_file():
             key, value = line.split("=", 1)
             os.environ.setdefault(key.strip(), value.strip())
 
-
 def keyring_secret(service: str, username: str) -> str:
     try:
         secret = keyring.get_password(service, username)

@@ -62,7 +62,7 @@ dans le JSON ou dans le code.
 ### Clé service_role (PROD)
 
 1. Dans Supabase, ouvrez le projet **PROD** → **Project Settings → API Keys** et copiez
-   la clé secrète `service_role`.
+   la clé secrète nommée `publish_tool`.
 2. Dans un terminal où le projet est activé, enregistrez-la une fois (même commande sous
    Windows et macOS) :
 
