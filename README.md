@@ -28,11 +28,21 @@ scripts d'outillage sont en Python et tournent dans un environnement virtuel (`v
 
 ### 2. Activer le projet
 
-Depuis la racine du dépôt, lancez :
+Depuis la racine du dépôt, lancez le script correspondant à votre système.
 
+Windows :
 ```bat
 activate.bat
 ```
+
+Sur macOS ou Linux :
+
+```sh
+source ./activate.sh
+```
+
+Le script shell doit être sourcé pour que l'environnement virtuel et les variables
+d'environnement restent actifs dans le terminal.
 
 Ce script :
 
@@ -149,6 +159,20 @@ Commandes propres à ce projet :
 
 > Les opérations utilisent le jeton `~/.supabase/planetraves.token`. Ajoutez `--yes` pour sauter la confirmation des actions
 > destructrices, et `--help` sur n'importe quelle commande pour le détail des options.
+
+## publish — publier de vrais évènements en PROD
+
+`tools/publish/publish.py` publie de vrais évènements dans la base **PROD** à partir d'un
+fichier JSON (Windows et macOS). Chaque évènement peut donner une image locale : elle est
+compressée comme sur le site, envoyée dans le bucket `event-images`, et son URL est
+enregistrée dans l'évènement.
+
+```sh
+python tools/publish/publish.py mes-evenements.json --creator vous@example.org --dry-run
+```
+
+> 📖 Format du JSON, secrets à enregistrer (clé `service_role` PROD dans le trousseau) et
+> options : [tools/publish/README.md](tools/publish/README.md)
 
 ## test/create.py — jeux de données de test
 

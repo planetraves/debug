@@ -3,6 +3,8 @@ keyring
 psycopg2-binary
 requests
 cryptography
+Pillow
+phonenumbers
 mkdocs<2.0
 mkdocs-material>=9.5
 mkdocs-minify-plugin

@@ -4,7 +4,7 @@ Bienvenue sur l'agenda culturel du Rabastinois <span class="heart heart--pink">&
 
 # message2
 
-A Rabastens, Couffouleux, Salvagnac et aux alentours
+A Rabastens, Coufouleux, Salvagnac et aux alentours
 
 # message3
 

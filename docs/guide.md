@@ -13,7 +13,7 @@ hide:
     <span>Bienvenue sur planetraves.fr</span>
 </div>
 
-Planet Raves est l'agenda culturel du Rabastinois : concerts, spectacles, expositions et autres évènements à **Rabastens, Couffouleux, Salvagnac et alentours**.
+Planet Raves est l'agenda culturel du Rabastinois : concerts, spectacles, expositions et autres évènements à **Rabastens, Coufouleux, Salvagnac et alentours**.
 
 Ce guide présente rapidement comment utiliser le site.
 
@@ -73,7 +73,7 @@ Chaque catégorie a sa propre icône et sa couleur, utilisées sur les fiches et
 3. Validez : en tant que contributeur·rice, votre évènement est vérifié puis publié **sous trois jours**.
 4. Vous recevrez un email seulement si votre évènement est refusé ou supprimé (vérifiez les emails indésirables).
 
-Pour être publié, un évènement doit être **culturel et artistique, ouvert au public, sur le territoire de Rabastens, Couffouleux, Salvagnac et alentours**.
+Pour être publié, un évènement doit être **culturel et artistique, ouvert au public, sur le territoire de Rabastens, Coufouleux, Salvagnac et alentours**.
 
 !!! info "Vous organisez souvent des évènements ?"
     Depuis [Mon compte](account.md), demandez à devenir **contributeur·rice pro** pour publier instantanément, sans attendre la validation.

@@ -1,0 +1,36 @@
+[
+    {
+        "title": "Concert de Noël",
+        "category": ["concert"],
+        "tags": ["jazz", "noël"],
+        "event_date": "2026-12-20",
+        "event_start_time": "20:30",
+        "location_name": "La Halle",
+        "location_address": "Place Saint Michel",
+        "location_address_code": "81800",
+        "location_address_town": "Rabastens",
+        "long_description": "Le grand concert de fin d'année.\nBuvette sur place.",
+        "price": 2,
+        "min_price": 5,
+        "max_price": 10,
+        "phone": "06 12 34 56 78",
+        "site_url": "https://example.org",
+        "to_drink": true,
+        "image_path": "images/concert-noel.jpg"
+    },
+    {
+        "_note": "les champs commençant par _ sont ignorés",
+        "title": "Festival des arts de rue",
+        "category": [1, 5],
+        "tags": ["cirque", "festival"],
+        "event_date": "2027-06-12",
+        "end_date": "2027-06-14",
+        "location_name": "Promenade des Lices",
+        "location_address": "Promenade des Lices",
+        "location_address_code": "81800",
+        "location_address_town": "Rabastens",
+        "min_age": 3,
+        "creator_email": "organisateur@example.org",
+        "image_path": "images/festival.png"
+    }
+]

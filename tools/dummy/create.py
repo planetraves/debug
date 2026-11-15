@@ -120,7 +120,7 @@ def format_event_payload(day_delta, category, title, pending):
 
     location_address_code = random.choice(["81800", "81630", f"81{random.randrange(800, 899)}"])
     if location_address_code == "81800":
-        location_address_town = random.choice(["Rabastens", "Couffouleux"])
+        location_address_town = random.choice(["Rabastens", "Coufouleux"])
     elif location_address_code == "81630":
         location_address_town = "Salvagnac" 
     else:
@@ -147,7 +147,7 @@ def format_event_payload(day_delta, category, title, pending):
         "long_description": random.choice([None, f"This is a generated test event.\nBe Cool 😎.\nDon't panic 👌.\nParty hard 🖤.\nwww.github.com"]),
         "pending": pending,
         "phone": random.choice([None, "+33 6 01 12 13 14"]),
-        "site_url": random.choice([None, "https://rcsculture.github.io"]),
+        "site_url": random.choice([None, "https://planetraves.github.io"]),
         "to_drink": random.choice([True, False]),
         "to_eat": random.choice([True, False]),
         "min_age": min_age,

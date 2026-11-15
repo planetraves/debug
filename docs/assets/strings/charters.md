@@ -39,7 +39,7 @@ Des évènements qui répondent à l'ensemble des critères suivants :
 
 - culturels, artistiques
 - ouverts au public
-- sur les territoires de Rabastens, Couffouleux, Salvagnac et alentours
+- sur les territoires de Rabastens, Coufouleux, Salvagnac et alentours
 - ponctuels (mais ça peut être sur plusieurs jours)
 
 Cela concerne donc : **concert**, **spectacle**, **projection**, **exposition**, **rencontre**, atelier (seulement dans le cadre de la programmation d'un spectacle ou d'un festival), festival (dont la programmation propose des évènements dit de spectacle vivant, etc).

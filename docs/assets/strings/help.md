@@ -36,7 +36,7 @@ Veuillez en sélectionner au moins une.
 
 Filtrez les évènements par zone géographique, déterminée à partir du code postal du lieu.
 
-- **Rabas/Couff** : évènements situés dans le 81800.
+- **Rabas/Couf** : évènements situés dans le 81800.
 - **Salvagnac** : évènements situés dans le 81630.
 - **Ailleurs** : évènements situés dans les autres communes.
 

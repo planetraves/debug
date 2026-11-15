@@ -7,10 +7,11 @@ TLS sur le réseau d'entreprise).
 Il gère aussi la config auth (URLs, templates d'email…), le déploiement des fonctions
 Edge et quelques opérations sur les comptes utilisateur·rice·s.
 
-Toutes les commandes se lancent **depuis la racine du dépôt**, après `activate.bat` :
+Toutes les commandes se lancent **depuis la racine du dépôt**, après avoir activé
+l'environnement (`activate.bat` sous Windows ou `source ./activate.sh` sous macOS/Linux) :
 
-```powershell
-py tools/sbdb/sbdb.py <commande> [options]
+```sh
+python tools/sbdb/sbdb.py <commande> [options]
 ```
 
 ---
@@ -31,7 +32,7 @@ py tools/sbdb/sbdb.py <commande> [options]
 ### Dépendances
 
 `requests` (backend `api`, par défaut), `psycopg2-binary` (backend `pg`) et `keyring`.
-Elles sont dans `requirements.txt` et installées par `activate.bat`.
+Elles sont dans `requirements.txt` et installées par le script d'activation.
 
 ### Backends (`--backend`)
 
