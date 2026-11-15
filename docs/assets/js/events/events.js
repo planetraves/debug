@@ -1,6 +1,6 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal
+import { openErrorModal, openEventModal, openSuccessModal, openShareModal
 } from "../global/modal.js?v=dev";
 
 import { renderOptionBtn, renderSection, renderEventTile,
@@ -525,15 +525,10 @@ export function openEvent(eventId) {
     openEventModal(event, "classic", user_profile);
 }
 
-export async function shareEvent(eventId) {
+export function shareEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
-    const error = await navigatorShareEvent(event, event_url);
-    if (error) {
-        console.error("Share failed:", error);
-        openSuccessModal("Lien vers l'évènement copié !");
-    }
+    openShareModal(event, `${SITE_URL}#id=${eventId}&type=myevent`);
 }
 
 export async function emailEvent(eventId) {

@@ -13,6 +13,7 @@ const moderatorCharterModal = document.getElementById("moderator-charter-modal")
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
+const shareModal = document.getElementById("share-modal");
 
 const profileModal = document.getElementById("profile-modal");
 const profileModalContent = document.getElementById("profile-modal-content");
@@ -37,6 +38,7 @@ let sessionProfile = null;
 let eventModalType = null;
 let reasonRequired = false;
 let errorModalOnClose = null;
+let shareTarget = null;  // { event, url } picked with the event modal share button
 
 // Predefined moderation motives shown as checkboxes in the confirm modal.
 const MODERATION_REASONS = {
@@ -59,7 +61,8 @@ const MODERATION_REASONS = {
 /* === LOCAL FUNCTIONS === */
 function closeSuccessModal() {
     successModal.classList.add("hidden");
-    document.body.style.overflow = "";
+    // keep the page locked when the message was shown over another modal (e.g. "link copied" over the event)
+    if (!document.querySelector(".modal-overlay:not(.hidden)")) document.body.style.overflow = "";
 }
 
 function closeErrorModal() {
@@ -83,6 +86,20 @@ function closeCurrentModal() {
 function closeConfirmModal() {
     generatedCode = null;
     confirmModal.classList.add("hidden");
+}
+
+function closeShareModal() {
+    shareModal.classList.add("hidden");
+    shareTarget = null;
+}
+
+async function copyText(text, successMsg) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (err) {
+        console.error("copy failed:", err);
+        openErrorModal("Impossible de copier dans le presse-papier");
+    }
 }
 
 function buildConfirmReasons(kind) {
@@ -472,6 +489,31 @@ export function openEventModal(event, type, user_profile=null) {
     eventModal.scrollTop = 0;
 }
 
+/* share popup over the event modal: copy the link only, or use the device share sheet */
+export function openShareModal(event, url) {
+    shareTarget = { event, url };
+    shareModal.classList.remove("hidden");
+}
+
+export async function copyShareLink() {
+    if (!shareTarget) return;
+    const { url } = shareTarget;
+    closeShareModal();
+    await copyText(url, "Lien vers l'évènement copié !");
+}
+
+export async function shareEventNatively() {
+    if (!shareTarget) return;
+    const { event, url } = shareTarget;
+    closeShareModal();
+    const error = await navigatorShareEvent(event, url);
+    if (error) {
+        // no share sheet on this device (e.g. desktop Firefox): copy the full text instead
+        console.error("Share failed:", error);
+        await copyText(`${eventShareText(event)}\n${url}`, "Description et lien de l'évènement copiés !");
+    }
+}
+
 export function openConfirmModal(type, action_type) {
     generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
     confirmCodeEl.textContent = generatedCode;
@@ -625,6 +667,10 @@ export function closeModal(target) {
 
         case "confirm-modal":
             closeConfirmModal();
+            break;
+
+        case "share-modal":
+            closeShareModal();
             break;
 
         case "event-modal":

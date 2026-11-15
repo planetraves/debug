@@ -5,6 +5,7 @@ hide:
 ---
 
 {% include 'includes/modals/event_modal.html' %}
+{% include 'includes/modals/share_modal.html' %}
 {% include 'includes/modals/confirm_modal.html' %}
 {% include 'includes/modals/popup.html' %}
 {% include 'includes/nav/loading.html' %}

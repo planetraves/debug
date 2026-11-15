@@ -1,6 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState, openModeratorCharterModal
+    setConfirmBtnState, openModeratorCharterModal,
+    copyShareLink, shareEventNatively
 } from "../global/modal.js?v=dev";
 
 import {
@@ -74,6 +75,14 @@ async function handleClick(el) {
 
         case "share-event":
             shareEvent(el.dataset.id);
+            break;
+
+        case "share-copy-link":
+            await copyShareLink();
+            break;
+
+        case "share-native":
+            await shareEventNatively();
             break;
 
         case "edit-event":

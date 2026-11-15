@@ -458,11 +458,11 @@ function configureSelectList(configList, selectList, defaultValue=null) {
 }
 
 /* === SHARE === */
-async function navigatorShareEvent(event, event_url) {
+function eventShareText(event) {
     const event_category = categoryLabel(eventCategoryIds(event));
     const event_tags = event.tags?.join(", ") ?? "";
     const msg_title = event.pending ? "Ici un évènement en attente de publication :" : "Regarde cet évènement !";
-    const event_desc = `${msg_title}
+    return `${msg_title}
 
 ${event.title}
 - ${event_category}${event_tags ? ` (${event_tags})` : ""}
@@ -470,44 +470,44 @@ ${event.title}
 - Le ${formatDateForUI(event.event_date)}
 
 `;
-    
-    const clipBoardText = `${event_desc}\n${event_url}`;
-    navigator.clipboard.writeText(clipBoardText);
+}
 
-    if (navigator.share) {
-        try {
-            var file = null;
-            if (event.image_url) {
-                const response = await fetch(event.image_url);
-                const blob = await response.blob();
+/* native share sheet; returns null when shared or cancelled by the user, else the error */
+async function navigatorShareEvent(event, event_url) {
+    if (!navigator.share) return "share feature not available on device";
 
-                file = new File([blob], "event-image.jpg", {
-                    type: blob.type
-                });
-            }
-            
-            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    title: event_category,
-                    text: event_desc,
-                    url: event_url,
-                    files: [file]
-                });
-            } else {
-                // fallback: share link
-                await navigator.share({
-                    title: event_title,
-                    text: event_desc,
-                    url: event_url,
-                });
-            }
+    const event_category = categoryLabel(eventCategoryIds(event));
+    const event_desc = eventShareText(event);
+    try {
+        var file = null;
+        if (event.image_url) {
+            const response = await fetch(event.image_url);
+            const blob = await response.blob();
 
-        } catch (err) {
-            if (err.name === "AbortError") return err;
+            file = new File([blob], "event-image.jpg", {
+                type: blob.type
+            });
         }
-    } else {
-        return "share feature not available on device";
+
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: event_category,
+                text: event_desc,
+                url: event_url,
+                files: [file]
+            });
+        } else {
+            // fallback: share link
+            await navigator.share({
+                title: event.title,
+                text: event_desc,
+                url: event_url,
+            });
+        }
+    } catch (err) {
+        if (err.name !== "AbortError") return err;
     }
+    return null;
 }
 
 async function navigatorShareProfile(profile, profile_url) {

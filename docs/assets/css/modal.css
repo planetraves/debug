@@ -373,6 +373,29 @@ label.event-categories-body {
     max-width: 420px;
 }
 
+/* === SHARE POPUP (over the event modal) === */
+.modal-overlay.share {
+    z-index: 200;
+}
+
+.share-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    margin: 0 0 0.8rem;
+    padding-right: 1.5rem;
+    color: var(--primary-text);
+    font-size: 1.25rem;
+}
+
+.modal-btn.share-choice {
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.7rem;
+}
+
 .modal-form-title {
     display: flex;
     margin-bottom: 1rem;

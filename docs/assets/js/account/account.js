@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal} from "../global/modal.js?v=dev";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=dev";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -766,15 +766,10 @@ export function searchInput(input) {
     suggestions.classList.remove("hidden");
 }
 
-export async function shareEvent(eventId) {
+export function shareEvent(eventId) {
     const event = MY_EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
-    const error = await navigatorShareEvent(event, event_url);
-    if (error) {
-        console.error("Share failed:", error);
-        openSuccessModal("Lien vers l'évènement copié !");
-    }
+    openShareModal(event, `${SITE_URL}#id=${eventId}&type=myevent`);
 }
 
 export async function emailEvent(eventId) {
@@ -797,15 +792,10 @@ Concernant cet évènement :
     window.location.href = `mailto:${event.creator_email ?? ""}?subject=${subject}&body=${body}&reply-to=${replyTo}`;
 }
 
-export async function sharePendingEvent(eventId) {
+export function sharePendingEvent(eventId) {
     const event = PENDING_EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${SITE_URL}/account#id=${eventId}&type=pendingevent`;
-    const error = await navigatorShareEvent(event, event_url);
-    if (error) {
-        console.error("Share failed:", error);
-        openSuccessModal("Lien vers l'évènement copié !");
-    }
+    openShareModal(event, `${SITE_URL}/account#id=${eventId}&type=pendingevent`);
 }
 
 export async function shareProfile(profileId) {
