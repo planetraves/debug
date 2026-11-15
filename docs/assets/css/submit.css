@@ -167,7 +167,7 @@
     color: #ccc;
 }
 
-/* Event creator tile (edit_event page, role >= 2) */
+/* Event creator tile (submit and edit_event pages, role > 2) */
 .creator-tile {
     margin: 1rem 0;
     padding: 0.8rem;

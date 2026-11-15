@@ -5,7 +5,7 @@ import {
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited
+    priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited, searchCreator
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -17,7 +17,7 @@ import {
 } from "../global/address.js?v=dev"
 
 import { 
-    editEvent, goBack, searchCreator
+    editEvent, goBack
 } from "./edit_event.js?v=dev"
 
 /* === LOCAL FUNCTIONS === */

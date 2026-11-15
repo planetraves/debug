@@ -1,7 +1,7 @@
 console.log("executing:", "submit.js");
 
 import { openErrorModal, openSuccessModal, openPublicationCharterModal } from "../global/modal.js?v=dev";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=dev";
+import { initEventForm, getEventFormPayload, uploadImageFile, loadProfiles, setCreatorFields } from "../global/eventform.js?v=dev";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -9,6 +9,7 @@ const loading = document.getElementById("loading-screen");
 document.body.appendChild(loading);
 const eventForm = document.getElementById("event-form");
 const submitContainer = document.getElementById("submit-container");
+const creatorTile = document.getElementById("creator-tile");
 
 let user_profile = null;
 let pendingEvent = null;  // validated payload awaiting charter acceptance
@@ -47,6 +48,13 @@ function showSubmit(user, profile) {
     eventForm.querySelector("#cancel-btn").hidden = true;
     eventForm.querySelector("#cancel-btn").disabled = true;
 
+    /* creator section (super admins only) */
+    creatorTile.hidden = profile.role <= 2;
+    if (profile.role > 2) {
+        setCreatorFields(user_profile.id, user_profile.name, user_profile.email);
+        loadProfiles();
+    }
+
     /* show page */
     submitContainer.hidden = false;
     loading.style.display = "none";
@@ -74,14 +82,23 @@ export async function submitEvent() {
         return;
     }
 
+    /* super admins can publish on behalf of another account (creator tile) */
+    const creator = user_profile.role > 2
+        ? {
+            id: eventForm.querySelector("#created_by").value || user_profile.id,
+            name: eventForm.querySelector("#creator_name").value.trim() || null,
+            email: eventForm.querySelector("#creator_email").value.trim() || null
+        }
+        : user_profile;
+
     /* push events on database */
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
         payload.event_date = formatDateStr(addDays(eventForm.querySelector("#event_date").value + "T00:00:00", day))
         payload.pending = user_profile.role == 0
-        payload.created_by = user_profile?.id ?? null
-        payload.creator_name = user_profile?.name ?? null;
-        payload.creator_email = user_profile?.email ?? null;
+        payload.created_by = creator?.id ?? null
+        payload.creator_name = creator?.name ?? null;
+        payload.creator_email = creator?.email ?? null;
         payload.image_url = imageUrl
         payload.is_test = APP_CONFIG.DEV
         console.log("submit event payload:", payload)

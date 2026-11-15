@@ -5,7 +5,8 @@ import {
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, validateEndDate, onFieldEdited
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, validateEndDate, onFieldEdited,
+    searchCreator
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -91,6 +92,10 @@ async function handleInput(el) {
 
         case "address-search":
             searchAddress(el);
+            break;
+
+        case "creator-search":
+            searchCreator(el);
             break;
 
         default:
