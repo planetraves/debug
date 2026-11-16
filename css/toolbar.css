@@ -34,17 +34,17 @@
     gap: 0.2rem;
 }
 
-.switch-view-btns .material-symbols-outlined {
+.switch-view-btns .material-symbols-outlined.switch-btn {
     color: var(--primary-subtext);
     font-size: 1.2rem;
     cursor: pointer;
 }
 
-.switch-view-btns .material-symbols-outlined:hover {
+.switch-view-btns .material-symbols-outlined.switch-btn:hover {
     color: var(--primary-text);
 }
 
-.switch-view-btns .material-symbols-outlined.active {
+.switch-view-btns .material-symbols-outlined.switch-btn.active {
     color: var(--primary-text);
     font-size: 1.5rem;
 }
