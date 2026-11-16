@@ -191,3 +191,40 @@ body {
         color: var(--primary-text);
     }
 }
+
+@media screen and not (min-width: 70em) {
+    .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link::before {
+        display: inline-block;
+        margin-right: 0.55rem;
+        font-family: "Material Symbols Outlined";
+        font-size: 1.15rem;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        vertical-align: middle;
+        white-space: nowrap;
+        -webkit-font-feature-settings: "liga";
+        font-feature-settings: "liga";
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:nth-child(1) > .md-nav__link::before {
+        content: "calendar_month";
+    }
+
+    .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:nth-child(2) > .md-nav__link::before {
+        content: "add_circle";
+    }
+
+    .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:nth-child(3) > .md-nav__link::before {
+        content: "person";
+    }
+
+    .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:nth-child(4) > .md-nav__link::before {
+        content: "diversity_3";
+    }
+
+    .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:nth-child(5) > .md-nav__link::before {
+        content: "menu_book";
+    }
+}

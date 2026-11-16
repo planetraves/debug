@@ -1,10 +1,10 @@
 import {
     sendRequestPro, goBack, setSendBtnState, onFieldEdited
-} from "./request_pro.js?v=2b4ffa5e.e437454";
+} from "./request_pro.js?v=f6d426ea.f63be43";
 
 import {
     closeModal
-} from "../global/modal.js?v=2b4ffa5e.e437454";
+} from "../global/modal.js?v=f6d426ea.f63be43";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
