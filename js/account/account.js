@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=5fdbbb3a.79c6bdf";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=04011004.e437454";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -328,10 +328,10 @@ export async function showAccount(user, profile) {
 
     /* configure roles */
     const details = document.getElementById("detail-section");
+    const detailPermission = details.querySelector("#detail-permission");
     const permissionPro = details.querySelector("#permission-pro");
-    const permissionAdmin = details.querySelector("#permission-admin");
-    const permissionSuperAdmin = details.querySelector("#permission-super-admin");
     const roleRequest = details.querySelector("#role-request");
+    detailPermission.hidden = !(user_profile.role < 2);
 
     switch(user_profile.role) {
 
@@ -340,8 +340,6 @@ export async function showAccount(user, profile) {
             permissionPro.classList.add("denied");
             permissionPro.classList.remove("granted");
             permissionPro.querySelector("#icon").innerText = "lock"
-            permissionAdmin.hidden = true;
-            permissionSuperAdmin.hidden = true;
             roleRequest.classList.remove("hidden");
             openModeratorCharterBtn.classList.add("hidden");
             adminSection.hidden = true;
@@ -353,8 +351,6 @@ export async function showAccount(user, profile) {
             permissionPro.classList.remove("denied");
             permissionPro.classList.add("granted");
             permissionPro.querySelector("#icon").innerText = "check"
-            permissionAdmin.hidden = true;
-            permissionSuperAdmin.hidden = true;
             roleRequest.classList.add("hidden");
             openModeratorCharterBtn.classList.add("hidden");
             adminSection.hidden = true;
@@ -368,8 +364,6 @@ export async function showAccount(user, profile) {
             permissionPro.classList.remove("denied");
             permissionPro.classList.add("granted");
             permissionPro.querySelector("#icon").innerText = "check"
-            permissionAdmin.hidden = false;
-            permissionSuperAdmin.hidden = true;
             roleRequest.classList.add("hidden");
             openModeratorCharterBtn.classList.remove("hidden");
             adminSection.hidden = false;
@@ -381,7 +375,6 @@ export async function showAccount(user, profile) {
 
             if (user_profile.role == 3)
             {
-                permissionSuperAdmin.hidden = false;
                 superAdminSection.hidden = false;
 
                 await getProfiles();
@@ -407,8 +400,6 @@ export async function showAccount(user, profile) {
             permissionPro.classList.add("denied");
             permissionPro.classList.remove("granted");
             permissionPro.querySelector("#icon").innerText = "lock"
-            permissionAdmin.hidden = true;
-            permissionSuperAdmin.hidden = true;
             roleRequest.classList.add("hidden");
             openModeratorCharterBtn.classList.add("hidden");
             adminSection.hidden = true;
