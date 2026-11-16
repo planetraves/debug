@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=6a885642.91f572f";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=9bb3e6c8.91f572f";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -363,6 +363,7 @@ export async function showAccount(user, profile) {
 
         case 2: /* moderator */
         case 3: /* admin */
+        case 4: /* service */
             // statsSection.classList.remove("hidden");
             permissionPro.classList.remove("denied");
             permissionPro.classList.add("granted");
