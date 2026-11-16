@@ -195,7 +195,7 @@ body {
 @media screen and not (min-width: 70em) {
     .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link::before {
         display: inline-block;
-        margin-right: 0.55rem;
+        margin-right: 0.40em;
         font-family: "Material Symbols Outlined";
         font-size: 1.15rem;
         font-weight: normal;
