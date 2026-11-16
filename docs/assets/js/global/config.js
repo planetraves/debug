@@ -14,7 +14,8 @@ APP_CONFIG = {
         0: "Contributeur·rice",
         1: "Contributeur·rice pro",
         2: "Modérateur·rice",
-        3: "Admin"
+        3: "Admin",
+        4: "Service"
     },
     USER_STATUS: {
         0: {

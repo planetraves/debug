@@ -363,6 +363,7 @@ export async function showAccount(user, profile) {
 
         case 2: /* moderator */
         case 3: /* admin */
+        case 4: /* service */
             // statsSection.classList.remove("hidden");
             permissionPro.classList.remove("denied");
             permissionPro.classList.add("granted");

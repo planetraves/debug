@@ -15,9 +15,9 @@ Le script fonctionne sous **Windows** et **macOS** (et Linux).
 - [publish — publier de vrais évènements en PROD](#publish--publier-de-vrais-évènements-en-prod)
   - [Sommaire](#sommaire)
   - [1. Installation](#1-installation)
-  - [2. Secrets à enregistrer sur le poste](#2-secrets-à-enregistrer-sur-le-poste)
-    - [Clé service\_role (PROD)](#clé-service_role-prod)
-    - [Clé service\_role (DEV)](#clé-service_role-dev)
+  - [2. Identifiants à enregistrer sur le poste](#2-identifiants-à-enregistrer-sur-le-poste)
+    - [Compte service (PROD)](#compte-service-prod)
+    - [Compte service (DEV)](#compte-service-dev)
     - [Mot de passe du proxy (réseau d'entreprise)](#mot-de-passe-du-proxy-réseau-dentreprise)
   - [3. Format du fichier JSON](#3-format-du-fichier-json)
   - [4. Utilisation](#4-utilisation)
@@ -42,64 +42,65 @@ des images) et `phonenumbers` (validation des numéros de téléphone), et charg
 | Variable | Rôle |
 | --- | --- |
 | `SUPABASE_PROD_URL` / `SUPABASE_DEV_URL` | URL du projet Supabase visé |
+| `SUPABASE_PROD_ANON_KEY` / `SUPABASE_DEV_ANON_KEY` | clé API publique du projet (nom historique de la variable) |
 | `PROXY_HOST` / `PROXY_PORT` / `PROXY_USER` | proxy d'entreprise (utilisé seulement s'il est joignable) |
 | `SPB_CA_BUNDLE` | bundle de certificats CA (fichier `.pem`) pour la connexion HTTPS |
 | `SPB_INSECURE=1` | désactive la vérification TLS, **uniquement** à travers le proxy d'entreprise |
 
-## 2. Secrets à enregistrer sur le poste
+## 2. Identifiants à enregistrer sur le poste
 
-Les secrets sont lus dans le **trousseau du système** via `keyring` : le
+Les identifiants du compte service sont lus dans le **trousseau du système** via `keyring` : le
 **Gestionnaire d'identifiants** sous Windows, le **Trousseau d'accès** (Keychain) sous
 macOS. Ils ne doivent **jamais** être écrits dans `planetraves.env` (versionné dans Git),
 dans le JSON ou dans le code.
 
-| Secret | Service keyring | Utilisateur keyring | Nécessaire |
+| Identifiant | Service keyring | Utilisateur keyring | Nécessaire |
 | --- | --- | --- | --- |
-| clé `service_role` du projet **PROD** | `planetraves.prod.servicerolekey` | `planetraves` | toujours |
-| clé `service_role` du projet **DEV** | `planetraves.dev.servicerolekey` | `planetraves` | pour répéter sur DEV (`--env dev`) |
+| mot de passe du compte service **PROD** | `planetraves.prod.sa.password` | `sa@planetraves.fr` | toujours |
+| mot de passe du compte service **DEV** | services `planetraves.dev.sa.password` | `sa@planetraves.fr` | pour répéter sur DEV (`--env dev`) |
 | mot de passe du proxy d'entreprise | valeur de `PROXY_HOST` | valeur de `PROXY_USER` | seulement derrière le proxy d'entreprise |
 
-### Clé service_role (PROD)
+### Compte service (PROD)
 
-1. Dans Supabase, ouvrez le projet **PROD** → **Project Settings → API Keys** et copiez
-   la clé secrète nommée `publish_tool`.
-2. Dans un terminal où le projet est activé, enregistrez-la une fois (même commande sous
-   Windows et macOS) :
+1. Créez un compte dédié dans l'authentification Supabase du projet **PROD**. Ce compte
+   doit être un utilisateur normal, **pas** un rôle administrateur et **pas** un compte
+   PostgreSQL `postgres`.
+2. Configurez les privilèges `authenticated` et les politiques RLS pour que **ce seul
+   compte** puisse lire les profils (colonnes `id`, `name`, `email`) et les évènements
+   nécessaires à la détection des doublons, insérer des évènements, et envoyer/supprimer
+   des objets dans le bucket `event-images`. N'accordez ni `UPDATE`/`DELETE` sur les
+   évènements, ni accès à d'autres buckets. Les politiques doivent identifier le service
+   par son UID Auth ; ne donnez pas ces droits à tous les utilisateurs authentifiés.
+3. Enregistrez l'email et le mot de passe dans le trousseau (chaque valeur est demandée
+   sans être affichée) :
 
    ```sh
-   python -m keyring set planetraves.prod.servicerolekey planetraves
+   python -m keyring set planetraves.prod.sa.password sa@planetraves.fr
    ```
 
-   Collez la clé quand le mot de passe est demandé (rien ne s'affiche pendant la saisie,
-   c'est normal).
-3. Vérifiez sans l'afficher avec un essai à blanc (`--dry-run`, voir
-   [Utilisation](#4-utilisation)).
+4. Vérifiez avec un essai à blanc (`--dry-run`, voir [Utilisation](#4-utilisation)).
 
 Où retrouver l'entrée :
 
 - **Windows** : *Panneau de configuration → Gestionnaire d'identifiants → Informations
   d'identification Windows → Informations d'identification génériques*, entrée
-  `planetraves.prod.servicerolekey`.
+  `planetraves.prod.sa.password`.
 - **macOS** : application *Trousseau d'accès*, trousseau *session*, élément
-  `planetraves.prod.servicerolekey`. Au premier lancement du script, macOS demande si
-  Python peut utiliser cet élément : saisissez le mot de passe de la session et choisissez
-  **Toujours autoriser** (la question revient si l'environnement `venv/` est recréé).
+  `planetraves.prod.sa.password`. Au premier
+  lancement du script, macOS demande si Python peut utiliser ces éléments : saisissez le
+  mot de passe de la session et choisissez **Toujours autoriser** (la question revient si
+  l'environnement `venv/` est recréé).
 
-> ⚠️ La clé `service_role` donne **tous les droits** sur la base (elle contourne les règles
-> RLS). Ne la partagez pas, ne la commitez pas, ne la collez pas dans un fichier.
+> Le script utilise la clé API publique `SUPABASE_PROD_ANON_KEY` pour se connecter, puis
+> s'authentifie comme ce compte. Les requêtes sont donc soumises aux privilèges SQL et aux
+> politiques RLS : le script ne lit ni n'utilise de clé `service_role`.
 
-Sans trousseau utilisable (Linux sans bureau, CI…), la clé peut être fournie par la
-variable d'environnement `SUPABASE_PROD_SERVICE_ROLE_KEY` (resp.
-`SUPABASE_DEV_SERVICE_ROLE_KEY`), définie dans le terminal uniquement. Le trousseau reste
-préférable : une variable tapée en ligne de commande finit dans l'historique du shell.
+### Compte service (DEV)
 
-### Clé service_role (DEV)
-
-Même procédure avec le projet **DEV** et le service `planetraves.dev.servicerolekey`
-(c'est la même entrée que celle utilisée par `tools/dummy/create.py`) :
+Même procédure avec un compte dédié au projet **DEV** :
 
 ```sh
-python -m keyring set planetraves.dev.servicerolekey planetraves
+python -m keyring set planetraves.dev.sa.password sa@planetraves.fr
 ```
 
 ### Mot de passe du proxy (réseau d'entreprise)
@@ -232,8 +233,9 @@ DEV).
    transparence remplacée par du blanc, JPEG qualité 0.8. Les métadonnées (EXIF, position
    GPS) sont supprimées. Il n'y a pas de limite de taille pour l'image source : la
    compression est faite sur le poste.
-3. Se connecte au projet avec la clé `service_role`, retrouve le profil de chaque
-   créateur et **recherche les doublons** (même titre à la même date), qui sont ignorés.
+3. Se connecte avec le compte service, retrouve le profil de chaque créateur et
+   **recherche les doublons** (même titre à la même date), qui sont ignorés. Les règles
+   RLS restent actives.
 4. Affiche le récapitulatif (dates, lieu, créateur, image avant/après compression) et
    demande confirmation.
 5. Pour chaque évènement : envoie l'image dans le bucket `event-images` sous le nom
@@ -249,7 +251,9 @@ reconnus comme doublons et ignorés.
 
 | Message | Solution |
 | --- | --- |
-| `service_role key of PROD not found` | enregistrez la clé : `python -m keyring set planetraves.prod.servicerolekey planetraves` |
+| `service account credentials for PROD not found` | enregistrez l'email et le mot de passe du compte avec les commandes de [configuration PROD](#compte-service-prod) |
+| `service account authentication failed` | vérifiez le mot de passe, que le compte existe dans le projet visé et qu'il peut se connecter |
+| erreur `permission denied` / `row-level security` | vérifiez les privilèges SQL et politiques RLS du compte service pour `profiles`, `events` et le bucket `event-images` |
 | `no PROD account for: …` | le créateur (`--creator` / `creator_email`) doit avoir un compte sur le site PROD |
 | `Missing Python package …` | relancez le script d'activation (`activate.bat` / `source ./activate.sh`) |
 | `cannot read the image ….heic` | photo iPhone (HEIC) : `python -m pip install pillow-heif`, ou exportez-la en JPEG (Aperçu → Exporter… sous macOS) |

@@ -59,7 +59,8 @@ async function loadTeam() {
     const { data, error } = await window.supabaseClient
         .from("profiles")
         .select("name, email, role, label, color")
-        .gte("role", 2) /* modérateurs (2) et admins (3) */
+        .gte("role", 2)
+        .lte("role", 3) /* modérateurs (2), admins (3) */
         .order("role", { ascending: false })
         .order("name", { ascending: true });
 

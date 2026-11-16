@@ -57,6 +57,7 @@ else:
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 ENV_FILE = PROJECT_ROOT / "planetraves.env"
+PLANETRAVES_SERVICE_ACCOUNT_EMAIL = "sa@planetraves.fr"
 
 # same rules as the website (submit form and docs/assets/js/global/eventform.js)
 IMAGE_BUCKET = "event-images"
@@ -508,11 +509,11 @@ def load_env_file():
             key, value = line.split("=", 1)
             os.environ.setdefault(key.strip(), value.strip())
 
-def keyring_secret(service: str, username: str) -> str:
+def keyring_secret(sa: str, username: str) -> str:
     try:
-        secret = keyring.get_password(service, username)
+        secret = keyring.get_password(sa, username)
         if not secret:  # Windows: entry saved under another user name
-            credential = keyring.get_credential(service, None)
+            credential = keyring.get_credential(sa, None)
             secret = credential.password if credential else None
     except KeyringError as exc:
         warn(f"keyring unavailable: {exc}")
@@ -520,19 +521,21 @@ def keyring_secret(service: str, username: str) -> str:
     return secret or ""
 
 
-def credentials(env: str) -> tuple:
+def credentials(env: str) -> tuple[str, str, str, str]:
     name = env.upper()
     url = os.environ.get(f"SUPABASE_{name}_URL", "").strip()
     if not url:
         raise PublishError(f"SUPABASE_{name}_URL is not set (it comes from planetraves.env)")
-    key = (os.environ.get(f"SUPABASE_{name}_SERVICE_ROLE_KEY", "").strip()
-           or keyring_secret(f"planetraves.{env}.servicerolekey", "planetraves"))
-    if not key:
+    api_key = os.environ.get(f"SUPABASE_{name}_ANON_KEY", "").strip()
+    if not api_key:
+        raise PublishError(f"SUPABASE_{name}_ANON_KEY is not set (it comes from planetraves.env)")
+    account_password = keyring_secret(f"planetraves.{env}.sa.password", PLANETRAVES_SERVICE_ACCOUNT_EMAIL)
+    if not account_password:
         raise PublishError(
-            f"service_role key of {name} not found. Store it once with:\n"
-            f"     python -m keyring set planetraves.{env}.servicerolekey planetraves\n"
+            f"service account credentials for {name} not found. Store them with:\n"
+            f"     python -m keyring set planetraves.{env}.sa.password {PLANETRAVES_SERVICE_ACCOUNT_EMAIL}\n"
             "   (see tools/publish/README.md)")
-    return url, key
+    return url, api_key, PLANETRAVES_SERVICE_ACCOUNT_EMAIL, account_password
 
 
 def proxy_url() -> Optional[str]:
@@ -692,10 +695,19 @@ def run(args) -> int:
     success(f"{len(plans)} valid event(s) in {json_path.name}")
     images = compress_images(plans)
 
-    url, key = credentials(args.env)
+    url, api_key, account_email, account_password = credentials(args.env)
     proxy = proxy_url() if args.proxy else None
     with httpx.Client(proxy=proxy, verify=tls_verify(proxy), timeout=60.0) as http:
-        client = supabase.create_client(url, key, options=supabase.ClientOptions(httpx_client=http))
+        client = supabase.create_client(url, api_key, options=supabase.ClientOptions(httpx_client=http))
+        try:
+            auth_response = client.auth.sign_in_with_password({
+                "email": account_email,
+                "password": account_password,
+            })
+        except Exception as exc:
+            raise PublishError(f"service account authentication failed for {target}: {exc}") from exc
+        if not auth_response.session:
+            raise PublishError(f"service account authentication returned no session for {target}")
         info(f"target  : {target} database ({url})")
         profiles = find_creators(client, plans, target)
         if not args.allow_duplicates:

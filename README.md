@@ -171,8 +171,8 @@ enregistrée dans l'évènement.
 python tools/publish/publish.py mes-evenements.json --creator vous@example.org --dry-run
 ```
 
-> 📖 Format du JSON, secrets à enregistrer (clé `service_role` PROD dans le trousseau) et
-> options : [tools/publish/README.md](tools/publish/README.md)
+> 📖 Format du JSON, compte service PROD à configurer dans Supabase, identifiants à
+> enregistrer dans le trousseau et options : [tools/publish/README.md](tools/publish/README.md)
 
 ## test/create.py — jeux de données de test
 
