@@ -1,7 +1,7 @@
 console.log("executing:", "request_pro.js");
 
-import {openErrorModal, openSuccessModal} from "../global/modal.js?v=8e57c54b.a173642";
-import {clearFieldError, markInvalidFields, focusField} from "../global/checkFieldsValidity.js?v=8e57c54b.a173642";
+import {openErrorModal, openSuccessModal} from "../global/modal.js?v=fae6f7f9.a173642";
+import {clearFieldError, markInvalidFields, focusField} from "../global/checkFieldsValidity.js?v=fae6f7f9.a173642";
 
 /* === VARIABLES === */
 const requestContainer = document.getElementById("request-container");

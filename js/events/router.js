@@ -2,7 +2,7 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal,
     copyShareLink, shareEventNatively
-} from "../global/modal.js?v=8e57c54b.a173642";
+} from "../global/modal.js?v=fae6f7f9.a173642";
 
 import { 
     openEvent, searchInput, 
@@ -10,7 +10,7 @@ import {
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
     fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove
-} from "./events.js?v=8e57c54b.a173642"
+} from "./events.js?v=fae6f7f9.a173642"
 
 const container = document.getElementById("events");
 const calendarEl = document.getElementById("calendar");
@@ -28,6 +28,10 @@ async function handleClick(el, e) {
 
         case "reset-filter":
             resetFilter();
+            break;
+
+        case "new-event":
+            window.location.href = "../submit";
             break;
 
         case "switch-view":

@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal, openSuccessModal, openShareModal
-} from "../global/modal.js?v=8e57c54b.a173642";
+} from "../global/modal.js?v=fae6f7f9.a173642";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=8e57c54b.a173642";
+} from "./renderevents.js?v=fae6f7f9.a173642";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -451,6 +451,7 @@ async function loadEvents() {
     renderTiles();
     showHeader();
     updateEmptyState();
+    updateEventCounter();
 }
 
 function matchesFilters(category, pg, price, area, minAge, maxAge) {
@@ -498,7 +499,20 @@ function copyToClipboard(event_desc, event_url) {
     openSuccessModal("Lien vers l'évènement copié!");
 }
 
+function updateEventCounter() {
+    const counter = document.getElementById("event-counter");
+    const count = EVENTS.length;
+    if (user_profile === null) return;
+    if ((user_profile.role < 2) || (count === 0)) {
+        counter.classList.add("hidden");
+        return;
+    }
+    counter.classList.remove("hidden");
+    counter.querySelector(".text").innerText = count;
+}
+
 /* === EXPORTED FUNCTIONS === */
+
 // Flag tile tag rows that overflow so CSS can show a trailing ellipsis.
 export function markOverflowingTags() {
     tilesView.querySelectorAll(".event-tile .event-tags").forEach(el => {
