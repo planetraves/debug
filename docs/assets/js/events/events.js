@@ -1,9 +1,9 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal, openShareModal
+import { openEventModal, openShareModal
 } from "../global/modal.js?v=dev";
 
-import { renderOptionBtn, renderSection, renderEventTile,
+import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
 } from "./renderevents.js?v=dev";
 
@@ -28,17 +28,9 @@ const resetFilterBtn = document.getElementById("reset-filter-btn");
 
 const catOptions = document.getElementById("category-options");
 const areaOptions = document.getElementById("area-options");
-const pgOptions = document.getElementById("pg-options");
-const priceOptions = document.getElementById("price-options");
-const whenOptions = document.getElementById("when-options");
 const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
-const tomorrow = addDays(today, 1);
-const afterTomorrow = addDays(today, 2);
-const thisSunday = getSunday(today);
-const nextMonday = addDays(thisSunday, 1);
-const nextSunday = getSunday(nextMonday);
 let year = today.getFullYear();
 let month = today.getMonth();
 const thisMonthStr = String(today.getMonth() + 1).padStart(2, "0");
@@ -70,19 +62,14 @@ const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 function groupEvents(events) {
     const groups = {
         today: [],
-        tomorrow: [],
         later: []
     };
-
 
     events.forEach(event => {
         const eventDate = startOfDay(new Date(event.event_date));
         if (eventDate.getTime() === today.getTime()) {
             groups.today.push(event);
         }
-        // else if (eventDate.toDateString() == tomorrow.toDateString()) { 
-        //     groups.tomorrow.push(event);
-        // }
         else if (eventDate > today) {
             groups.later.push(event);
         }
@@ -91,33 +78,22 @@ function groupEvents(events) {
     return groups;
 }
 
-function groupByDate(events) {
+function groupByMonth(events) {
     const map = {};
 
     events.forEach(event => {
-        const date = event.event_date; // "YYYY-MM-DD"
+        const monthKey = event.event_date.slice(0, 7); // "YYYY-MM"
 
-        if (!map[date]) map[date] = [];
-        map[date].push(event);
+        if (!map[monthKey]) map[monthKey] = [];
+        map[monthKey].push(event);
     });
 
     return map;
 }
 
-function groupByDateWithCategories(events) {
-    const map = {};
-
-    events.forEach(event => {
-        const date = event.event_date;
-
-        if (!map[date]) {
-            map[date] = new Set(); // ✅ unique types
-        }
-
-        eventCategoryIds(event).forEach(cat => map[date].add(cat));
-    });
-
-    return map;
+function formatMonthTitle(monthKey) {
+    const [y, m] = monthKey.split("-").map(Number);
+    return new Date(y, m - 1).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
 }
 
 function groupByDateEvents(events) {
@@ -166,13 +142,16 @@ function renderTiles() {
     const grouped = groupEvents(EVENTS);
 
     grouped.today = sortByDate(grouped.today);
-    grouped.tomorrow = sortByDate(grouped.tomorrow);
     grouped.later = sortByDate(grouped.later);
+
+    // every month keeps key "1" so the "Prochainement" when-filter still applies to it
+    const monthSections = Object.entries(groupByMonth(grouped.later))
+        .map(([monthKey, events]) => renderSection("1", formatMonthTitle(monthKey), "", events))
+        .join("");
 
     tilesView.innerHTML =
         renderSection("0", "Aujourd'hui", formatEventDate(today), grouped.today) +
-        // renderSection("1", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
-        renderSection("1", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
+        monthSections;
 
     tilesView.hidden = false;
     agendaView.hidden = true;
@@ -216,7 +195,7 @@ function applyFilter() {
                 return;
             }
 
-            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area, tile.dataset.minAge, tile.dataset.maxAge));
+            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.price, tile.dataset.area, tile.dataset.minAge, tile.dataset.maxAge));
         });
 
         /* apply when filter only on tiles */
@@ -252,7 +231,7 @@ function applyFilter() {
         } else if (hideAll) {
             filteredEvents = [];
         } else {
-            filteredEvents = EVENTS.filter(event => matchesFilters(eventCategoryIds(event).join(","), String(event.pg), String(event.price), eventAreaId(event), event.min_age, event.max_age));
+            filteredEvents = EVENTS.filter(event => matchesFilters(eventCategoryIds(event).join(","), String(event.price), eventAreaId(event), event.min_age, event.max_age));
         }
         renderCalendar(filteredEvents);
     }
@@ -454,7 +433,7 @@ async function loadEvents() {
     updateEventCounter();
 }
 
-function matchesFilters(category, pg, price, area, minAge, maxAge) {
+function matchesFilters(category, price, area, minAge, maxAge) {
     const cats = String(category).split(",").filter(Boolean);
     if (
         activeFilters.category.size > 0 &&
@@ -491,12 +470,6 @@ function isFiltered() {
         type => activeFilters[type].size !== Object.keys(filterOptions[type]).length
     );
     return optionsDirty || activeFilters.free || activeFilters.minAge !== null || activeFilters.maxAge !== null;
-}
-
-function copyToClipboard(event_desc, event_url) {
-    const txt = `${event_desc}\n${event_url}`;
-    navigator.clipboard.writeText(txt);
-    openSuccessModal("Lien vers l'évènement copié!");
 }
 
 function updateEventCounter() {
@@ -629,41 +602,6 @@ export function searchInput(input) {
 
     input.classList.add("looking");
     suggestions.classList.remove("hidden");
-}
-
-export function selectWhenOption(tab) {
-    const wasActive = tab.classList.contains("active");
-
-    // reset everything
-    document.querySelectorAll("#when-tab")
-        .forEach(t => t.classList.remove("active"));
-
-    if (wasActive) {
-        // No tab active → show ALL sections
-        document.querySelectorAll(".section-tab.no-empty")
-            .forEach(section => {
-                section.hidden = false;
-                section.classList.add("selected");
-            });
-        updateEmptyState();
-        return;
-    }
-
-    // Activate clicked tab
-    tab.classList.add("active");
-    
-    // Show only its section
-    document.querySelectorAll(".section-tab.no-empty")
-        .forEach(section => {
-            section.hidden = true;
-            section.classList.remove("selected");
-        });
-    document.querySelectorAll(`.section-${tab.dataset.target}.no-empty`)
-        .forEach(section => {
-            section.hidden = false;
-            section.classList.add("selected");
-        });
-    updateEmptyState();
 }
 
 export function resetFilter() {

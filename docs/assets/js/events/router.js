@@ -6,7 +6,7 @@ import {
 
 import { 
     openEvent, searchInput, 
-    selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
+    selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
     fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove

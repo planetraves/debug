@@ -28,7 +28,7 @@ Ce guide présente rapidement comment utiliser le site.
 
 Sur la page [Évènements](index.md), deux affichages sont disponibles :
 
-- <span class="material-symbols-outlined">view_agenda</span> **Liste** : les évènements à venir, regroupés par période (*Aujourd'hui*, *Prochainement*).
+- <span class="material-symbols-outlined">view_agenda</span> **Liste** : les évènements à venir, regroupés par période (*Aujourd'hui*, puis par mois).
 - <span class="material-symbols-outlined">calendar_month</span> **Agenda** : un calendrier mensuel. Chaque point coloré représente un évènement. Changez de mois avec les flèches ou en glissant le doigt vers la gauche / la droite, et touchez un jour pour voir ses évènements.
 
 Touchez ou cliquez un évènement pour ouvrir sa fiche : description, horaires, prix, lieu (cliquable pour ouvrir la carte), contact et bouton de **partage**.
