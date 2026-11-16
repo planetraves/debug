@@ -1,6 +1,6 @@
 /* ============================================================
    toolbar.css — Events toolbar
-   Switch-view buttons, filter bar, filter option buttons
+   View switch, filter bar, filter option buttons
    (category / area), search.
    ============================================================ */
 
@@ -34,19 +34,80 @@
     gap: 0.2rem;
 }
 
-.switch-view-btns .material-symbols-outlined {
+.switch-view-btns .material-symbols-outlined.switch-btn {
     color: var(--primary-subtext);
     font-size: 1.2rem;
     cursor: pointer;
 }
 
-.switch-view-btns .material-symbols-outlined:hover {
+.switch-view-btns .material-symbols-outlined.switch-btn:hover {
     color: var(--primary-text);
 }
 
-.switch-view-btns .material-symbols-outlined.active {
+.switch-view-btns .material-symbols-outlined.switch-btn.active {
     color: var(--primary-text);
     font-size: 1.5rem;
+}
+
+.event-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--primary-subtext);
+    border-radius: 999px;
+    background-color: var(--primary-subtext);
+    color: #fff;
+    gap: 0.1rem;
+    font: inherit;
+    font-size: 0.65rem;
+    line-height: 1;
+    padding: 0.08rem 0.2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.event-counter.hidden {
+    display: none;
+}
+
+.event-counter .material-symbols-outlined {
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.publish-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.05rem;
+    border: 1px solid var(--primary-text);
+    border-radius: 999px;
+    background-color: var(--primary-text);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.65rem;
+    /* font-weight: 600; */
+    line-height: 1;
+    padding: 0.08rem 0.4rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.publish-btn .material-symbols-outlined {
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.publish-btn:hover,
+.publish-btn.active {
+    background-color: var(--primary-subtext);
+    color:#fff;
+}
+
+.publish-btn:hover .material-symbols-outlined,
+.publish-btn.active .material-symbols-outlined {
+    color: #fff;
 }
 
 /* filters */

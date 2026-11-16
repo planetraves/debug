@@ -30,6 +30,10 @@ async function handleClick(el, e) {
             resetFilter();
             break;
 
+        case "new-event":
+            window.location.href = "../submit";
+            break;
+
         case "switch-view":
             switchView(el.dataset.view);
             break;
