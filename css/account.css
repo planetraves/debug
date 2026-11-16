@@ -82,13 +82,12 @@
 }
 
 .account-logout-btn:hover {
-    background: var(--primary-fg);
-    border-color: var(--primary-basic);
-    color: var(--primary-basic);
+    background: var(--category4);
+    color: #fff;
 }
 
 .account-logout-btn:focus-visible {
-    outline: 2px solid var(--primary-basic);
+    outline: 2px solid var(--category4);
     outline-offset: 3px;
 }
 
