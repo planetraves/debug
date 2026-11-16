@@ -2,15 +2,15 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal,
     copyShareLink, shareEventNatively
-} from "../global/modal.js?v=28e10952.99d9fff";
+} from "../global/modal.js?v=e0287cb1.5c627e4";
 
 import { 
     openEvent, searchInput, 
-    selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
+    selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
     fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove
-} from "./events.js?v=28e10952.99d9fff"
+} from "./events.js?v=e0287cb1.5c627e4"
 
 const container = document.getElementById("events");
 const calendarEl = document.getElementById("calendar");
