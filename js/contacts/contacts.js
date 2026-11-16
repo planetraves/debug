@@ -75,7 +75,10 @@ async function loadTeam() {
         return;
     }
 
-    teamList.innerHTML = data.map(renderTeamTile).join("");
+    const isDevAdmin = profile => profile.role === 3 && profile.label?.toLowerCase() === "dev";
+    const prioritized = data.filter(isDevAdmin);
+    const others = data.filter(profile => !isDevAdmin(profile));
+    teamList.innerHTML = [...prioritized, ...others].map(renderTeamTile).join("");
 }
 
 
