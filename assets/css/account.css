@@ -40,6 +40,58 @@
     font-size: 1.2rem;
 }
 
+.account-profile-title {
+    display: flex;
+    max-width: 100%;
+}
+
+.account-profile-title #account-name {
+    min-width: 0;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.account-logout {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0.35rem 0 0.8rem;
+}
+
+.account-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: fit-content;
+    margin: 0;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--category4);
+    border-radius: 999px;
+    background: var(--category4--light);
+    box-shadow: none;
+    color: var(--primary-basic);
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+.account-logout-btn .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+.account-logout-btn:hover {
+    background: var(--primary-fg);
+    border-color: var(--primary-basic);
+    color: var(--primary-basic);
+}
+
+.account-logout-btn:focus-visible {
+    outline: 2px solid var(--primary-basic);
+    outline-offset: 3px;
+}
+
 .account-section-title.details {
     display: flex;
     align-items: center;
