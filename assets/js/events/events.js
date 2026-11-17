@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=6be028e7.fd0f8b8";
+} from "../global/modal.js?v=0fcab880.239b5419";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=6be028e7.fd0f8b8";
+} from "./renderevents.js?v=0fcab880.239b5419";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -59,20 +59,56 @@ const filterOptions = {
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
 /* === LOCAL FUNCTIONS === */
+function addDays(date, days) {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+}
+
+function createPeriod(title, startDate, endDate) {
+    return {
+        title,
+        start: formatDateStr(startDate),
+        end: formatDateStr(endDate),
+        events: []
+    };
+}
+
+function getNearPeriods() {
+    const weekday = today.getDay(); // 0 (Sun) → 6 (Sat)
+    const tomorrow = addDays(today, 1);
+
+    if (weekday === 0) return [];
+    if (weekday === 6) return [createPeriod("Dimanche", tomorrow, tomorrow)];
+
+    const saturday = addDays(today, 6 - weekday);
+    const weekend = createPeriod("Ce week-end", saturday, addDays(saturday, 1));
+
+    if (weekday === 5) return [weekend];
+    if (weekday === 4) return [createPeriod("Demain", tomorrow, tomorrow), weekend];
+
+    return [createPeriod("Cette semaine", tomorrow, addDays(saturday, -1)), weekend];
+}
+
 function groupEvents(events) {
+    const todayStr = formatDateStr(today);
     const groups = {
         today: [],
+        periods: getNearPeriods(),
         later: []
     };
 
     events.forEach(event => {
-        const eventDate = startOfDay(new Date(event.event_date));
-        if (eventDate.getTime() === today.getTime()) {
+        const eventDate = event.event_date.slice(0, 10); // "YYYY-MM-DD"
+        if (eventDate < todayStr) return;
+
+        if (eventDate === todayStr) {
             groups.today.push(event);
+            return;
         }
-        else if (eventDate > today) {
-            groups.later.push(event);
-        }
+
+        const period = groups.periods.find(p => eventDate >= p.start && eventDate <= p.end);
+        (period ? period.events : groups.later).push(event);
     });
 
     return groups;
@@ -144,13 +180,18 @@ function renderTiles() {
     grouped.today = sortByDate(grouped.today);
     grouped.later = sortByDate(grouped.later);
 
-    // every month keeps key "1" so the "Prochainement" when-filter still applies to it
+    // every upcoming section keeps key "1" so the "Prochainement" when-filter still applies to it
+    const periodSections = grouped.periods
+        .map(period => renderSection("1", period.title, "", sortByDate(period.events)))
+        .join("");
+
     const monthSections = Object.entries(groupByMonth(grouped.later))
         .map(([monthKey, events]) => renderSection("1", formatMonthTitle(monthKey), "", events))
         .join("");
 
     tilesView.innerHTML =
         renderSection("0", "Aujourd'hui", formatEventDate(today), grouped.today) +
+        periodSections +
         monthSections;
 
     tilesView.hidden = false;
