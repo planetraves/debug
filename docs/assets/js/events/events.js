@@ -416,7 +416,12 @@ async function loadEvents() {
         query = query.not("is_test", "is", true);
     }
 
-    const { data, error } = await query.order("event_date", { ascending: true });
+    const { data, error } = await query
+        .order("event_date", { ascending: true })
+        .order("event_start_time", {
+            ascending: true,
+            nullsFirst: false
+        });
 
     if (error) {
         console.log("Error:", error);
