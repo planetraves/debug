@@ -2,24 +2,24 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal, 
     openPublicationCharterModal
-} from "../global/modal.js?v=e0287cb1.5c627e4";
+} from "../global/modal.js?v=6be028e7.fd0f8b8";
 
 import { 
     priceChanged, handleImageChoice, formatPhoneInput, toggleCategory, updateEndDateBounds, validateEndDate, onFieldEdited,
     searchCreator
-} from "../global/eventform.js?v=e0287cb1.5c627e4"
+} from "../global/eventform.js?v=6be028e7.fd0f8b8"
 
 import { 
     addTag, removeLastTag
-} from "../global/tags.js?v=e0287cb1.5c627e4"
+} from "../global/tags.js?v=6be028e7.fd0f8b8"
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=e0287cb1.5c627e4"
+} from "../global/address.js?v=6be028e7.fd0f8b8"
 
 import { 
     submitEvent
-} from "./submit.js?v=e0287cb1.5c627e4"
+} from "./submit.js?v=6be028e7.fd0f8b8"
 
 
 /* === LOCAL FUNCTIONS === */

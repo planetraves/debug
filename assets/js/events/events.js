@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=e0287cb1.5c627e4";
+} from "../global/modal.js?v=6be028e7.fd0f8b8";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=e0287cb1.5c627e4";
+} from "./renderevents.js?v=6be028e7.fd0f8b8";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -416,7 +416,12 @@ async function loadEvents() {
         query = query.not("is_test", "is", true);
     }
 
-    const { data, error } = await query.order("event_date", { ascending: true });
+    const { data, error } = await query
+        .order("event_date", { ascending: true })
+        .order("event_start_time", {
+            ascending: true,
+            nullsFirst: false
+        });
 
     if (error) {
         console.log("Error:", error);
