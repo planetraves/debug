@@ -65,7 +65,7 @@ SCHEMA_DEFAULT = "all"
 BATCH = 500
 
 # this script lives in <root>/tools/sbdb/
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.getenv("PROJECT_ROOT_FOLDER")
 
 # Management API config resources (fetched over HTTPS, absent from the SQL schema)
 _CONFIG_ENDPOINTS = {"auth": "config/auth"}
@@ -314,7 +314,7 @@ def _supabase_home_file(name: str) -> str:
 
 def _proxies():
     host = os.environ.get("PROXY_HOST")
-    if not host:
+    if not host or host == "":
         return None
     port = os.environ.get("PROXY_PORT", "8080")
     user = os.environ.get("PROXY_USER", "")
@@ -1194,6 +1194,7 @@ def _print_table(rows):
 # -----------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Supabase DB dump / migrate tool (see tools/sbdb/README.md)")
+    parser.add_argument("--proxy", action="store_true", default=False)
     parser.add_argument("--backend", choices=["pg", "api"], default="api")
     parser.add_argument("--schema", default=SCHEMA_DEFAULT,
                         help='schema to dump, or "all" for every user schema')
@@ -1301,6 +1302,8 @@ def _load_env_file():
 def main() -> int:
     _load_env_file()
     args = build_parser().parse_args()
+    if not args.proxy:
+        os.environ["PROXY_HOST"] = ""
     try:
         return args.func(args)
     except SystemExit:
