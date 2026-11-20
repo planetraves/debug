@@ -120,7 +120,7 @@ def format_event_payload(day_delta, category, title, pending):
 
     location_address_code = random.choice(["81800", "81630", f"81{random.randrange(800, 899)}"])
     if location_address_code == "81800":
-        location_address_town = random.choice(["Rabastens", "Coufouleux"])
+        location_address_town = random.choice(["Rabastens", "Couffouleux"])
     elif location_address_code == "81630":
         location_address_town = "Salvagnac" 
     else:
