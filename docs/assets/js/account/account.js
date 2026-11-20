@@ -305,16 +305,10 @@ async function getStats() {
         .select("*", { count: "exact", head: true });
     statEvents.innerText = eventsCount ?? "-";
 
-    // average unique visitors per month = total visit rows / number of distinct months
-    const { data: visits } = await window.supabaseClient
-        .from("visits")
-        .select("period");
-    if (visits && visits.length) {
-        const months = new Set(visits.map(v => v.period));
-        statVisitors.innerText = Math.round(visits.length / months.size);
-    } else {
-        statVisitors.innerText = "0";
-    }
+    // average unique visitors per month, computed in the DB (a plain select is capped at 1000 rows)
+    const { data: avgVisitors, error: visitsError } = await window.supabaseClient.rpc("visit_stats");
+    if (visitsError) console.warn("visit_stats failed:", visitsError);
+    statVisitors.innerText = visitsError ? "-" : (avgVisitors ?? 0);
 }
 
 export async function showAccount(user, profile) {
