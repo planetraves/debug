@@ -272,9 +272,15 @@ function renderEventData(event, details = false) {
                     <div class="image-placeholder no-image"><span class="material-symbols-outlined">local_activity</span></div>
                 </div>`;
 
-        eventData.locationAddress = eventData.location_address_2
-            ? `${eventData.location_address}, ${eventData.location_address_2}, ${eventData.location_address_code} ${eventData.location_address_town}`
-            : `${eventData.location_address} ${eventData.location_address_code} ${eventData.location_address_town}`;
+        // skip the address line when it only repeats the town (e.g. a town picked from autocomplete)
+        const addressIsTown = (eventData.location_address || "").trim().toLowerCase()
+            === (eventData.location_address_town || "").trim().toLowerCase();
+        const streetPart = [addressIsTown ? "" : eventData.location_address, eventData.location_address_2]
+            .filter(Boolean).join(", ");
+        const townPart = `${eventData.location_address_code} ${eventData.location_address_town}`;
+        eventData.locationAddress = streetPart
+            ? `${streetPart}${eventData.location_address_2 ? ", " : " "}${townPart}`
+            : townPart;
 
         // clickable address -> universal Google Maps link (opens the app on mobile)
         const mapQuery = encodeURIComponent(`${eventData.location_name}, ${eventData.locationAddress}`);

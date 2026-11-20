@@ -10,6 +10,32 @@ const API_URL = "https://api-adresse.data.gouv.fr/search/";
 let inFlight = null;         // AbortController for the current request
 let currentFeatures = [];    // last suggestions, indexed by data-index
 
+// BAN spells some towns differently from local usage; keys are the API's city names
+const CITY_FIXES = {
+    "Coufouleux": "Couffouleux",
+};
+
+function fixCityName(feature) {
+    const props = feature.properties;
+    const fixed = props && CITY_FIXES[props.city];
+    if (!fixed) return;
+    // label is "<street or name> <postcode> <city>", so only rewrite the trailing city
+    if (props.label?.endsWith(props.city)) {
+        props.label = props.label.slice(0, -props.city.length) + fixed;
+    }
+    // town-level results (type "municipality") use the town itself as name
+    if (props.name === props.city) props.name = fixed;
+    props.city = fixed;
+}
+
+// reverse mapping: users type the local spelling, but the API only knows its own
+const QUERY_FIXES = Object.entries(CITY_FIXES)
+    .map(([api, local]) => [new RegExp(`\\b${local}\\b`, "gi"), api]);
+
+function toApiQuery(value) {
+    return QUERY_FIXES.reduce((q, [re, api]) => q.replace(re, api), value);
+}
+
 function getEls() {
     const container = document.getElementById("address-autocomplete");
     if (!container) return null;
@@ -45,7 +71,7 @@ async function runSearch(input) {
 
     let data;
     try {
-        const url = `${API_URL}?q=${encodeURIComponent(value)}&limit=5`;
+        const url = `${API_URL}?q=${encodeURIComponent(toApiQuery(value))}&limit=5`;
         const res = await fetch(url, { signal: inFlight.signal });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         data = await res.json();
@@ -55,6 +81,7 @@ async function runSearch(input) {
     }
 
     currentFeatures = data?.features || [];
+    currentFeatures.forEach(fixCityName);
     if (currentFeatures.length === 0) {
         input.classList.remove("looking");
         hideAddressSuggestions();
