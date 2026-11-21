@@ -175,8 +175,8 @@ Votre évènement « ${event.title} » a été retiré par l'équipe de modérat
 
 Détails de l'évènement :
 - Titre : ${event.title}
-- Date : ${formatDateForUI(event.event_date)}
-- Lieu : ${event.location_name || "—"}
+- Date : ${eventDatesText(event)}
+- Lieu : ${eventPlacesText(event) || "—"}
 
 ${formatReason(reason)}Si vous n'êtes pas d'accord avec cette décision, vous pouvez répondre à cet email pour nous en faire part.
 
@@ -206,8 +206,8 @@ Bonne nouvelle ! Votre évènement est désormais visible en ligne.
 
 Détails de l'évènement :
 - Titre : ${event.title}
-- Date : ${formatDateForUI(event.event_date)}
-- Lieu : ${event.location_name || "—"}
+- Date : ${eventDatesText(event)}
+- Lieu : ${eventPlacesText(event) || "—"}
 - Lien : ${event_url}
 
 Pour toute question, vous pouvez répondre à cet email.
@@ -442,8 +442,9 @@ export function openEventModal(event, type, user_profile=null) {
         <header class="event-modal-header" style="--event-color: ${eventData.categoryColor};">
             <div class="event-side" style="background: ${eventData.categoryPie}">
                 <div class="event-category">${eventData.categoryLabel}</div>
-                <div class="event-date">${formatEventDate(eventData.event_date)}</div>
+                <div class="event-date">${formatEventDate(eventData.nextDay)}</div>
                 ${eventData.timeHtml}
+                ${eventData.untilHtml}
             </div>
             <span id="modal-title" class="event-modal-title">${event.title}</span>
         </header>
@@ -452,20 +453,13 @@ export function openEventModal(event, type, user_profile=null) {
 
         <div class="event-details">
             <div class="event-meta">
-                <span class="event-icon-text">
-                <span class="material-symbols-outlined">place</span>
-                <span class="text"><strong>${eventData.location_name}</strong></span>
-            </span>
-            </div>
-            <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
             </div>
             <div class="event-meta">
                 ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
-            <div class="event-meta">
-                ${eventData.locationAddressHtml}
-            </div>
+            ${eventData.locationsHtml}
+            ${eventData.programmeHtml}
             ${eventData.eatHtml}
             ${eventData.drinkHtml}
             ${eventData.siteUrlHtml}

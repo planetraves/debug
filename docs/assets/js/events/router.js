@@ -31,7 +31,7 @@ async function handleClick(el, e) {
             break;
 
         case "new-event":
-            window.location.href = "../submit";
+            window.location.href = "submit/";
             break;
 
         case "switch-view":
@@ -83,7 +83,8 @@ async function handleClick(el, e) {
             break;
 
         case "edit-event":
-            window.location.href = `../edit_event#id=${el.dataset.id}`;
+            // the events page is the site root: stay relative to it (the dev site lives under /debug/)
+            window.location.href = `edit_event/#id=${el.dataset.id}`;
             break;
 
         case "email-event":

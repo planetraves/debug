@@ -126,6 +126,24 @@ def format_event_payload(day_delta, category, title, pending):
     else:
         location_address_town = random.choice(["Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])
 
+    start_time = random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).strftime("%H:%M")])
+    locations = [{
+        "name": location_name,
+        "address": f"{random.randrange(1, 50)} {random.choice(['rue', 'place', 'avenue', 'boulevard'])} {random.choice(['Saint Michel', 'Général de Gaulle', 'Du Printemps', 'Jérome'])}",
+        "address_2": random.choice([None, None, None, "2ème étage", "Rez-de-chaussée", "Derrière le buisson"]),
+        "code": location_address_code,
+        "town": location_address_town,
+    }]
+    # some events last several days (with a day off in the middle), some have a 2nd place on their first day
+    nb_days = random.choice([1, 1, 1, 1, 3, 5])
+    days = [date.today() + timedelta(days=day_delta + d) for d in range(nb_days)]
+    if nb_days > 3:
+        days.pop(2)
+    schedule = [{"date": day.isoformat(), "time": start_time, "loc": 0} for day in days]
+    if random.random() < 0.2:
+        locations.append({"name": "Salle des fêtes", "address": "1 place de la Mairie", "address_2": None, "code": "81630", "town": "Salvagnac"})
+        schedule.append({"date": days[0].isoformat(), "time": "22:00", "loc": 1})
+
     return {
         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
         "creator_name": "Planet Raves Test",
@@ -134,13 +152,9 @@ def format_event_payload(day_delta, category, title, pending):
         "title": title,
         "is_test": True,
         "category": category,
-        "event_date": (date.today() + timedelta(days=day_delta)).isoformat(),
-        "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
-        "location_name": location_name,
-        "location_address": f"{random.randrange(1, 50)} {random.choice(['rue', 'place', 'avenue', 'boulevard'])} {random.choice(['Saint Michel', 'Général de Gaulle', 'Du Printemps', 'Jérome'])}",
-        "location_address_2": random.choice([None, None, None, "2ème étage", "Rez-de-chaussée", "Derrière le buisson"]),
-        "location_address_code": location_address_code,
-        "location_address_town": location_address_town,
+        # event_date / end_date are computed by the database from the schedule
+        "locations": locations,
+        "schedule": schedule,
         "price": price,
         "min_price": min_price,
         "max_price": max_price,

@@ -118,10 +118,13 @@ function addDays(date, days) {
 }
 
 function sortByDate(events) {
-    return events.sort(
-        (a, b) =>
-            new Date(a.event_date) - new Date(b.event_date)
-    );
+    // by next upcoming day, then its first start time (events without time last)
+    const key = event => {
+        const day = eventNextDay(event);
+        const time = eventEntriesOn(event, day).find(e => e.time)?.time ?? "99:99";
+        return `${day} ${time}`;
+    };
+    return events.sort((a, b) => key(a).localeCompare(key(b)));
 }
 
 function formatDateRange(startDate, endDate) {
@@ -131,6 +134,74 @@ function formatDateRange(startDate, endDate) {
     } else {
         return `Du ${formatEventDate(startDate)} au ${formatEventDate(endDate)}`;
     }
+}
+
+/* "dim. 14 déc." (plain text) */
+function formatShortDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" });
+}
+
+
+/* === SCHEDULE ===
+   An event has one or more places (event.locations) and one schedule entry per
+   (day, place): event.schedule = [{date: "YYYY-MM-DD", time: "HH:MM" | null, loc: <index>}],
+   sorted by date then time. event.event_date is the first day, event.end_date the last. */
+function eventLocations(event) {
+    return event.locations ?? [];
+}
+
+function eventSchedule(event) {
+    return event.schedule ?? [];
+}
+
+function eventDays(event) {
+    return [...new Set(eventSchedule(event).map(e => e.date))];
+}
+
+function eventEndDate(event) {
+    return event.end_date ?? eventDays(event).at(-1) ?? event.event_date;
+}
+
+/* first scheduled day from today on (the last day if the event is over) */
+function eventNextDay(event) {
+    const todayStr = formatDateStr(startOfDay(new Date()));
+    const days = eventDays(event);
+    return days.find(d => d >= todayStr) ?? days.at(-1) ?? event.event_date;
+}
+
+function eventEntriesOn(event, day) {
+    return eventSchedule(event).filter(e => e.date === day);
+}
+
+/* places used by the given entries, without duplicates, in place order */
+function entriesLocations(event, entries) {
+    const locations = eventLocations(event);
+    return [...new Set(entries.map(e => e.loc))].sort((a, b) => a - b).map(i => locations[i]).filter(Boolean);
+}
+
+/* "12/12/2026" or "du 12/12/2026 au 14/12/2026" */
+function eventDatesText(event) {
+    const start = event.event_date;
+    const end = eventEndDate(event);
+    return end && end !== start
+        ? `du ${formatDateForUI(start)} au ${formatDateForUI(end)}`
+        : formatDateForUI(start);
+}
+
+function eventPlacesText(event) {
+    return eventLocations(event).map(l => l.name).join(", ");
+}
+
+/* address of one place: skips the street when it only repeats the town (e.g. a town picked from autocomplete) */
+function locationAddressText(location) {
+    const addressIsTown = (location.address || "").trim().toLowerCase()
+        === (location.town || "").trim().toLowerCase();
+    const streetPart = [addressIsTown ? "" : location.address, location.address_2]
+        .filter(Boolean).join(", ");
+    const townPart = `${location.code} ${location.town}`;
+    return streetPart
+        ? `${streetPart}${location.address_2 ? ", " : " "}${townPart}`
+        : townPart;
 }
 
 
@@ -182,8 +253,15 @@ function renderEventData(event, details = false) {
     eventData.categoryColorLight = categoryColorLight(eventData.categoryPrimaryId);
     eventData.categoryIcon = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["icon"];
 
-    /* area derived from the postal code */
-    eventData.areaId = eventAreaId(event);
+    /* areas derived from the postal codes of the places */
+    eventData.areaIds = eventAreaIds(event);
+
+    /* next scheduled day (today for an event in progress), its entries and places */
+    eventData.nextDay = eventNextDay(event);
+    eventData.endDate = eventEndDate(event);
+    const nextEntries = eventEntriesOn(event, eventData.nextDay);
+    eventData.nextTime = nextEntries.find(e => e.time)?.time ?? null;  // entries are sorted by time
+    const nextLocations = entriesLocations(event, nextEntries);
 
     eventData.categoryHtml = `
         <div class="event-category category cat-${eventData.categoryPrimaryId}" style="color: ${eventData.categoryColor};">
@@ -220,10 +298,18 @@ function renderEventData(event, details = false) {
         eventData.categoriesHtml = "";
     }
 
+    // places of the next day first; on the tile, the first two names then "+N"
+    const orderedLocations = [...nextLocations, ...eventLocations(event).filter(l => !nextLocations.includes(l))];
+    const morePlaces = Math.max(0, orderedLocations.length - 2);
+    const placesLabel = orderedLocations.length === 1
+        ? `${orderedLocations[0].name} - ${orderedLocations[0].town}`
+        : orderedLocations.slice(0, 2).map(l => `${l.name} - ${l.town}`).join(", ");
+    eventData.locationText = placesLabel + (morePlaces ? ` +${morePlaces}` : "");
     eventData.locationHtml = `
-        <span class="event-icon-text">
+        <span class="event-icon-text event-places">
             <span class="material-symbols-outlined">place</span>
-            <span class="text"><strong>${eventData.location_name} - ${eventData.location_address_town}</strong></span>
+            <span class="text"><strong>${placesLabel}</strong></span>
+            ${morePlaces ? `<span class="event-more-places">+${morePlaces}</span>` : ""}
         </span>
     `
 
@@ -254,11 +340,25 @@ function renderEventData(event, details = false) {
         eventData.ageLabel = "Jusqu'à " + eventData.max_age + " ans";
     }
 
-    eventData.timeHtml = eventData.event_start_time
+    eventData.timeHtml = eventData.nextTime
         ? `<span class="event-time event-icon-text">
              <span class="material-symbols-outlined">schedule</span>
-             <span class="text">${formatEventTime(eventData.event_start_time)}</span>
+             <span class="text">${formatEventTime(eventData.nextTime)}</span>
            </span>`
+        : "";
+
+    eventData.untilHtml = eventData.endDate > eventData.nextDay
+        ? `<span class="event-until">jusqu'au ${formatShortDate(eventData.endDate)}</span>`
+        : "";
+
+    // tile: same information, as a pill in the details column
+    eventData.untilPillHtml = eventData.endDate > eventData.nextDay
+        ? `<div class="event-meta">
+               <span class="event-until-pill">
+                   <span class="material-symbols-outlined">date_range</span>
+                   jusqu'au ${formatShortDate(eventData.endDate)}
+               </span>
+           </div>`
         : "";
 
     if (details) {
@@ -272,23 +372,57 @@ function renderEventData(event, details = false) {
                     <div class="image-placeholder no-image"><span class="material-symbols-outlined">local_activity</span></div>
                 </div>`;
 
-        // skip the address line when it only repeats the town (e.g. a town picked from autocomplete)
-        const addressIsTown = (eventData.location_address || "").trim().toLowerCase()
-            === (eventData.location_address_town || "").trim().toLowerCase();
-        const streetPart = [addressIsTown ? "" : eventData.location_address, eventData.location_address_2]
-            .filter(Boolean).join(", ");
-        const townPart = `${eventData.location_address_code} ${eventData.location_address_town}`;
-        eventData.locationAddress = streetPart
-            ? `${streetPart}${eventData.location_address_2 ? ", " : " "}${townPart}`
-            : townPart;
+        // one block per place: name + clickable address -> universal Google Maps link (opens the app on mobile)
+        eventData.locationsHtml = eventLocations(event).map(location => {
+            const address = locationAddressText(location);
+            const mapQuery = encodeURIComponent(`${location.name}, ${address}`);
+            return `
+            <div class="event-meta event-location">
+                <span class="event-icon-text">
+                    <span class="material-symbols-outlined">place</span>
+                    <span class="text"><strong>${location.name}</strong></span>
+                </span>
+                <span class="event-icon-text">
+                    <span class="material-symbols-outlined">distance</span>
+                    <span class="text contact"><a class="map" href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" rel="noopener noreferrer">${address}</a></span>
+                </span>
+            </div>`;
+        }).join("");
 
-        // clickable address -> universal Google Maps link (opens the app on mobile)
-        const mapQuery = encodeURIComponent(`${eventData.location_name}, ${eventData.locationAddress}`);
-        eventData.locationAddressHtml = `
-            <span class="event-icon-text">
-                <span class="material-symbols-outlined">distance</span>
-                <span class="text contact"><a class="map" href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" rel="noopener noreferrer">${eventData.locationAddress}</a></span>
-            </span>`;
+        // programme: only useful when there is more than one day or place; collapsed like the categories
+        const schedule = eventSchedule(event);
+        const severalPlaces = eventLocations(event).length > 1;
+        const todayStr = formatDateStr(startOfDay(new Date()));
+        const nbDays = eventDays(event).length;
+        const programmeSummary = [
+            `${nbDays} jour${nbDays > 1 ? "s" : ""}`,
+            severalPlaces ? `${eventLocations(event).length} lieux` : "",
+        ].filter(Boolean).join(", ");
+        eventData.programmeHtml = schedule.length > 1
+            ? ` <div class="event-meta event-programme">
+                    <input type="checkbox" id="programme-toggle-${eventData.id}" class="event-programme-toggle">
+                    <label class="event-programme-body" for="programme-toggle-${eventData.id}">
+                        <span class="event-programme-header">
+                            ${renderMaterialIconText("calendar_month", `<strong>Programmation</strong> · ${programmeSummary}`)}
+                            <span class="event-categories-chevron">
+                                <span class="material-symbols-outlined chevron">expand_less</span>
+                            </span>
+                        </span>
+                        <ul>
+                            ${eventDays(event).map(day => {
+                                const entries = eventEntriesOn(event, day).map(e => {
+                                    const parts = [];
+                                    if (e.time) parts.push(formatEventTime(e.time));
+                                    if (severalPlaces) parts.push(eventLocations(event)[e.loc]?.name ?? "");
+                                    return parts.join(" · ");
+                                }).filter(Boolean).join(", ");
+                                const dayLabel = formatShortDate(day);
+                                return `<li class="${day < todayStr ? "past" : ""}"><strong>${dayLabel.charAt(0).toUpperCase() + dayLabel.slice(1)}</strong>${entries ? ` : ${entries}` : ""}</li>`;
+                            }).join("")}
+                        </ul>
+                    </label>
+                </div>`
+            : "";
 
         eventData.phoneHtml = eventData.phone
             ? ` <div class="event-meta">
@@ -410,9 +544,9 @@ function categoryTextStyle(ids) {
     return `background: linear-gradient(90deg, ${stops}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;`;
 }
 
-/* === AREA (derived from the event postal code) === */
-function eventAreaId(event) {
-    const code = String(event.location_address_code ?? "").trim();
+/* === AREA (derived from the postal code of each place) === */
+function areaIdForCode(postalCode) {
+    const code = String(postalCode ?? "").trim();
     let fallback = null;
     for (const key of Object.keys(APP_CONFIG.AREAS)) {
         const codes = APP_CONFIG.AREAS[key]["codes"];
@@ -420,6 +554,11 @@ function eventAreaId(event) {
         if (codes.includes(code)) return key;
     }
     return fallback;
+}
+
+/* every area the event takes place in (several places can be in several areas) */
+function eventAreaIds(event) {
+    return [...new Set(eventLocations(event).map(l => areaIdForCode(l.code)))];
 }
 
 
@@ -472,8 +611,8 @@ function eventShareText(event) {
 
 ${event.title}
 - ${event_category}${event_tags ? ` (${event_tags})` : ""}
-- ${event.location_name}
-- Le ${formatDateForUI(event.event_date)}
+- ${eventPlacesText(event)}
+- ${eventDatesText(event).startsWith("du ") ? "D" + eventDatesText(event).slice(1) : `Le ${eventDatesText(event)}`}
 
 `;
 }

@@ -64,7 +64,7 @@ IMAGE_BUCKET = "event-images"
 IMAGE_MAX_WIDTH = 1200
 IMAGE_JPEG_QUALITY = 80  # canvas.toBlob(..., "image/jpeg", 0.8)
 IMAGE_CACHE_CONTROL = "3600"
-MAX_EVENT_DAYS = 8  # including the start date
+MAX_EVENT_DAYS = 14  # including the start date (same limit as the website and the database)
 MAX_TITLE_LENGTH = 60
 MAX_TAGS = 4
 MAX_AGE = 18
@@ -124,8 +124,8 @@ class PublishError(Exception):
 class EventPlan:
     number: int
     title: str
-    payload: dict  # columns shared by every day of the event
-    dates: list  # one row is inserted per day, like the website does
+    payload: dict  # the row to insert (one row per event, whatever its number of days)
+    dates: list  # the days of the event, one schedule entry each
     creator: str  # email of the creator's account
     image: Optional[Path]
     existing_dates: list = field(default_factory=list)
@@ -363,16 +363,22 @@ def parse_event(raw: Any, number: int, base_dir: Path, today: date,
     if not creator and len(r.errors) == n_errors:
         r.fail("creator_email", "missing: add it to the event or pass --creator EMAIL")
 
+    # same format as the website: places in "locations", one "schedule" entry per day
+    # (event_date / end_date are computed by the database from the schedule)
+    start_time = r.start_time()
+    location = {
+        "name": r.text("location_name", required=True),
+        "address": r.text("location_address", required=True),
+        "address_2": r.text("location_address_2"),
+        "code": code,
+        "town": r.text("location_address_town", required=True),
+    }
     payload = {
         "title": title,
         "category": r.categories(),
         "tags": r.tags(),
-        "event_start_time": r.start_time(),
-        "location_name": r.text("location_name", required=True),
-        "location_address": r.text("location_address", required=True),
-        "location_address_2": r.text("location_address_2"),
-        "location_address_code": code,
-        "location_address_town": r.text("location_address_town", required=True),
+        "locations": [location],
+        "schedule": [{"date": day.isoformat(), "time": start_time, "loc": 0} for day in dates],
         "long_description": r.text("long_description"),
         "price": price,
         "min_price": min_price,
@@ -590,27 +596,26 @@ def find_creators(client, plans: list, target: str) -> dict:
 
 
 def existing_dates(client, plan: EventPlan) -> list:
-    """Dates on which an event with the same title is already published."""
-    rows = (client.table("events").select("event_date")
+    """Days of this event on which an event with the same title is already published."""
+    days = {day.isoformat() for day in plan.dates}
+    rows = (client.table("events").select("schedule")
             .eq("title", plan.title)
-            .in_("event_date", [day.isoformat() for day in plan.dates])
             .execute().data)
-    return sorted({row["event_date"] for row in rows})
+    return sorted({entry["date"] for row in rows for entry in row["schedule"] if entry["date"] in days})
 
 
-def insert_event(client, plan: EventPlan, creator: dict, image_url: Optional[str], is_test: bool) -> list:
-    """Insert one row per day in a single request: all the days are created, or none."""
-    rows = [{
+def insert_event(client, plan: EventPlan, creator: dict, image_url: Optional[str], is_test: bool) -> str:
+    """Insert the event as one row (all its days at once); return its id."""
+    row = {
         **plan.payload,
-        "event_date": day.isoformat(),
         "pending": False,
         "is_test": is_test,
         "created_by": creator["id"],
         "creator_name": creator["name"],
         "creator_email": creator["email"],
         "image_url": image_url,
-    } for day in plan.dates]
-    return [row["id"] for row in client.table("events").insert(rows).execute().data]
+    }
+    return client.table("events").insert(row).execute().data[0]["id"]
 
 
 def remove_image(bucket, name: str):
@@ -620,11 +625,11 @@ def remove_image(bucket, name: str):
         warn(f"could not delete the uploaded image {name}: {exc}")
 
 
-def publish(client, plans: list, profiles: dict, images: dict, is_test: bool) -> tuple:
-    """Upload each image then insert its event; return (number of rows, failed plans)."""
+def publish(client, plans: list, profiles: dict, images: dict, is_test: bool) -> list:
+    """Upload each image then insert its event; return the failed plans."""
     bucket = client.storage.from_(IMAGE_BUCKET)
     uploaded = {}  # image path -> public URL, so that an image shared by several events is sent once
-    n_rows, failed = 0, []
+    failed = []
     for plan in plans:
         new_upload = None
         try:
@@ -638,7 +643,7 @@ def publish(client, plans: list, profiles: dict, images: dict, is_test: bool) ->
                 })
                 new_upload = name
                 image_url = bucket.get_public_url(name)
-            ids = insert_event(client, plan, profiles[plan.creator], image_url, is_test)
+            event_id = insert_event(client, plan, profiles[plan.creator], image_url, is_test)
         except Exception as exc:  # report it and go on with the next events
             error(f"{plan.label}: {exc}")
             failed.append(plan)
@@ -647,9 +652,8 @@ def publish(client, plans: list, profiles: dict, images: dict, is_test: bool) ->
             continue
         if new_upload:
             uploaded[plan.image] = image_url
-        n_rows += len(ids)
-        success(f"{plan.label}: published ({len(ids)} day(s), id {', '.join(ids)})")
-    return n_rows, failed
+        success(f"{plan.label}: published ({len(plan.dates)} day(s), id {event_id})")
+    return failed
 
 
 # -----------------------------------------------------------------------------
@@ -658,15 +662,17 @@ def publish(client, plans: list, profiles: dict, images: dict, is_test: bool) ->
 def show_plan(plans: list, profiles: dict, images: dict):
     for plan in plans:
         p = plan.payload
+        place = p["locations"][0]
+        start_time = p["schedule"][0]["time"]
         when = plan.dates[0].isoformat()
         if len(plan.dates) > 1:
             when += f" -> {plan.dates[-1].isoformat()} ({len(plan.dates)} days)"
-        if p["event_start_time"]:
-            when += f" at {p['event_start_time']}"
+        if start_time:
+            when += f" at {start_time}"
         creator = profiles[plan.creator]
         print(f"\n{plan.label}")
         info(f"date    : {when}")
-        info(f"place   : {p['location_name']}, {p['location_address_town']}")
+        info(f"place   : {place['name']}, {place['town']}")
         info(f"creator : {creator['name']} <{creator['email']}>")
         info(f"image   : {images[plan.image].summary if plan.image else 'none'}")
         if plan.existing_dates:
@@ -716,23 +722,22 @@ def run(args) -> int:
         show_plan(plans, profiles, images)
 
         to_publish = [plan for plan in plans if not plan.existing_dates]
-        n_rows = sum(len(plan.dates) for plan in to_publish)
         print()
         if args.dry_run:
-            success(f"dry run: {len(to_publish)} event(s) ({n_rows} row(s)) ready for {target}, nothing was sent")
+            success(f"dry run: {len(to_publish)} event(s) ready for {target}, nothing was sent")
             return 0
         if not to_publish:
             warn("nothing to publish")
             return 0
-        if not confirm(f"publish {len(to_publish)} event(s) ({n_rows} row(s)) to {target}", args.yes):
+        if not confirm(f"publish {len(to_publish)} event(s) to {target}", args.yes):
             info("cancelled: nothing was published")
             return 0
-        published_rows, failed = publish(client, to_publish, profiles, images, is_test=args.env == "dev")
+        failed = publish(client, to_publish, profiles, images, is_test=args.env == "dev")
 
     print()
     n_published = len(to_publish) - len(failed)
     if n_published:
-        success(f"{n_published} event(s) published to {target} ({published_rows} row(s))")
+        success(f"{n_published} event(s) published to {target}")
     if len(plans) > len(to_publish):
         warn(f"{len(plans) - len(to_publish)} event(s) skipped: already published")
     if failed:

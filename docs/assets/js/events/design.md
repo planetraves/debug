@@ -8,6 +8,9 @@ How the tile view groups and shows events. The logic lives in `events.js`:
 ### Rules
 
 - Events are grouped by their calendar date (`YYYY-MM-DD`) and sorted by date.
+- A multi-day event has a single tile, grouped and sorted by its **next scheduled day**
+  (today while it is in progress), with "jusqu'au …" under the date when it lasts longer.
+  The calendar view shows a dot on each of its days.
 - Past events are not shown.
 - A section with no visible events is hidden.
 - A month section only exists if that month has at least one event.

@@ -44,7 +44,6 @@ function showSubmit(user, profile) {
     
     /* initialize form */
     initEventForm();
-    eventForm.querySelector("#end_date_container").hidden = false;
     eventForm.querySelector("#cancel-btn").hidden = true;
     eventForm.querySelector("#cancel-btn").disabled = true;
 
@@ -91,29 +90,22 @@ export async function submitEvent() {
         }
         : user_profile;
 
-    /* push events on database */
-    for (let day = 0; day < new_event.nb_days; day++) {
-        var payload = new_event.payload;
-        payload.event_date = formatDateStr(addDays(eventForm.querySelector("#event_date").value + "T00:00:00", day))
-        payload.pending = user_profile.role == 0
-        payload.created_by = creator?.id ?? null
-        payload.creator_name = creator?.name ?? null;
-        payload.creator_email = creator?.email ?? null;
-        payload.image_url = imageUrl
-        payload.is_test = APP_CONFIG.DEV
-        console.log("submit event payload:", payload)
+    /* push the event on database: one row, whatever its number of days and places */
+    const payload = new_event.payload;
+    payload.pending = user_profile.role == 0;
+    payload.created_by = creator?.id ?? null;
+    payload.creator_name = creator?.name ?? null;
+    payload.creator_email = creator?.email ?? null;
+    payload.image_url = imageUrl;
+    payload.is_test = APP_CONFIG.DEV;
+    console.log("submit event payload:", payload);
 
-        const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
-        if (error) {
-            publishBtn?.setAttribute("aria-busy", "false");
-            if ((new_event.nb_days > 1) && (day > 0)) {
-                openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`, error.message ? error.message : null);
-            } else {
-                openErrorModal("Problème de publication", error.message ? error.message : null);
-            }
-            console.error(error);
-            return;
-        }
+    const { error: insertError } = await window.supabaseClient.from("events").insert(payload);
+    if (insertError) {
+        publishBtn?.setAttribute("aria-busy", "false");
+        openErrorModal("Problème de publication", insertError.message ? insertError.message : null);
+        console.error(insertError);
+        return;
     }
 
     publishBtn?.setAttribute("aria-busy", "false");

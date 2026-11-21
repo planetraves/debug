@@ -250,6 +250,143 @@
     background: rgba(0, 0, 0, 0.06);
 }
 
+/* === Places (one block per place) === */
+.places-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.3rem;
+}
+
+.pico .place-block {
+    margin: 0;
+    padding: 0.6rem 0.6rem 0;
+    border: 1px solid var(--primary-subtext);
+    border-radius: 10px;
+}
+
+.place-header,
+.programme-day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.8rem;
+}
+
+.place-title {
+    font-weight: 600;
+    color: var(--primary-textarea);
+}
+
+/* .pico scopes Pico's conditional button theme; override it here */
+.pico .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 0.15rem;
+    margin: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    color: var(--primary-subtext);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.pico .icon-btn:hover {
+    color: var(--primary-link);
+    background: transparent;
+}
+
+.pico .icon-btn[hidden] {
+    display: none;
+}
+
+.pico .icon-btn .material-symbols-outlined {
+    font-size: 1.15rem;
+}
+
+.pico .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: auto;
+    margin: 0.6rem 0 1rem;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+}
+
+.pico .add-btn.small {
+    margin: 0 0 0.3rem;
+    padding: 0.15rem 0.6rem;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    color: var(--primary-link);
+    font-size: 0.7rem;
+}
+
+.pico .add-btn .material-symbols-outlined {
+    font-size: 1.1rem;
+}
+
+/* === Programme (one row per day) === */
+.programme-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0.3rem 0 1rem;
+}
+
+.programme-day {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--primary-subtext);
+    border-radius: 10px;
+}
+
+.programme-day.removed {
+    opacity: 0.55;
+    border-style: dashed;
+}
+
+.programme-day.removed .programme-day-label {
+    text-decoration: line-through;
+}
+
+.programme-day-header {
+    margin-bottom: 0.2rem;
+}
+
+.programme-entry {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pico .programme-entry input,
+.pico .programme-entry select {
+    margin-bottom: 0.3rem;
+}
+
+.pico .programme-entry input[type="time"] {
+    flex: 0 0 7.5rem;
+}
+
+.pico .programme-entry select {
+    flex: 1;
+    min-width: 0;
+}
+
+.programme-removed {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.7rem;
+    color: var(--primary-subtext);
+}
+
 /* === Category multi-select chips === */
 .category-choices {
     display: grid;

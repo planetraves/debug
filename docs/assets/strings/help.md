@@ -18,11 +18,11 @@ Les tags permettent de décrire l'évènement et d'en faciliter la recherche. Vo
 
 # end-date
 
-Indiquez la date de fin de l'évènement si celui-ci s'étend sur plusieurs jours. Un évènement individuel sur chaque jour sera créé automatiquement.
+Indiquez la date de fin de l'évènement si celui-ci s'étend sur plusieurs jours. L'évènement reste unique : il apparaît une seule fois dans la liste, avec la mention « jusqu'au … ».
 
-**Durée maximum** : 8 jours, date de début incluse.
+Le **programme** affiché en dessous liste chaque jour : vous pouvez y changer l'heure et le lieu, ajouter un autre lieu le même jour, ou retirer les jours sans évènement (un week-end par exemple).
 
-**Note** : lorsque vous voudrez supprimer ou éditer l'évènement, il faudra ensuite le faire pour chaque jour séparément.
+**Durée maximum** : 14 jours, date de début incluse.
 
 # category
 

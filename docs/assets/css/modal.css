@@ -191,6 +191,38 @@ label.event-categories-body {
     transform: rotate(180deg);
 }
 
+/* programme accordion: same behavior as the categories (closed = summary line) */
+.event-programme-toggle {
+    display: none;
+}
+
+label.event-programme-body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    cursor: pointer;
+}
+
+.event-programme-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+}
+
+/* scoped to .event-details: the theme's list rules (.md-typeset ul) would otherwise win */
+.event-details .event-programme .event-programme-body ul {
+    display: block;
+}
+
+.event-details .event-programme .event-programme-toggle:checked ~ .event-programme-body ul {
+    display: none;
+}
+
+.event-programme-toggle:checked ~ .event-programme-body .chevron {
+    transform: rotate(180deg);
+}
+
 .event-details {
     display: flex;
     flex-direction: column;

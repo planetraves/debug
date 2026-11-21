@@ -2,8 +2,9 @@ console.log("executing:", "address.js");
 
 /* Free address autocomplete via the French Base Adresse Nationale (api-adresse.data.gouv.fr).
    No API key required. The event listeners live in the page routers (submit / edit_event);
-   this module only exposes the handlers they call. Suggestions fill the street / postal code /
-   town fields; manual entry always works. */
+   this module only exposes the handlers they call. An event can have several places: each
+   place block ([data-address-group]) has its own street input + suggestions; picking a
+   suggestion fills that block's postal code / town fields. Manual entry always works. */
 
 const API_URL = "https://api-adresse.data.gouv.fr/search/";
 
@@ -36,14 +37,16 @@ function toApiQuery(value) {
     return QUERY_FIXES.reduce((q, [re, api]) => q.replace(re, api), value);
 }
 
-function getEls() {
-    const container = document.getElementById("address-autocomplete");
+/* fields of the place block containing `el` (the street input or one of its suggestions) */
+function getEls(el) {
+    const group = el?.closest("[data-address-group]");
+    const container = group?.querySelector(".address-autocomplete");
     if (!container) return null;
     return {
-        input: document.getElementById("location_address"),
+        input: container.querySelector(".search-address"),
         suggestionsEl: container.querySelector(".address-suggestions"),
-        codeInput: document.getElementById("location_address_code"),
-        townInput: document.getElementById("location_address_town"),
+        codeInput: group.querySelector(".place-code"),
+        townInput: group.querySelector(".place-town"),
     };
 }
 
@@ -56,7 +59,7 @@ function debounce(fn, delay = 300) {
 }
 
 async function runSearch(input) {
-    const els = getEls();
+    const els = getEls(input);
     if (!els?.suggestionsEl) return;
 
     const value = input.value.trim();
@@ -88,6 +91,7 @@ async function runSearch(input) {
         return;
     }
 
+    hideAddressSuggestions(els.suggestionsEl);  // only one suggestion list open at a time
     els.suggestionsEl.innerHTML = "";
     currentFeatures.forEach((feature, index) => {
         const props = feature.properties;
@@ -113,22 +117,26 @@ export function searchAddress(input) {
 
 export function selectAddress(el) {
     const props = currentFeatures[Number(el.dataset.index)]?.properties;
-    const els = getEls();
+    const els = getEls(el);
     if (!props || !els) return;
     els.input.value = props.name || props.label || els.input.value;
     if (els.codeInput) els.codeInput.value = props.postcode || "";
     if (els.townInput) els.townInput.value = props.city || "";
-    // programmatic value changes don't fire "input"; notify listeners (e.g. clear validation errors)
+    // programmatic value changes don't fire "input"; notify listeners (e.g. clear validation errors).
+    // Not on the street input: its "input" listener would start a new search.
     [els.codeInput, els.townInput].forEach(i => i?.dispatchEvent(new Event("input", { bubbles: true })));
-    if (els.input) els.input.classList.remove("looking");
+    els.input.classList.remove("looking");
     hideAddressSuggestions();
 }
 
-export function hideAddressSuggestions() {
-    const els = getEls();
-    if (!els?.suggestionsEl) return;
-    els.suggestionsEl.innerHTML = "";
-    if (els.input) els.input.classList.remove("looking");
-    els.suggestionsEl.classList.add("hidden");
-    currentFeatures = [];
+/* hide every suggestion list (except `keep`) */
+export function hideAddressSuggestions(keep = null) {
+    document.querySelectorAll(".address-autocomplete").forEach(container => {
+        const suggestionsEl = container.querySelector(".address-suggestions");
+        if (!suggestionsEl || suggestionsEl === keep) return;
+        suggestionsEl.innerHTML = "";
+        suggestionsEl.classList.add("hidden");
+        container.querySelector(".search-address")?.classList.remove("looking");
+    });
+    if (!keep) currentFeatures = [];
 }

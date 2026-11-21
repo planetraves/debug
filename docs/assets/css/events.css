@@ -121,6 +121,77 @@ body.events-page {
     margin: 0;
 }
 
+/* multi-day event: last day, under the next day (modal) */
+.event-until {
+    font-size: 0.55rem;
+    line-height: 1.1;
+    padding: 0.1rem 0 0.15rem;
+    opacity: 0.9;
+}
+
+/* multi-day event: last day, as a pill in the tile details */
+.event-until-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin: 0.1rem 0;
+    padding: 0.05rem 0.5rem 0.05rem 0.35rem;
+    border-radius: 999px;
+    background: var(--event-color);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.event-until-pill .material-symbols-outlined {
+    font-size: 0.75rem;
+}
+
+/* several places: the "+N" badge stays visible when the names are ellipsed */
+.event-places {
+    max-width: 100%;
+}
+
+.event-more-places {
+    flex-shrink: 0;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: var(--primary-dark);
+    color: #fff;
+    font-size: 0.5rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* modal: one block per place (name + address) */
+.event-details .event-location {
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+/* modal: programme of a multi-day / multi-place event (accordion, see modal.css) */
+.event-details .event-programme {
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.event-details .event-programme ul {
+    margin: 0.15rem 0 0 1.1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.event-details .event-programme li {
+    margin: 0;
+    padding: 0.05rem 0;
+}
+
+.event-details .event-programme li.past {
+    opacity: 0.5;
+}
+
 .event-tile:hover {
     transform: translateX(-2px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

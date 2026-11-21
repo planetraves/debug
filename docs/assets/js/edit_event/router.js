@@ -5,7 +5,9 @@ import {
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited, searchCreator
+    priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited, searchCreator,
+    updateEndDateBounds, validateEndDate, onAddPlace, removePlace, onPlaceNameEdited, refreshProgramme,
+    toggleProgrammeDay, addProgrammeEntry, removeProgrammeEntry
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -52,6 +54,26 @@ async function handleClick(el, e) {
 
         case "select-address":
             selectAddress(el);
+            break;
+
+        case "add-place":
+            onAddPlace();
+            break;
+
+        case "remove-place":
+            removePlace(el);
+            break;
+
+        case "toggle-programme-day":
+            toggleProgrammeDay(el);
+            break;
+
+        case "add-programme-entry":
+            addProgrammeEntry(el);
+            break;
+
+        case "remove-programme-entry":
+            removeProgrammeEntry(el);
             break;
 
         case "submit-event":
@@ -101,6 +123,10 @@ async function handleInput(el) {
             searchAddress(el);
             break;
 
+        case "place-name":
+            onPlaceNameEdited();
+            break;
+
         case "creator-search":
             searchCreator(el);
             break;
@@ -121,6 +147,17 @@ async function handleChange(el) {
             const file = el.files[0];
             if (!file) return;
             await handleImageChoice(file);
+            break;
+
+        case "event-date":
+            updateEndDateBounds();
+            refreshProgramme();
+            break;
+
+        case "end-date":
+            validateEndDate();
+            el.reportValidity();
+            refreshProgramme();
             break;
 
         default:
@@ -154,6 +191,8 @@ document.addEventListener("keydown", async (event) => {
         return;
     } else 
         if (el.dataset.action != "tag-input") {
+        // only Enter/Space activate an action: other keys (e.g. Tab) keep their default behavior
+        if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
     }
     await handleClick(el, event);

@@ -166,7 +166,7 @@ formulaire de publication du site, avec les noms des colonnes de la table `event
 | `category` | oui | liste de catégories : numéros `0` à `5` ou noms `concert`, `spectacle`, `projection`, `exposition`, `rencontre`, `autre` |
 | `tags` | oui | liste de 1 à 4 tags (mis en minuscules) |
 | `event_date` | oui | date `AAAA-MM-JJ`, aujourd'hui ou plus tard |
-| `end_date` | non | dernier jour `AAAA-MM-JJ` d'un évènement sur plusieurs jours (8 jours maximum) : une ligne est créée par jour, comme sur le site |
+| `end_date` | non | dernier jour `AAAA-MM-JJ` d'un évènement sur plusieurs jours (14 jours maximum) : un seul évènement est créé, avec une entrée de programme par jour, comme sur le site |
 | `event_start_time` | non | heure de début : `20:30` ou `20h30` |
 | `location_name` | oui | nom du lieu |
 | `location_address` | oui | numéro et rue |
@@ -239,9 +239,13 @@ DEV).
 4. Affiche le récapitulatif (dates, lieu, créateur, image avant/après compression) et
    demande confirmation.
 5. Pour chaque évènement : envoie l'image dans le bucket `event-images` sous le nom
-   `event-<uuid>.jpg` (cache d'1 h, comme le site), puis crée la ou les lignes (une par
-   jour, en une seule requête : tous les jours ou aucun) avec `pending = false` et
-   `is_test = false` en PROD. Si la création échoue, l'image envoyée est supprimée.
+   `event-<uuid>.jpg` (cache d'1 h, comme le site), puis crée l'évènement en **une seule
+   ligne**, quel que soit son nombre de jours (une entrée de programme par jour), avec
+   `pending = false` et `is_test = false` en PROD. Si la création échoue, l'image envoyée
+   est supprimée.
+
+Le script écrit les colonnes `locations` / `schedule` : la base visée doit avoir reçu la
+migration `sql/20261121_multi_day_1_expand.sql`.
 
 Si un évènement échoue, les suivants sont quand même publiés et le script se termine en
 erreur. Corrigez puis relancez **la même commande** : les évènements déjà publiés sont

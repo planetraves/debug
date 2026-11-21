@@ -51,28 +51,23 @@
                 <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: jazz, poesie, cirque..." autocomplete="off">
             </div>
 
-            <label class="pico">
-                Nom du lieu *
-                <input type="text" id="location_name" placeholder="" required>
-            </label class="pico">
-
-            <label class="pico">
-                Adresse du lieu *
-                <div id="address-autocomplete" class="address-autocomplete">
-                    <input type="text" id="location_address" class="search-address" placeholder="Numéro et rue *" autocomplete="off" data-input-type="address-search" required>
-                    <div class="address-suggestions hidden"></div>
-                </div>
-                <input type="text" id="location_address_2" placeholder="Complément d'adresse">
-                <input type="number" id="location_address_code" inputmode="numeric" placeholder="Code postal *" required>
-                <input type="text" id="location_address_town" placeholder="Ville *" required>
-            </label>
+            <div class="pico">
+                <span class="label-help">Lieu(x) *</span>
+                <small id="places-hint" class="field-hint">Ajoutez un lieu pour chaque endroit où se déroule l'évènement. La programmation ci-dessous permet ensuite de choisir le lieu et l'heure de chaque jour.</small>
+                <!-- one block per place, built by eventform.js -->
+                <div id="places-list" class="places-list" aria-describedby="places-hint"></div>
+                <button type="button" id="add-place-btn" class="secondary outline add-btn" data-action="add-place">
+                    <span class="material-symbols-outlined" aria-hidden="true">add_location_alt</span>
+                    Ajouter un lieu
+                </button>
+            </div>
 
             <label class="pico">
                 Date *
                 <input type="date" id="event_date" data-change-type="event-date" required>
             </label>
 
-            <label id="end_date_container" for="end_date" class="pico" hidden>
+            <label id="end_date_container" for="end_date" class="pico">
                 <span class="label-help">
                     Date de fin (si plusieurs jours)
                     <button type="button" class="help-btn" data-action="open-end-date-help" aria-label="Aide : fin de l'évènement">
@@ -82,10 +77,17 @@
                 <input type="date" id="end_date" data-change-type="end-date" disabled>
             </label>
 
-            <label class="pico">
+            <label id="start_time_container" class="pico">
                 Heure de début
                 <input type="time" id="event_start_time">
             </label>
+
+            <!-- shown for several days or several places: one row per day, built by eventform.js -->
+            <div id="programme-container" class="pico" hidden>
+                <span class="label-help">Programmation</span>
+                <small id="programme-hint" class="field-hint">Pour chaque jour : heure et lieu, autre lieu le même jour, ou jour à retirer s'il n'y a pas d'évènement ce jour-là.</small>
+                <div id="programme-list" class="programme-list" aria-describedby="programme-hint"></div>
+            </div>
 
             <label class="pico">
                 Description de l'évènement

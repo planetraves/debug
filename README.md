@@ -120,13 +120,26 @@ Pour du HTML ajoute dynamiquement, appeler `await applyStrings(container)` apres
 insertion. Les valeurs sont du HTML, pas du texte brut ; n'utiliser que des
 sources Markdown de confiance. Seuls ces textes dynamiques necessitent JavaScript.
 
-### Dates des évènements
+### Dates et lieux des évènements
 
-Un évènement peut durer au maximum 8 jours, date de début incluse. Les bornes du
-champ de date de fin utilisent le format ISO `YYYY-MM-DD`, sans dépendre de la
-langue du navigateur. La durée est aussi validée à la sélection et à la publication,
-car certains calendriers natifs mobiles permettent de sélectionner une date hors
-des bornes.
+Un évènement est **une seule ligne** de la table `events`, même s'il dure plusieurs
+jours ou se déroule dans plusieurs lieux :
+
+- `locations` (JSON) : les lieux `[{"name", "address", "address_2", "code", "town"}]` ;
+- `schedule` (JSON) : une entrée par jour et par lieu
+  `[{"date": "YYYY-MM-DD", "time": "HH:MM" | null, "loc": <index dans locations>}]` ;
+- `event_date` / `end_date` : premier et dernier jour, calculés par le trigger
+  `trg_events_sync_schedule`, qui valide aussi les données.
+
+Un évènement peut durer au maximum 14 jours, date de début incluse (limite vérifiée
+aussi par la base). Les bornes du champ de date de fin utilisent le format ISO
+`YYYY-MM-DD`, sans dépendre de la langue du navigateur. La durée est aussi validée à
+la sélection et à la publication, car certains calendriers natifs mobiles permettent
+de sélectionner une date hors des bornes.
+
+Dans l'agenda, un évènement sur plusieurs jours n'a qu'une tuile, placée à son
+prochain jour, avec la mention « jusqu'au … ». Migration depuis l'ancien format (une
+ligne par jour) : [sql/20261121_multi_day_events_plan.md](sql/20261121_multi_day_events_plan.md).
 
 ## sbdb — outil base de données & Supabase
 

@@ -20,6 +20,7 @@ const submitContainer = document.getElementById("submit-container");
 const creatorTile = document.getElementById("creator-tile");
 
 let user_profile = null;
+let currentEvent = null;
 
 /* === LOCAL FUNCTIONS === */
 async function initEditEventPage() {
@@ -29,11 +30,12 @@ async function initEditEventPage() {
     submitContainer.hidden = true;
     const session = await getSessionUserProfile();
     if (session?.session?.user && session?.profile) {
-        // get event
+        // get event (links to a day of an old per-day event point to an id now kept in old_ids)
          const { data, error } = await window.supabaseClient
             .from("future_events")
             .select("*")
-            .eq("id", eventId).single()
+            .or(`id.eq.${eventId},old_ids.cs.{${eventId}}`)
+            .single()
 
         if (error) {
             console.log("Error:", error);
@@ -54,10 +56,10 @@ function showLoginWarning() {
 
 function showEdit(user, profile, event) {
     user_profile = profile;
+    currentEvent = event;
     
     /* initialize form */
     initEventForm(event);
-    form.querySelector("#end_date_container").hidden = true;
     form.querySelector("#cancel-btn").hidden = false;
     form.querySelector("#cancel-btn").disabled = false;
 
@@ -115,7 +117,6 @@ export async function editEvent() {
     }
 
     var payload = new_event.payload;
-    payload.event_date = form.querySelector("#event_date").value;
     payload.pending = user_profile.role == 0;
     if (user_profile.role > 2) {
         const createdBy = form.querySelector("#created_by").value;
@@ -129,11 +130,11 @@ export async function editEvent() {
     const { error } = await window.supabaseClient
         .from("events")
         .update(payload)
-        .eq("id", eventId);
+        .eq("id", currentEvent.id);
 
     if (error) {
         button.setAttribute("aria-busy", "false");
-        openErrorModal("Problème de mise à jour");
+        openErrorModal("Problème de mise à jour", error.message ? error.message : null);
         console.error(error);
         return;
     }
