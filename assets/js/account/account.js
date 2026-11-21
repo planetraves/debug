@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=c928fe84.f68b9821";
+import {openProfileModal, openEventModal, openErrorModal, openSuccessModal, openUpdateRoleModal, openShareModal} from "../global/modal.js?v=47abd2f5.7bb0d9c8";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -235,20 +235,20 @@ function renderEventSmallTile(event, type) {
         ? "pending"
         : ""
     
-    const town = eventData.location_address_town
-        ? ` - ${eventData.location_address_town}`
-        : ""
+    const until = eventData.endDate > eventData.nextDay
+        ? ` · jusqu'au ${formatShortDate(eventData.endDate)}`
+        : "";
 
     const html = `
         <div class="event-small-tile ${pending}" style="--event-color: ${eventData.categoryColor};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
             <div class="event-small-side" style="background: ${eventData.categoryPie};"></div>
             <div class="event-small-main">
                 <span class="event-small-title non-wrap">${event.title}</span>
-                <span class="event-small-loc non-wrap">${eventData.location_name}${town}</span>
+                <span class="event-small-loc non-wrap">${eventData.locationText}</span>
                 <span class="event-small-meta non-wrap">
                     <span class="event-small-cat" style="${categoryTextStyle(eventData.categoryIds)}">${eventData.categoryLabel}</span>
                     <span class="event-small-sep">·</span>
-                    <span>${formatEventDateTime(eventData.event_date, eventData.event_start_time)}</span>
+                    <span>${formatEventDateTime(eventData.nextDay, eventData.nextTime)}${until}</span>
                 </span>
             </div>
             <span class="material-symbols-outlined event-small-chevron">chevron_right</span>
@@ -412,6 +412,9 @@ export async function showAccount(user, profile) {
     focusPendingRequestSection();
 
     if (itemId) {
+        // links to a day of an old per-day event point to an id now kept in old_ids
+        const merged = [...MY_EVENTS, ...PENDING_EVENTS].find(e => e.old_ids?.includes(itemId));
+        if (merged) itemId = merged.id;
         var el = null;
         switch (itemType) {
             case "profile":
@@ -767,8 +770,8 @@ export async function emailEvent(eventId) {
 Concernant cet évènement :
  - Titre: ${event.title}
  - Type: ${categoryLabel(eventCategoryIds(event))}
- - Lieu: ${event.location_name}
- - Date: ${formatDateForUI(event.event_date)}
+ - Lieu: ${eventPlacesText(event)}
+ - Date: ${eventDatesText(event)}
  - Lien: ${event_url}
 `;
 

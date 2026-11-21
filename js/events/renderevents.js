@@ -47,18 +47,20 @@ export function renderEventTile(event) {
             data-category="${eventData.categoryIds.join(",")}"
             data-pg="${eventData.pg}"
             data-price="${eventData.price}"
-            data-area="${eventData.areaId}"
+            data-area="${eventData.areaIds.join(",")}"
             data-min-age="${eventData.min_age}"
             data-max-age="${eventData.max_age}"
-            data-date="${eventData.event_date}">
+            data-date="${eventData.nextDay}"
+            data-days="${eventDays(event).join(" ")}">
         <div class="event-side" style="background: ${eventData.categoryPie}">
             <div class="event-category">${eventData.categoryLabel}</div>
-            <div class="event-date">${formatEventDate(eventData.event_date)}</div>
+            <div class="event-date">${formatEventDate(eventData.nextDay)}</div>
             ${eventData.timeHtml}
         </div>
 
         <div class="event-content">
             <div class="event-title">${event.title}</div>
+            ${eventData.untilPillHtml}
             <div class="event-meta">
                 ${eventData.locationHtml}
             </div>
@@ -97,9 +99,9 @@ export function renderEventSuggestion(event) {
         <div class="event-suggestion-meta non-wrap">
             <div style="color: ${eventData.categoryColor};">${eventData.categoryLabel}</div>
             .
-            <div>${formatEventDateTime(eventData.event_date)}</div>
+            <div>${formatEventDateTime(eventData.nextDay)}</div>
             .
-            <div>${eventData.location_name}</div>
+            <div>${eventData.locationText}</div>
         </div>
     `
     return html;
