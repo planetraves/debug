@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=ffe0d663.3dc44e3a";
+} from "../global/modal.js?v=6b374b47.ed266747";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=ffe0d663.3dc44e3a";
+} from "./renderevents.js?v=6b374b47.ed266747";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -812,7 +812,7 @@ export function calendarSelectDay(dateStr) {
     // Wait for DOM update (important)
     requestAnimationFrame(() => {
         // scroll to the first tile taking place that day (a multi-day tile lists all its days)
-        const selector = `.event-tile[data-days~="${dateStr}"]:not(.hidden)`;
+        const selector = `.event-tile[data-date="${dateStr}"]:not(.hidden)`;
         const firstTile = document.querySelector(selector);
         if (!firstTile) return;
         firstTile.scrollIntoView({

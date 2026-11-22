@@ -1,8 +1,8 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=ffe0d663.3dc44e3a";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=ffe0d663.3dc44e3a";
-import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=ffe0d663.3dc44e3a";
+import { openErrorModal } from "./modal.js?v=6b374b47.ed266747";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=6b374b47.ed266747";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=6b374b47.ed266747";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
