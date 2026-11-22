@@ -64,12 +64,13 @@ export function renderEventTile(event) {
             <div class="event-meta">
                 ${eventData.locationHtml}
             </div>
+            ${eventData.untilPillHtml}
             <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
                 ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
             ${eventData.tagsHtml}
-            ${eventData.untilPillHtml}
+            
         </div>
     </div>
     `;
