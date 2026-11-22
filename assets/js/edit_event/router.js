@@ -2,25 +2,25 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal,
     openPublicationCharterModal
-} from "../global/modal.js?v=b44d6743.d1dd4f93";
+} from "../global/modal.js?v=1e7bcce7.d1dd4f93";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited, searchCreator,
     updateEndDateBounds, validateEndDate, onAddPlace, removePlace, onPlaceNameEdited, refreshProgramme,
-    toggleProgrammeDay, addProgrammeEntry, removeProgrammeEntry
-} from "../global/eventform.js?v=b44d6743.d1dd4f93"
+    toggleProgrammeDay, addProgrammeEntry, removeProgrammeEntry, toggleProgramme
+} from "../global/eventform.js?v=1e7bcce7.d1dd4f93"
 
 import { 
     addTag, removeLastTag
-} from "../global/tags.js?v=b44d6743.d1dd4f93"
+} from "../global/tags.js?v=1e7bcce7.d1dd4f93"
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=b44d6743.d1dd4f93"
+} from "../global/address.js?v=1e7bcce7.d1dd4f93"
 
 import { 
     editEvent, goBack
-} from "./edit_event.js?v=b44d6743.d1dd4f93"
+} from "./edit_event.js?v=1e7bcce7.d1dd4f93"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -66,6 +66,10 @@ async function handleClick(el, e) {
 
         case "toggle-programme-day":
             toggleProgrammeDay(el);
+            break;
+
+        case "toggle-programme":
+            toggleProgramme();
             break;
 
         case "add-programme-entry":

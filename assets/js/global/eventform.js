@@ -1,8 +1,8 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=b44d6743.d1dd4f93";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=b44d6743.d1dd4f93";
-import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=b44d6743.d1dd4f93";
+import { openErrorModal } from "./modal.js?v=1e7bcce7.d1dd4f93";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=1e7bcce7.d1dd4f93";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=1e7bcce7.d1dd4f93";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -24,6 +24,9 @@ const startTimeContainer = document.getElementById("start_time_container");
 const placesList = document.getElementById("places-list");
 const programmeContainer = document.getElementById("programme-container");
 const programmeList = document.getElementById("programme-list");
+const programmeToggle = document.getElementById("programme-toggle");
+const programmeBody = document.getElementById("programme-body");
+const clearEndDateBtn = document.getElementById("clear-end-date");
 
 let currentImageUrl = null;
 let imageToUpload = null;
@@ -87,39 +90,6 @@ function renderCategoryChoices() {
                 ${cat.label}
             </button>`;
     });
-}
-
-/* restrict the end date picker to the [event_date+1, event_date+MAX_EVENT_DAYS-1] range */
-export function updateEndDateBounds() {
-    endDateInput.setCustomValidity("");
-    clearFieldError(endDateInput);
-    if (!eventDateInput.value) {
-        endDateInput.disabled = true;
-        endDateInput.value = "";
-        endDateInput.removeAttribute("min");
-        endDateInput.removeAttribute("max");
-        return;
-    }
-    endDateInput.disabled = false;
-    const start = new Date(eventDateInput.value + "T00:00:00");
-    endDateInput.min = formatDateStr(addDays(start, 1));
-    endDateInput.max = formatDateStr(addDays(start, MAX_EVENT_DAYS - 1));
-    if (endDateInput.value && (endDateInput.value < endDateInput.min || endDateInput.value > endDateInput.max)) {
-        endDateInput.value = "";
-    }
-}
-
-export function validateEndDate() {
-    endDateInput.setCustomValidity("");
-    if (!eventDateInput.value || !endDateInput.value || endDateInput.disabled) return 1;
-
-    const nbDays = Math.round((new Date(endDateInput.value + "T00:00:00") - new Date(eventDateInput.value + "T00:00:00")) / 86400000) + 1;
-    if (nbDays <= 1) {
-        endDateInput.setCustomValidity("La date de fin doit être à strictement supérieure à la date de début");
-    } else if (nbDays > MAX_EVENT_DAYS) {
-        endDateInput.setCustomValidity(`Un évènement ne peut pas durer plus de ${MAX_EVENT_DAYS} jours`);
-    }
-    return nbDays;
 }
 
 /* === PLACES === */
@@ -218,37 +188,6 @@ function entriesCount() {
     return [...programme.values()].reduce((n, day) => n + day.entries.length, 0);
 }
 
-/* rebuild the programme for the current dates and places; it is only shown for several days or places */
-export function refreshProgramme() {
-    const wasShown = !programmeContainer.hidden;
-    if (wasShown) {
-        readProgrammeFromDom();
-    } else if (entriesCount() <= 1) {
-        // simple form (one day, one place): its time is the time input
-        programme.forEach(day => day.entries.forEach(e => e.time = startTimeInput.value));
-    }
-
-    const dates = rangeDates();
-    const keys = placeKeys();
-    const time = defaultTime();
-    const next = new Map();
-    dates.forEach(date => {
-        const day = programme.get(date) ?? { removed: false, entries: [] };
-        day.entries = day.entries.filter(e => keys.includes(e.place));
-        if (day.entries.length === 0) day.entries.push({ place: keys[0], time });
-        next.set(date, day);
-    });
-    if (dates.length === 1) next.get(dates[0]).removed = false;
-    programme = next;
-
-    const shown = dates.length > 1 || keys.length > 1;
-    if (wasShown && !shown && dates.length) {
-        startTimeInput.value = programme.get(dates[0]).entries[0].time;
-    }
-    programmeContainer.hidden = !shown;
-    startTimeContainer.hidden = shown;
-    if (shown) renderProgramme();
-}
 
 function renderProgramme() {
     const keys = placeKeys();
@@ -304,6 +243,44 @@ function programmeDay(el) {
     return programme.get(el.closest(".programme-day")?.dataset.date);
 }
 
+/* === EXPORTED FUNCTIONS === */
+/* restrict the end date picker to the [event_date+1, event_date+MAX_EVENT_DAYS-1] range */
+export function updateEndDateBounds() {
+    endDateInput.setCustomValidity("");
+    clearFieldError(endDateInput);
+    if (!eventDateInput.value) {
+        endDateInput.disabled = true;
+        endDateInput.value = "";
+        endDateInput.removeAttribute("min");
+        endDateInput.removeAttribute("max");
+        return;
+    }
+    endDateInput.disabled = false;
+    const start = new Date(eventDateInput.value + "T00:00:00");
+    endDateInput.min = formatDateStr(addDays(start, 1));
+    endDateInput.max = formatDateStr(addDays(start, MAX_EVENT_DAYS - 1));
+    if (endDateInput.value && (endDateInput.value < endDateInput.min || endDateInput.value > endDateInput.max)) {
+        endDateInput.value = "";
+    }
+}
+
+export function validateEndDate() {
+    endDateInput.setCustomValidity("");
+    if (!eventDateInput.value || !endDateInput.value || endDateInput.disabled)
+    {
+        clearEndDateBtn.hidden = true;
+        return 1;
+    }
+    clearEndDateBtn.hidden = false;
+    const nbDays = Math.round((new Date(endDateInput.value + "T00:00:00") - new Date(eventDateInput.value + "T00:00:00")) / 86400000) + 1;
+    if (nbDays <= 1) {
+        endDateInput.setCustomValidity("La date de fin doit être à strictement supérieure à la date de début");
+    } else if (nbDays > MAX_EVENT_DAYS) {
+        endDateInput.setCustomValidity(`Un évènement ne peut pas durer plus de ${MAX_EVENT_DAYS} jours`);
+    }
+    return nbDays;
+}
+
 export function onAddPlace() {
     const block = addPlace();
     // one-day event: a new place is most likely another place the same day
@@ -321,6 +298,43 @@ export function removePlace(btn) {
     readProgrammeFromDom();
     block.remove();
     refreshPlaces();  // days only using this place fall back to the first place
+}
+
+/* rebuild the programme for the current dates and places; it is only shown for several days or places */
+export function refreshProgramme() {
+    const wasShown = !programmeContainer.hidden;
+    console.log("wasShown:", wasShown);
+    if (wasShown) {
+        readProgrammeFromDom();
+    } else if (entriesCount() <= 1) {
+        // simple form (one day, one place): its time is the time input
+        programme.forEach(day => day.entries.forEach(e => e.time = startTimeInput.value));
+    }
+
+    const dates = rangeDates();
+    const keys = placeKeys();
+    const time = defaultTime();
+    const next = new Map();
+    dates.forEach(date => {
+        const day = programme.get(date) ?? { removed: false, entries: [] };
+        day.entries = day.entries.filter(e => keys.includes(e.place));
+        if (day.entries.length === 0) day.entries.push({ place: keys[0], time });
+        next.set(date, day);
+    });
+    if (dates.length === 1) next.get(dates[0]).removed = false;
+    programme = next;
+
+    const shown = dates.length > 1 || keys.length > 1;
+    if (wasShown && !shown && dates.length) {
+        startTimeInput.value = programme.get(dates[0]).entries[0].time;
+    }
+    // Close when first displayed or when returning to a simple event.
+    // Keep the user's open/closed choice during programme updates.
+    console.log("shown:", shown);
+    if (!wasShown) toggleProgramme(false);
+    programmeContainer.hidden = !shown;
+    startTimeContainer.hidden = shown;
+    if (shown) renderProgramme();
 }
 
 /* keep the place names shown in the programme up to date */
@@ -357,7 +371,12 @@ export function removeProgrammeEntry(btn) {
     renderProgramme();
 }
 
-/* === EXPORTED FUNCTIONS === */
+export function toggleProgramme(expand=null) {
+    const isExpanded = (expand != null) ? !expand : (programmeToggle.getAttribute("aria-expanded") === "true");
+    programmeToggle.setAttribute("aria-expanded", String(!isExpanded));
+    programmeBody.hidden = isExpanded;
+}
+
 export function onFieldEdited(el) {
     if (el.classList?.contains("field-invalid")) clearFieldError(el);
 }
@@ -376,7 +395,17 @@ export function toggleCategory(el) {
     console.log("selectedCategories:", selectedCategories);
 }
 
-/* === EXPORTED FUNCTIONS === */
+export function clearEndDate() {
+    if (endDateInput.disabled) return;
+
+    endDateInput.value = "";
+    endDateInput.setCustomValidity("");
+    clearFieldError(endDateInput);
+    refreshProgramme();
+    clearEndDateBtn.hidden = true;
+    endDateInput.focus();
+}
+
 export function initEventForm(eventData=null) {
     eventForm.reset()
     eventForm.querySelectorAll(".field-invalid").forEach(clearFieldError);
@@ -397,6 +426,7 @@ export function initEventForm(eventData=null) {
     placesList.innerHTML = "";
     programme = new Map();
     programmeContainer.hidden = true;
+    toggleProgramme(false);
     startTimeContainer.hidden = false;
     initialEventDate = null;
 
@@ -598,6 +628,10 @@ export function getEventFormPayload() {
     /* report form validity */
     const firstInvalid = markInvalidFields(eventForm);
     if (firstInvalid) {
+        if (programmeBody.contains(firstInvalid)) {
+            toggleProgramme(true);
+        }
+
         openErrorModal("Le formulaire contient des erreurs", null, () => focusField(firstInvalid));
         return;
     };
