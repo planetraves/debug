@@ -73,6 +73,9 @@
                     <button type="button" class="help-btn" data-action="open-end-date-help" aria-label="Aide : fin de l'évènement">
                         <span class="material-symbols-outlined">help</span>
                     </button>
+                    <button type="button" id="clear-end-date" class="help-btn" data-action="clear-end-date" aria-label="Effacer la date de fin" hidden>
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
                 </span>
                 <input type="date" id="end_date" data-change-type="end-date" disabled>
             </label>
@@ -83,10 +86,21 @@
             </label>
 
             <!-- shown for several days or several places: one row per day, built by eventform.js -->
-            <div id="programme-container" class="pico" hidden>
-                <span class="label-help">Programmation</span>
-                <small id="programme-hint" class="field-hint">Pour chaque jour : heure et lieu, autre lieu le même jour, ou jour à retirer s'il n'y a pas d'évènement ce jour-là.</small>
-                <div id="programme-list" class="programme-list" aria-describedby="programme-hint"></div>
+            <div id="programme-container" class="programme-container pico" hidden>
+                Programmation
+                <div id="programme-toggle"
+                    class="programme-toggle"
+                    aria-expanded="false"
+                    data-action="toggle-programme" 
+                    aria-controls="programme-body">
+                    <span>(Optionnel) Ouvrez cette section pour modifier les heures et lieux de chaques jours,
+                        ou retirer certains jours</span>
+                    <span class="material-symbols-outlined programme-chevron"
+                        aria-hidden="true">expand_more</span>
+                </div>
+                <div id="programme-body" class="programme-body" hidden>
+                    <div id="programme-list" class="programme-list" aria-describedby="programme-hint"></div>
+                </div>
             </div>
 
             <label class="pico">

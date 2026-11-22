@@ -7,7 +7,7 @@ import {
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory, onFieldEdited, searchCreator,
     updateEndDateBounds, validateEndDate, onAddPlace, removePlace, onPlaceNameEdited, refreshProgramme,
-    toggleProgrammeDay, addProgrammeEntry, removeProgrammeEntry
+    toggleProgrammeDay, addProgrammeEntry, removeProgrammeEntry, toggleProgramme, clearEndDate
 } from "../global/eventform.js?v=dev"
 
 import { 
@@ -74,6 +74,14 @@ async function handleClick(el, e) {
 
         case "remove-programme-entry":
             removeProgrammeEntry(el);
+            break;
+
+        case "toggle-programme":
+            toggleProgramme();
+            break;
+
+        case "clear-end-date":
+            clearEndDate();
             break;
 
         case "submit-event":

@@ -96,7 +96,7 @@ function formatEventDateRange(dateStr, endDateStr) {
     });
     const capitalizedStartDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
     const capitalizedEndDate = formattedEndDate.charAt(0).toUpperCase() + formattedEndDate.slice(1);
-    return `<strong>${capitalizedStartDate} ⭣<br>${capitalizedEndDate}</strong>`;
+    return `<strong>${capitalizedStartDate} &darr;<br>${capitalizedEndDate}</strong>`;
 }
 
 function formatEventTime(timeStr) {

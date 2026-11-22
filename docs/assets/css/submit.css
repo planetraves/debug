@@ -333,6 +333,45 @@
     font-size: 1.1rem;
 }
 
+ /* === End date input row === */
+.clear-end-date {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--primary-subtext);
+}
+.clear-end-date:hover {
+    color: var(--primary-text);
+}
+.clear-end-date.hidden {
+    display: none;
+}
+
+/* .date-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-input-row input {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+#clear-end-date {
+    flex-shrink: 0;
+    width: auto;
+    margin: 0;
+}
+
+.date-input-row:has(input:disabled) #clear-end-date {
+    display: none;
+} */
+
+
 /* === Programme (one row per day) === */
 .programme-list {
     display: flex;
@@ -386,6 +425,45 @@
     font-size: 0.7rem;
     color: var(--primary-subtext);
 }
+
+.programme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 0.8rem;
+    /* padding: 0.4rem 0.6rem; */
+    /* border: 1px solid var(--primary-subtext);
+    border-radius: 10px; */
+    box-shadow: none;
+    /* color: inherit; */
+    text-align: left;
+    color: var(--primary-subtext);
+    font-size: 0.65rem;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.programme-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.programme-toggle[aria-expanded="true"] .programme-chevron {
+    transform: rotate(180deg);
+}
+
+.programme-body {
+    padding-top: 8px;
+}
+
+.programme-container[hidden],
+.programme-body[hidden] {
+    display: none;
+}
+
+
 
 /* === Category multi-select chips === */
 .category-choices {
