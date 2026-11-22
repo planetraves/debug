@@ -54,21 +54,24 @@ export function renderEventTile(event) {
             data-days="${eventDays(event).join(" ")}">
         <div class="event-side" style="background: ${eventData.categoryPie}">
             <div class="event-category">${eventData.categoryLabel}</div>
-            <div class="event-date">${formatEventDate(eventData.nextDay)}</div>
+            ${eventData.dateHtml}
+            <!-- <div class="event-date">${formatEventDate(eventData.nextDay)}</div> -->
+            <!-- ${eventData.untilHtml} -->
             ${eventData.timeHtml}
         </div>
 
         <div class="event-content">
             <div class="event-title">${event.title}</div>
-            ${eventData.untilPillHtml}
             <div class="event-meta">
                 ${eventData.locationHtml}
             </div>
+            ${eventData.untilPillHtml}
             <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
                 ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
             ${eventData.tagsHtml}
+            
         </div>
     </div>
     `;

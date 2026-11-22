@@ -79,6 +79,26 @@ function formatEventDate(dateStr) {
     return `<strong>${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</strong>`;
 }
 
+function formatEventDateRange(dateStr, endDateStr) {
+    const startDate = new Date(dateStr);
+    const endDate = new Date(endDateStr);
+    var formattedDate = startDate.toLocaleDateString("fr-FR", {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+    });
+
+    // Capitalize first letter (Vendredi…)
+    const formattedEndDate = endDate.toLocaleDateString("fr-FR", {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+    });
+    const capitalizedStartDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    const capitalizedEndDate = formattedEndDate.charAt(0).toUpperCase() + formattedEndDate.slice(1);
+    return `<strong>${capitalizedStartDate} ⭣<br>${capitalizedEndDate}</strong>`;
+}
+
 function formatEventTime(timeStr) {
     // assume "18:30:45" => "18:30"
     const [hour, min] = timeStr.slice(0, 5).split(":");
@@ -340,7 +360,7 @@ function renderEventData(event, details = false) {
         eventData.ageLabel = "Jusqu'à " + eventData.max_age + " ans";
     }
 
-    eventData.timeHtml = eventData.nextTime
+    eventData.timeHtml = eventData.nextTime && (eventData.endDate == eventData.nextDay)
         ? `<span class="event-time event-icon-text">
              <span class="material-symbols-outlined">schedule</span>
              <span class="text">${formatEventTime(eventData.nextTime)}</span>
@@ -348,18 +368,36 @@ function renderEventData(event, details = false) {
         : "";
 
     eventData.untilHtml = eventData.endDate > eventData.nextDay
-        ? `<span class="event-until">jusqu'au ${formatShortDate(eventData.endDate)}</span>`
+        ? `<span class="event-until">jusqu'au<br>${formatShortDate(eventData.endDate)}</span>`
         : "";
 
+    eventData.dateHtml = eventData.endDate > eventData.nextDay
+        ? `<div class="event-date">${formatEventDateRange(eventData.nextDay, eventData.endDate)}</div>`
+        : `<div class="event-date">${formatEventDate(eventData.nextDay)}</div>`;
+
     // tile: same information, as a pill in the details column
-    eventData.untilPillHtml = eventData.endDate > eventData.nextDay
+    // eventData.untilPillHtml = eventData.endDate > eventData.nextDay
+    //     ? `<div class="event-meta">
+    //            <span class="event-until-pill">
+    //                <span class="material-symbols-outlined">date_range</span>
+    //                jusqu'au ${formatShortDate(eventData.endDate)}
+    //            </span>
+    //        </div>`
+    //     : "";
+    const dates = eventDays(event).sort();
+    const datesLabel = dates
+        .map(date => {
+            const [, month, day] = date.split("-");
+            return `${day}/${month}`;
+        })
+        .join(", ");
+
+    eventData.untilPillHtml = dates.length > 1
         ? `<div class="event-meta">
-               <span class="event-until-pill">
-                   <span class="material-symbols-outlined">date_range</span>
-                   jusqu'au ${formatShortDate(eventData.endDate)}
-               </span>
-           </div>`
+                ${renderMaterialIconText("date_range", datesLabel)}
+            </div>`
         : "";
+
 
     if (details) {
         // render extra information for event modal
