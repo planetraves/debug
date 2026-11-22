@@ -812,7 +812,7 @@ export function calendarSelectDay(dateStr) {
     // Wait for DOM update (important)
     requestAnimationFrame(() => {
         // scroll to the first tile taking place that day (a multi-day tile lists all its days)
-        const selector = `.event-tile[data-days~="${dateStr}"]:not(.hidden)`;
+        const selector = `.event-tile[data-date="${dateStr}"]:not(.hidden)`;
         const firstTile = document.querySelector(selector);
         if (!firstTile) return;
         firstTile.scrollIntoView({
