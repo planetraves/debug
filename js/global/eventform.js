@@ -1,8 +1,8 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=1e7bcce7.d1dd4f93";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=1e7bcce7.d1dd4f93";
-import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=1e7bcce7.d1dd4f93";
+import { openErrorModal } from "./modal.js?v=ffe0d663.3dc44e3a";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=ffe0d663.3dc44e3a";
+import { clearFieldError, markInvalidFields, focusField } from "./checkFieldsValidity.js?v=ffe0d663.3dc44e3a";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -324,7 +324,7 @@ export function refreshProgramme() {
     if (dates.length === 1) next.get(dates[0]).removed = false;
     programme = next;
 
-    const shown = dates.length > 1 || keys.length > 1;
+    const shown = dates.length > 1;
     if (wasShown && !shown && dates.length) {
         startTimeInput.value = programme.get(dates[0]).entries[0].time;
     }
