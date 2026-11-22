@@ -54,8 +54,9 @@ export function renderEventTile(event) {
             data-days="${eventDays(event).join(" ")}">
         <div class="event-side" style="background: ${eventData.categoryPie}">
             <div class="event-category">${eventData.categoryLabel}</div>
-            <div class="event-date">${formatEventDate(eventData.nextDay)}</div>
-            ${eventData.untilHtml}
+            ${eventData.dateHtml}
+            <!-- <div class="event-date">${formatEventDate(eventData.nextDay)}</div> -->
+            <!-- ${eventData.untilHtml} -->
             ${eventData.timeHtml}
         </div>
 

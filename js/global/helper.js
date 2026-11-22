@@ -96,7 +96,7 @@ function formatEventDateRange(dateStr, endDateStr) {
     });
     const capitalizedStartDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
     const capitalizedEndDate = formattedEndDate.charAt(0).toUpperCase() + formattedEndDate.slice(1);
-    return `<strong>${capitalizedStartDate} &gt;<br>${capitalizedEndDate}</strong>`;
+    return `<strong>${capitalizedStartDate} ⭣<br>${capitalizedEndDate}</strong>`;
 }
 
 function formatEventTime(timeStr) {
@@ -360,7 +360,7 @@ function renderEventData(event, details = false) {
         eventData.ageLabel = "Jusqu'à " + eventData.max_age + " ans";
     }
 
-    eventData.timeHtml = eventData.nextTime
+    eventData.timeHtml = eventData.nextTime && (eventData.endDate == eventData.nextDay)
         ? `<span class="event-time event-icon-text">
              <span class="material-symbols-outlined">schedule</span>
              <span class="text">${formatEventTime(eventData.nextTime)}</span>
@@ -370,6 +370,10 @@ function renderEventData(event, details = false) {
     eventData.untilHtml = eventData.endDate > eventData.nextDay
         ? `<span class="event-until">jusqu'au<br>${formatShortDate(eventData.endDate)}</span>`
         : "";
+
+    eventData.dateHtml = eventData.endDate > eventData.nextDay
+        ? `<div class="event-date">${formatEventDateRange(eventData.nextDay, eventData.endDate)}</div>`
+        : `<div class="event-date">${formatEventDate(eventData.nextDay)}</div>`;
 
     // tile: same information, as a pill in the details column
     // eventData.untilPillHtml = eventData.endDate > eventData.nextDay

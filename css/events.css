@@ -152,6 +152,7 @@ body.events-page {
     justify-content: left;
     font-size: 0.75rem;
     flex: 1;
+    line-height: 1.2;
 }
 
 .event-time {
