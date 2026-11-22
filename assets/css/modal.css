@@ -212,11 +212,11 @@ label.event-programme-body {
 
 /* scoped to .event-details: the theme's list rules (.md-typeset ul) would otherwise win */
 .event-details .event-programme .event-programme-body ul {
-    display: none;
+    display: block;
 }
 
 .event-details .event-programme .event-programme-toggle:checked ~ .event-programme-body ul {
-    display: block;
+    display: none;
 }
 
 .event-programme-toggle:checked ~ .event-programme-body .chevron {

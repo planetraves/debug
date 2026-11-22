@@ -55,12 +55,12 @@ export function renderEventTile(event) {
         <div class="event-side" style="background: ${eventData.categoryPie}">
             <div class="event-category">${eventData.categoryLabel}</div>
             <div class="event-date">${formatEventDate(eventData.nextDay)}</div>
+            ${eventData.untilHtml}
             ${eventData.timeHtml}
         </div>
 
         <div class="event-content">
             <div class="event-title">${event.title}</div>
-            ${eventData.untilPillHtml}
             <div class="event-meta">
                 ${eventData.locationHtml}
             </div>
@@ -69,6 +69,7 @@ export function renderEventTile(event) {
                 ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
             ${eventData.tagsHtml}
+            ${eventData.untilPillHtml}
         </div>
     </div>
     `;
