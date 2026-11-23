@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=a069368a.56eae793";
+} from "../global/modal.js?v=e5e07715.56eae793";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=a069368a.56eae793";
+} from "./renderevents.js?v=e5e07715.56eae793";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -43,6 +43,8 @@ let touchEndX = 0;
 let user_profile = null;
 let EVENTS = [];
 let calendarDayEvents = {};
+let selectedDay = null; // "YYYY-MM-DD" when the tiles view shows a single calendar day
+
 let activeFilters = {
     category: new Set(Object.keys(APP_CONFIG.CATEGORIES)),
     area: new Set(Object.keys(APP_CONFIG.AREAS)),
@@ -175,7 +177,45 @@ function showHeader() {
     toolbar.classList.remove("hidden");
 }
 
+function renderDayTiles(dateStr) {
+    // every event scheduled that day, multi-day ones included, ordered by their first time that day
+    const timeKey = event => eventEntriesOn(event, dateStr).find(e => e.time)?.time ?? "99:99";
+    const dayEvents = EVENTS
+        .filter(event => eventDays(event).includes(dateStr))
+        .sort((a, b) => timeKey(a).localeCompare(timeKey(b)));
+
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const title = new Date(y, m - 1, d).toLocaleDateString("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+    const backBtn = `
+        <button class="day-back-btn" data-action="calendar-clear-day" title="Retour à la vue normale">
+            <span class="text">Tout afficher</span>
+            <span class="material-symbols-outlined ico">close</span>
+        </button>`;
+
+    return renderSection("day", title, "", dayEvents, backBtn);
+}
+
 function renderTiles() {
+    if (selectedDay) {
+        tilesView.innerHTML = renderDayTiles(selectedDay);
+        tilesView.hidden = false;
+        agendaView.hidden = true;
+        document.body.classList.remove("calendar-view");
+        switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
+        switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
+        // the "Quand" filter doesn't apply to a single day
+        document.querySelectorAll(`[data-filter-type="when"]`).forEach(btn => btn.disabled = true);
+        loading.style.display = "none";
+        eventsMain.scrollTop = 0;
+        requestAnimationFrame(markOverflowingTags);
+        return;
+    }
+
     const grouped = groupEvents(EVENTS);
 
     grouped.today = sortByDate(grouped.today);
@@ -243,8 +283,10 @@ function applyFilter() {
             tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.price, tile.dataset.area, tile.dataset.minAge, tile.dataset.maxAge));
         });
 
-        /* apply when filter only on tiles */
-        if (activeFilters.when.size > 0) {
+        /* apply when filter only on tiles (not on a single selected day) */
+        if (selectedDay) {
+            // keep the day section (and its back button) even when filters hide all its tiles
+        } else if (activeFilters.when.size > 0) {
             document.querySelectorAll(".section-tab.no-empty")
                 .forEach(section => {
                     section.hidden = true;
@@ -283,7 +325,7 @@ function applyFilter() {
 }
 
 function updateEmptyState() {
-    document.querySelectorAll(".section-tab.no-empty.selected").forEach( section => {
+    document.querySelectorAll(".section-tab.no-empty.selected:not(.section-day)").forEach( section => {
         const sectionHasVisibleTile = [...section.querySelectorAll(".event-tile")]
             .some(tile => !tile.classList.contains("hidden"))
         section.hidden = !sectionHasVisibleTile;
@@ -543,6 +585,7 @@ export function markOverflowingTags() {
 }
 
 export function switchView(view) {
+    selectedDay = null;
     if (view === "tiles") {
         tilesView.hidden = false;
         document.querySelectorAll(`[data-filter-type="when"]`).forEach(btn => btn.disabled = false);
@@ -807,19 +850,14 @@ export function navToday() {
 }
 
 export function calendarSelectDay(dateStr) {
-    switchView("tiles");
+    selectedDay = dateStr;
+    renderTiles();
+    applyFilter();
+}
 
-    // Wait for DOM update (important)
-    requestAnimationFrame(() => {
-        // scroll to the first tile taking place that day (a multi-day tile lists all its days)
-        const selector = `.event-tile[data-date="${dateStr}"]:not(.hidden)`;
-        const firstTile = document.querySelector(selector);
-        if (!firstTile) return;
-        firstTile.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-    });
+export function calendarClearDay() {
+    switchView("tiles");
+    eventsMain.scrollTop = 0;
 }
 
 export function handleSwipe() {
