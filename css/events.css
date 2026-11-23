@@ -65,6 +65,7 @@ body.events-page {
     align-items: center;
     gap: 0.1rem;
     flex-shrink: 0;
+    margin-right:0.3rem;
     padding: 0.2rem 0.4rem;
     color: var(--primary-text);
     background: rgba(255, 255, 255, 0.9);
