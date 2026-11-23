@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=d9fc5407.99f4b566";
+} from "../global/modal.js?v=b95f82e2.99f4b566";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=d9fc5407.99f4b566";
+} from "./renderevents.js?v=b95f82e2.99f4b566";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -25,6 +25,10 @@ const toolbar = document.getElementById("toolbar");
 const switchViewArea = document.getElementById("switch-view-btns");
 const moreFiltersArea = document.getElementById("more-filters");
 const resetFilterBtn = document.getElementById("reset-filter-btn");
+const MORE_FILTERS_ANIMATION_MS = 280;
+let moreFiltersAnimation = null;
+let moreFiltersOpening = false;
+
 
 const catOptions = document.getElementById("category-options");
 const areaOptions = document.getElementById("area-options");
@@ -809,21 +813,56 @@ export function selectFilterOption(optionBtn) {
     applyFilter();
 }
 
+// Slide the "more filters" panel open/closed by animating its height (and the spacing around it).
+// A toggle during a running animation reverses it from its current position instead of jumping.
+function animateMoreFilters(open) {
+    moreFiltersOpening = open;
+
+    if (moreFiltersAnimation?.playState === "running") {
+        moreFiltersAnimation.reverse();
+        return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        moreFiltersArea.classList.toggle("hidden", !open);
+        return;
+    }
+
+    moreFiltersArea.classList.remove("hidden");
+    const style = getComputedStyle(moreFiltersArea);
+    const expanded = {
+        height: `${moreFiltersArea.offsetHeight}px`,
+        paddingTop: style.paddingTop,
+        marginTop: style.marginTop,
+        borderTopWidth: style.borderTopWidth,
+        opacity: 1,
+    };
+    const collapsed = { height: "0px", paddingTop: "0px", marginTop: "0px", borderTopWidth: "0px", opacity: 0 };
+
+    moreFiltersArea.style.overflow = "hidden";
+    moreFiltersArea.style.boxSizing = "border-box";
+    moreFiltersAnimation = moreFiltersArea.animate(open ? [collapsed, expanded] : [expanded, collapsed], {
+        duration: MORE_FILTERS_ANIMATION_MS,
+        easing: "cubic-bezier(0.2, 0, 0, 1)",
+        fill: "forwards", // hold the last frame until the class is set, avoids a one-frame flash
+    });
+    moreFiltersAnimation.onfinish = () => {
+        moreFiltersArea.classList.toggle("hidden", !moreFiltersOpening);
+        moreFiltersArea.style.overflow = "";
+        moreFiltersArea.style.boxSizing = "";
+        moreFiltersAnimation.cancel();
+        moreFiltersAnimation = null;
+    };
+}
+
 export function toggleAdditionalFilter(filterBtn) {
     const isOpen = filterBtn.getAttribute("aria-expanded") === "true";
     filterBtn.setAttribute("aria-expanded", String(!isOpen));
     document.body.classList.toggle("filters-open", !isOpen);
+    animateMoreFilters(!isOpen);
 
-    if (isOpen) {
-        moreFiltersArea.classList.add("hidden");
-        filterBtn.querySelector(".text").innerText = "Filtres";
-        filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_down";
-    } else {
-        /* open this one */
-        moreFiltersArea.classList.remove("hidden");
-        filterBtn.querySelector(".text").innerText = "Filtres";
-        filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
-    }
+    filterBtn.querySelector(".text").innerText = "Filtres";
+    filterBtn.querySelector(".chevron").innerText = isOpen ? "keyboard_arrow_down" : "keyboard_arrow_up";
 }
 
 export function navPrevMonth() {
