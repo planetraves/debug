@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=9b60a315.3642f703";
+} from "../global/modal.js?v=b63abae1.3642f703";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=9b60a315.3642f703";
+} from "./renderevents.js?v=b63abae1.3642f703";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -816,12 +816,12 @@ export function toggleAdditionalFilter(filterBtn) {
 
     if (isOpen) {
         moreFiltersArea.classList.add("hidden");
-        filterBtn.querySelector(".text").innerText = "Plus de filtres";
+        filterBtn.querySelector(".text").innerText = "Filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_down";
     } else {
         /* open this one */
         moreFiltersArea.classList.remove("hidden");
-        filterBtn.querySelector(".text").innerText = "Moins de filtres";
+        filterBtn.querySelector(".text").innerText = "Filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
     }
 }

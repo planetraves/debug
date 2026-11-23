@@ -40,7 +40,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.1rem;
+    gap: 0.3rem;
     /* same width as a category button: 3 columns with a 0.3rem gap */
     width: calc((100cqw - 0.6rem) / 3);
     height: 1.5rem;
