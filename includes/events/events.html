@@ -52,7 +52,7 @@
 
         <div class="toolbar-btn">
             <div class="filter-btns">
-                <button id="more-filter-btn" class="more-filter-btn" data-action="filter-toggle" aria-expanded="false">
+                <button id="more-filter-btn" class="toolbar-pill more-filter-btn" data-action="filter-toggle" aria-expanded="false">
                     <span class="text">Plus de filtres</span>
                     <span class="material-symbols-outlined chevron">keyboard_arrow_down</span>
                 </button>
@@ -70,8 +70,10 @@
                     <span class="material-symbols-outlined ico">add</span>
                     <span class="text">Publier</span>
                 </button> -->
-                <span class="material-symbols-outlined switch-btn" data-action="switch-view" data-view="tiles">view_agenda</span>
-                <span class="material-symbols-outlined switch-btn" data-action="switch-view" data-view="agenda">calendar_month</span>
+                <button id="switch-view-btn" class="toolbar-pill switch-view-btn" data-action="switch-view" data-view="agenda">
+                    <span class="material-symbols-outlined ico">calendar_month</span>
+                    <span class="text">Vue agenda</span>
+                </button>
             </div>
         </div>
     </div>

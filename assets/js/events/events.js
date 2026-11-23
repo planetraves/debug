@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=3e9d2c48.3642f703";
+} from "../global/modal.js?v=a12655c0.3642f703";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=3e9d2c48.3642f703";
+} from "./renderevents.js?v=a12655c0.3642f703";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -200,14 +200,22 @@ function renderDayTiles(dateStr) {
     return renderSection("day", title, "", dayEvents, backBtn);
 }
 
+// the single switch button always offers the other view
+function updateSwitchViewBtn(currentView) {
+    const btn = switchViewArea.querySelector("#switch-view-btn");
+    const toAgenda = currentView === "tiles";
+    btn.dataset.view = toAgenda ? "agenda" : "tiles";
+    btn.querySelector(".ico").innerText = toAgenda ? "calendar_month" : "lists";
+    btn.querySelector(".text").innerText = toAgenda ? "Vue agenda" : "Vue liste";
+}
+
 function renderTiles() {
     if (selectedDay) {
         tilesView.innerHTML = renderDayTiles(selectedDay);
         tilesView.hidden = false;
         agendaView.hidden = true;
         document.body.classList.remove("calendar-view");
-        switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
-        switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
+        updateSwitchViewBtn("tiles");
         // the "Quand" filter doesn't apply to a single day
         document.querySelectorAll(`[data-filter-type="when"]`).forEach(btn => btn.disabled = true);
         loading.style.display = "none";
@@ -238,8 +246,7 @@ function renderTiles() {
     tilesView.hidden = false;
     agendaView.hidden = true;
     document.body.classList.remove("calendar-view");
-    switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
-    switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
+    updateSwitchViewBtn("tiles");
     loading.style.display = "none";
 
     requestAnimationFrame(markOverflowingTags);
@@ -426,8 +433,7 @@ function renderCalendar(events=EVENTS) {
     tilesView.hidden = true;
     agendaView.hidden = false;
     document.body.classList.add("calendar-view");
-    switchViewArea.querySelector('[data-view="tiles"]').classList.remove("active");
-    switchViewArea.querySelector('[data-view="agenda"]').classList.add("active");
+    updateSwitchViewBtn("agenda");
     loading.style.display = "none";
     // the tiles empty-state message doesn't apply to the calendar (empty grid speaks for itself)
     emptyState.classList.add("hidden");
