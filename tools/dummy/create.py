@@ -35,6 +35,65 @@ TEST_TAGS = [
 
 OPTIONS=supabase.ClientOptions(httpx_client=httpx.Client(verify=False))
 
+MAX_EVENT_DAYS = 14  # same limits as the database trigger events_sync_schedule
+MAX_PLACES = 10
+PLACE_NAMES = [
+    "Café du bord du monde", "Chez l'Olive", "Café des Sports", "Colo N Co", "Le Pré Vert", "La Briqueterie",
+    "La Halle", "La confiserie", "Chez Vincent", "Promenade des Lices", "Musé Des Arts", "Au Cercle",
+    "Chez Jeanine", "Musé Des Livres", "Chez Julien", "Au livre enchainé", "Le Rouge en mélée", "Salle des fêtes",
+    "Dans la ruelle a coté de la pharmarcie derrière le panneau vert",
+]
+
+
+def days(first: date, *offsets: int) -> list:
+    return [first + timedelta(days=o) for o in offsets]
+
+
+def entry(day: date, hour, loc: int) -> dict:
+    return {"date": day.isoformat(), "time": hour, "loc": loc}
+
+
+def random_time():
+    return random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).strftime("%H:%M")])
+
+
+# Every date/place case the site has to handle:
+#   name: (number of places, first day relative to today (None = the event's day_delta), schedule builder)
+# A builder gets the first day and returns the schedule entries.
+CASES = {
+    # one day
+    "1 jour": (1, None, lambda d: [entry(d, random_time(), 0)]),
+    "1 jour sans heure": (1, None, lambda d: [entry(d, None, 0)]),
+    "1 jour à minuit": (1, None, lambda d: [entry(d, "00:00", 0)]),
+    "1 jour, 2 lieux": (2, None, lambda d: [entry(d, "18:00", 0), entry(d, "21:30", 1)]),
+    "1 jour, 2 lieux à la même heure": (2, None, lambda d: [entry(d, "20:00", 0), entry(d, "20:00", 1)]),
+    "1 jour, 3 lieux dont 1 sans heure": (3, None, lambda d: [entry(d, "20:00", 2), entry(d, None, 0), entry(d, "15:00", 1)]),
+    "1 jour, 10 lieux (max)": (10, None, lambda d: [entry(d, f"{10 + i}:00", i) for i in range(10)]),
+    # several days, one place
+    "2 jours": (1, None, lambda d: [entry(day, "20:00", 0) for day in days(d, 0, 1)]),
+    "5 jours, même heure": (1, None, lambda d: [entry(day, "19:00", 0) for day in days(d, 0, 1, 2, 3, 4)]),
+    "4 jours, heures différentes": (1, None, lambda d: [entry(day, h, 0) for day, h in zip(days(d, 0, 1, 2, 3), ["10:00", None, "14:30", "21:00"])]),
+    "6 jours avec 2 jours de pause": (1, None, lambda d: [entry(day, "20:00", 0) for day in days(d, 0, 1, 4, 5)]),
+    "14 jours (max)": (1, None, lambda d: [entry(day, "18:00", 0) for day in days(d, *range(14))]),
+    "14 jours, premier et dernier jour seulement": (1, None, lambda d: [entry(day, "20:00", 0) for day in days(d, 0, 13)]),
+    # several days, several places
+    "3 jours, 1 lieu différent par jour": (3, None, lambda d: [entry(day, "20:00", i) for i, day in enumerate(days(d, 0, 1, 2))]),
+    "5 jours, 3 lieux, 1 jour de pause": (3, None, lambda d: [
+        entry(d, "20:00", 0),
+        entry(d + timedelta(days=1), "14:00", 0), entry(d + timedelta(days=1), "21:00", 1),
+        entry(d + timedelta(days=3), None, 2),
+        entry(d + timedelta(days=4), "10:00", 0), entry(d + timedelta(days=4), "15:00", 1), entry(d + timedelta(days=4), "22:00", 2),
+    ]),
+    # already started (agenda: "Aujourd'hui" or next day, with "jusqu'au")
+    "en cours depuis 3 jours": (1, -3, lambda d: [entry(day, "20:00", 0) for day in days(d, *range(7))]),
+    "se termine aujourd'hui": (1, -4, lambda d: [entry(day, "18:00", 0) for day in days(d, *range(5))]),
+    "en cours, pause aujourd'hui": (1, -2, lambda d: [entry(day, "20:00", 0) for day in days(d, 0, 1, 3, 4)]),
+    "en cours, 2 lieux en alternance": (2, -1, lambda d: [entry(day, "19:00", i % 2) for i, day in enumerate(days(d, 0, 1, 2, 3))]),
+    # over: hidden from the agenda (still in the account page) until the cron deletes it tomorrow at 6:00
+    "terminé hier (invisible)": (1, -3, lambda d: [entry(day, "20:00", 0) for day in days(d, 0, 1, 2)]),
+    # far away
+    "dans 2 mois, 3 jours": (2, 60, lambda d: [entry(d, "20:00", 0), entry(d + timedelta(days=1), "20:00", 1), entry(d + timedelta(days=2), "16:00", 0)]),
+}
 
 
 class BytesDumpEncoder(json.JSONEncoder):
@@ -85,7 +144,33 @@ def delete_users():
         page += 1
 
 
-def format_event_payload(day_delta, category, title, pending):
+def random_place(name: str) -> dict:
+    code = random.choice(["81800", "81630", f"81{random.randrange(800, 899)}"])
+    if code == "81800":
+        town = random.choice(["Rabastens", "Couffouleux"])
+    elif code == "81630":
+        town = "Salvagnac"
+    else:
+        town = random.choice(["Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])
+    return {
+        "name": name,
+        "address": f"{random.randrange(1, 50)} {random.choice(['rue', 'place', 'avenue', 'boulevard'])} {random.choice(['Saint Michel', 'Général de Gaulle', 'Du Printemps', 'Jérome'])}",
+        "address_2": random.choice([None, None, None, "2ème étage", "Rez-de-chaussée", "Derrière le buisson"]),
+        "code": code,
+        "town": town,
+    }
+
+
+def check_schedule(case: str, locations: list, schedule: list):
+    """same rules as the database trigger, to report a broken case before inserting anything"""
+    dates = [date.fromisoformat(e["date"]) for e in schedule]
+    assert 1 <= len(locations) <= MAX_PLACES, f"{case}: 1 to {MAX_PLACES} places"
+    assert len({(e["date"], e["loc"]) for e in schedule}) == len(schedule), f"{case}: same place twice on one day"
+    assert {e["loc"] for e in schedule} == set(range(len(locations))), f"{case}: every place used, no unknown place"
+    assert (max(dates) - min(dates)).days + 1 <= MAX_EVENT_DAYS, f"{case}: more than {MAX_EVENT_DAYS} days"
+
+
+def format_event_payload(day_delta, category, title, pending, case=None):
     price = random.randrange(3)
     if price == 2:
         min_price = round(random.choice([0, random.uniform(0.0, 4.0)]), 2)
@@ -118,31 +203,14 @@ def format_event_payload(day_delta, category, title, pending):
     else:
         max_age = random.choice([None, random.randrange(6, 10)])
 
-    location_address_code = random.choice(["81800", "81630", f"81{random.randrange(800, 899)}"])
-    if location_address_code == "81800":
-        location_address_town = random.choice(["Rabastens", "Couffouleux"])
-    elif location_address_code == "81630":
-        location_address_town = "Salvagnac" 
-    else:
-        location_address_town = random.choice(["Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])
-
-    start_time = random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).strftime("%H:%M")])
-    locations = [{
-        "name": location_name,
-        "address": f"{random.randrange(1, 50)} {random.choice(['rue', 'place', 'avenue', 'boulevard'])} {random.choice(['Saint Michel', 'Général de Gaulle', 'Du Printemps', 'Jérome'])}",
-        "address_2": random.choice([None, None, None, "2ème étage", "Rez-de-chaussée", "Derrière le buisson"]),
-        "code": location_address_code,
-        "town": location_address_town,
-    }]
-    # some events last several days (with a day off in the middle), some have a 2nd place on their first day
-    nb_days = random.choice([1, 1, 1, 1, 3, 5])
-    days = [date.today() + timedelta(days=day_delta + d) for d in range(nb_days)]
-    if nb_days > 3:
-        days.pop(2)
-    schedule = [{"date": day.isoformat(), "time": start_time, "loc": 0} for day in days]
-    if random.random() < 0.2:
-        locations.append({"name": "Salle des fêtes", "address": "1 place de la Mairie", "address_2": None, "code": "81630", "town": "Salvagnac"})
-        schedule.append({"date": days[0].isoformat(), "time": "22:00", "loc": 1})
+    # random case when not given: mostly simple one-day events, like real data
+    if case is None:
+        case = random.choice(["1 jour"] * 8 + list(CASES))
+    nb_places, offset, build = CASES[case]
+    schedule = build(date.today() + timedelta(days=day_delta if offset is None else offset))
+    names = [location_name] + random.sample([p for p in PLACE_NAMES if p != location_name], nb_places - 1)
+    locations = [random_place(name) for name in names]
+    check_schedule(case, locations, schedule)
 
     return {
         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
@@ -183,6 +251,12 @@ def generate_events(n: int):
     events.append(format_event_payload(day_delta=0, category=["3"], title=f"Test Event #1.g", pending=False))
     events.append(format_event_payload(day_delta=0, category=["4"], title=f"Test Event #1.a", pending=False))
     events.append(format_event_payload(day_delta=0, category=["5"], title=f"Test Event #1.i", pending=False))
+    # one event per date/place case, spread over the next days
+    for i, case in enumerate(CASES):
+        category = sorted(random.sample([str(c) for c in range(6)], k=random.randint(1, 3)))
+        events.append(format_event_payload(day_delta=i % 7, category=category, title=f"Test cas : {case}", pending=False, case=case))
+    events.append(format_event_payload(day_delta=2, category=["1"], title="Test cas : 5 jours, 3 lieux (en attente)", pending=True, case="5 jours, 3 lieux, 1 jour de pause"))
+
     for i in range(n):
         title = random.choice([f"This is a very very long Test Event #{i + 1} sdfsddsfs sdfg sdgs", f"Test Event #{i + 1}"])
         category = sorted(random.sample([str(c) for c in range(6)], k=random.randint(1, 6)))

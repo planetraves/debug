@@ -6,7 +6,7 @@ Status (2026-11-21) — PROD untouched, everything below is on **DEV**:
   unchanged. Trigger checked with 13 rolled-back cases (old/new inserts and edits, no-op
   updates, validation errors, view). Revert script rehearsed: it restores the exact
   previous view, grants and cron job.
-- Phase 2 implemented (not deployed to the DEV site yet, not committed). Checked locally
+- Phase 2 implemented and deployed to the DEV site (`deploy.py`), not committed yet. Checked locally
   against DEV: agenda sections/tiles ("jusqu'au", places, areas), calendar dots, modal
   (places, programme), old per-day links (agenda and edit page), submit form (places,
   programme, validation; payload accepted by the trigger), edit form (multi-day and
@@ -14,9 +14,9 @@ Status (2026-11-21) — PROD untouched, everything below is on **DEV**:
 - Phase 3 applied: 4 per-day groups merged (68 → 52 rows). The merge → revert → merge
   cycle was rehearsed: the revert restores every row identically. PROD preview (read
   only, without the schedule filter): 3 groups to merge, 13 rows → 3 events.
-- Next: manual test of the DEV run by a human (logged in: account page tiles, publish,
-  edit, delete, moderation e-mails, an old tab opened before phase 2), `deploy.py` to the
-  DEV site, then the PROD run.
+- Manual test of the deployed DEV site done by a human (2026-11-23).
+- Next: commit phase 2, then the PROD run.
+- Phase 4 script written (`20261121_multi_day_3_contract.sql`), not run anywhere yet.
 
 DEV test data (all `is_test`): "Test multi-jours en cours / 5 jours / 8 jours" and "tt"
 (merged per-day events), "Test multi-lieux" (2 places, removed day), "Festival des arts
@@ -102,10 +102,10 @@ Each SQL step is one transaction of a few milliseconds: no downtime expected.
    an end date (e.g. 2, 5 and 8 days) so DEV has per-day groups like PROD.
    ✅ done (3 groups seeded by SQL as the old form does, plus "tt" from the site)
 4. Phase 2 on DEV: build the new front-end, test with `serve.bat`, then `deploy.py`
-   (dev site). ✅ built and tested locally — `deploy.py` to do
+   (dev site). ✅ done
 5. Phase 3 on DEV: merge the groups from step 3. ✅ done
 6. **Complete test on DEV** (see Checks): everything in phases 1–3, plus an old per-day
-   link and an old open tab.
+   link and an old open tab. ✅ done 2026-11-23
 7. Optional full rehearsal on real data: copy PROD into DEV
    (`sbdb migrate --from prod --to dev --include-data --clean`, wipes DEV data), then
    replay phases 1 and 3 on it and compare with the PROD numbers (45 → 35 rows).
