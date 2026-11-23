@@ -45,9 +45,10 @@
     width: calc((100cqw - 0.6rem) / 3);
     height: 1.5rem;
     padding: 0 0.2rem;
-    color: var(--primary-subtext);
+    color: var(--primary-title);
+    font-weight: 500;
     background: transparent;
-    border: 1px solid var(--primary-subtext);
+    border: 1px solid var(--primary-title);
     border-radius: 999px;
     cursor: pointer;
     line-height: 1;
