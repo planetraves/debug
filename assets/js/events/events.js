@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=b95f82e2.99f4b566";
+} from "../global/modal.js?v=e7cc1c94.23fc4063";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=b95f82e2.99f4b566";
+} from "./renderevents.js?v=e7cc1c94.23fc4063";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -791,6 +791,14 @@ export function selectFilterOption(optionBtn) {
         // then add selected one
         activeFilters[type].add(key);
         optionBtn.classList.add("active");
+
+    } else if ((type === "category" || type === "area")
+        && activeFilters[type].size === 1 && activeFilters[type].has(key)) {
+        // Clicking the only active option re-activates the whole group
+        activeFilters[type] = new Set(Object.keys(filterOptions[type]));
+        document
+            .querySelectorAll(`[data-filter-type="${type}"]`)
+            .forEach(btn => btn.classList.add("active"));
 
     } else {
         // Normal toggle behavior
