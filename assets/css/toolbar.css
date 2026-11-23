@@ -35,25 +35,26 @@
     gap: 0.2rem;
 }
 
-/* Pill buttons (switch view, more filters) */
+/* Pill buttons (switch view, more filters): frosted variant of the category buttons */
 .toolbar-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
     /* same width as a category button: 3 columns with a 0.3rem gap */
     width: calc((100cqw - 0.6rem) / 3);
-    height: 1.5rem;
+    height: 1.6rem;
     padding: 0 0.2rem;
-    color: var(--primary-title);
+    color: var(--primary-text);
     font-weight: 500;
-    background: transparent;
-    border: 1px solid var(--primary-title);
+    background: rgba(255, 255, 255, 0.55);
+    border: none;
     border-radius: 999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
     cursor: pointer;
     line-height: 1;
     white-space: nowrap;
-    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
 
 .toolbar-pill .text {
@@ -65,17 +66,43 @@
 
 .toolbar-pill .material-symbols-outlined {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     line-height: 1;
+    color: var(--primary-subtext);
+    transition: color 0.2s ease;
 }
 
-.toolbar-pill:hover {
-    border-color: var(--primary-text);
-    color: var(--primary-text);
+/* hover only on real pointers: on touch screens it would stick after a tap */
+@media (hover: hover) {
+    .toolbar-pill:hover {
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 3px 8px rgba(13, 44, 135, 0.18), inset 0 0 0 1px #fff;
+    }
+
+    .toolbar-pill:hover .material-symbols-outlined {
+        color: var(--primary-text);
+    }
 }
 
 .toolbar-pill:active {
     transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.toolbar-pill:focus-visible {
+    outline: 2px solid var(--primary-subtext);
+    outline-offset: 2px;
+}
+
+/* open filters panel: filled like an active category button */
+.toolbar-pill[aria-expanded="true"] {
+    background: var(--primary-text);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(13, 44, 135, 0.3);
+}
+
+.toolbar-pill[aria-expanded="true"] .material-symbols-outlined {
+    color: #fff;
 }
 
 
