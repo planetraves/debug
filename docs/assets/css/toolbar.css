@@ -106,21 +106,26 @@
 }
 
 
+/* compact counter: icon stacked above the number, same height as the pills */
 .event-counter {
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--primary-subtext);
+    flex-shrink: 0;
+    gap: 0.1rem;
+    height: 1.6rem;
+    min-width: 1.6rem;
+    padding: 0 0.35rem;
+    border: none;
     border-radius: 999px;
     background-color: var(--primary-subtext);
     color: #fff;
-    gap: 0.1rem;
     font: inherit;
-    font-size: 0.65rem;
+    font-weight: 500;
     line-height: 1;
-    padding: 0.08rem 0.2rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
-    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+    cursor: default;
 }
 
 .event-counter.hidden {
@@ -128,8 +133,18 @@
 }
 
 .event-counter .material-symbols-outlined {
+    display: block;
     color: #fff;
-    font-size: 0.85rem;
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+.event-counter .text {
+    display: block;
+    font-size: 0.5rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-box: trim-both cap alphabetic;
 }
 
 .publish-btn {
