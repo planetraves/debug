@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=e5e07715.56eae793";
+} from "../global/modal.js?v=dd3474ef.56eae793";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=e5e07715.56eae793";
+} from "./renderevents.js?v=dd3474ef.56eae793";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -193,8 +193,7 @@ function renderDayTiles(dateStr) {
     });
     const backBtn = `
         <button class="day-back-btn" data-action="calendar-clear-day" title="Retour à la vue normale">
-            <span class="text">Tout afficher</span>
-            <span class="material-symbols-outlined ico">close</span>
+            <span class="material-symbols-outlined ico">undo</span>
         </button>`;
 
     return renderSection("day", title, "", dayEvents, backBtn);
