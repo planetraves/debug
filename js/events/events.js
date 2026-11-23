@@ -1,11 +1,11 @@
 console.log("executing:", "events.js");
 
 import { openEventModal, openShareModal
-} from "../global/modal.js?v=6b374b47.ed266747";
+} from "../global/modal.js?v=a069368a.56eae793";
 
 import { renderOptionBtn, renderSection,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=6b374b47.ed266747";
+} from "./renderevents.js?v=a069368a.56eae793";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
