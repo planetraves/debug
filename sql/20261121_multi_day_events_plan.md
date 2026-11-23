@@ -1,6 +1,13 @@
 # Plan: multi-day and multi-place events
 
-Status (2026-11-21) — PROD untouched, everything below is on **DEV**:
+Status (2026-11-23) — phases 1–3 done on **DEV** and **PROD**; only phase 4 is left.
+
+- PROD run done 2026-11-23: dump, phase 1, `deploy.py --release`, phase 3. Counts and
+  merged events checked by a human, all good.
+- Next: phase 4, not before **2026-12-07** (2 weeks after PROD phase 3): rehearse on DEV,
+  new PROD dump, then PROD.
+
+DEV details (2026-11-21):
 
 - Phase 1 applied. Backfill checked: same rows, same `future_events` rows, old columns
   unchanged. Trigger checked with 13 rolled-back cases (old/new inserts and edits, no-op
@@ -15,7 +22,7 @@ Status (2026-11-21) — PROD untouched, everything below is on **DEV**:
   cycle was rehearsed: the revert restores every row identically. PROD preview (read
   only, without the schedule filter): 3 groups to merge, 13 rows → 3 events.
 - Manual test of the deployed DEV site done by a human (2026-11-23).
-- Next: commit phase 2, then the PROD run.
+
 - Phase 4 script written (`20261121_multi_day_3_contract.sql`), not run anywhere yet.
 
 DEV test data (all `is_test`): "Test multi-jours en cours / 5 jours / 8 jours" and "tt"
@@ -116,6 +123,8 @@ Each SQL step is one transaction of a few milliseconds: no downtime expected.
 2. Phase 1 on PROD, check counts.
 3. Phase 2: `deploy.py --release`.
 4. Phase 3 on PROD right after, at a quiet time; check counts and the 3 merged events.
+
+✅ done 2026-11-23
 
 ### Phase 4 (2–4 weeks after PROD phase 3)
 
