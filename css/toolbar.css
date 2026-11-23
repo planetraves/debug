@@ -5,6 +5,7 @@
    ============================================================ */
 
 .toolbar {
+    container-type: inline-size;
     position: sticky;
     background-color: var(--primary-fg);
     padding: 0.4rem;
@@ -38,16 +39,17 @@
 .toolbar-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.15rem;
+    justify-content: center;
+    gap: 0.1rem;
+    /* same width as a category button: 3 columns with a 0.3rem gap */
+    width: calc((100cqw - 0.6rem) / 3);
     height: 1.5rem;
-    padding: 0 0.6rem;
+    padding: 0 0.2rem;
     color: var(--primary-subtext);
     background: transparent;
     border: 1px solid var(--primary-subtext);
     border-radius: 999px;
     cursor: pointer;
-    font: inherit;
-    font-weight: 600;
     line-height: 1;
     white-space: nowrap;
     transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
@@ -55,14 +57,14 @@
 
 .toolbar-pill .text {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     line-height: 1;
     text-box: trim-both cap alphabetic;
 }
 
 .toolbar-pill .material-symbols-outlined {
     display: block;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     line-height: 1;
 }
 
@@ -567,6 +569,10 @@
 
     .option-btn.category {
         flex: 0 0 7rem;
+        width: 7rem;
+    }
+
+    .toolbar-pill {
         width: 7rem;
     }
 
