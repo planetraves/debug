@@ -53,6 +53,42 @@ body.events-page {
     background: transparent;
 }
 
+.section-header.with-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.day-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1rem;
+    flex-shrink: 0;
+    margin-right:0.3rem;
+    padding: 0.2rem 0.4rem;
+    color: var(--primary-text);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--primary-subtext);
+    border-radius: 999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.day-back-btn .text {
+    font-size: 0.7rem;
+}
+
+.day-back-btn .ico {
+    font-size: 0.85rem;
+}
+
+.day-back-btn:active {
+    transform: translateY(1px);
+}
+
 .section-tab.empty {
     display: none;
 }

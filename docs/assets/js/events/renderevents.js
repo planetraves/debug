@@ -13,7 +13,7 @@ export function renderOptionBtn(type, key, config, withicon=true) {
             </button>`
 }
 
-export function renderSection(sectionKey, sectionTitle, subtitle, events) {
+export function renderSection(sectionKey, sectionTitle, subtitle, events, headerAction = "") {
     if (events.length === 0) {
         return `
         <div class="section-tab empty selected" data-key="${sectionKey}">
@@ -27,8 +27,9 @@ export function renderSection(sectionKey, sectionTitle, subtitle, events) {
 
     return `
         <div class="section-tab section-${sectionKey} no-empty selected" data-key="${sectionKey}">
-            <div class="section-header">
+            <div class="section-header ${headerAction ? "with-action" : ""}">
                 <span class="section-title">${sectionTitle}</span>
+                ${headerAction}
             </div>
             <div>
                 ${events.map(renderEventTile).join("")}

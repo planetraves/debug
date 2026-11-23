@@ -7,7 +7,7 @@ import {
 import { 
     openEvent, searchInput, 
     selectFilterOption, toggleAdditionalFilter, resetFilter,
-    switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
+    switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay, calendarClearDay,
     handleSwipe, shareEvent, emailEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags,
     fitCalendar, calendarTouchStart, calendarTouchEnd, calendarTouchMove
 } from "./events.js?v=dev"
@@ -64,6 +64,10 @@ async function handleClick(el, e) {
 
         case "calendar-select-day":
             calendarSelectDay(el.dataset.date);
+            break;
+
+        case "calendar-clear-day":
+            calendarClearDay();
             break;
 
         case "show-event":
