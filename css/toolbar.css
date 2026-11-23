@@ -303,44 +303,93 @@
     border: 1px solid var(--primary-error--text);
 }
 
+/* Reset: reddish pill that slides out from the right of the filters button */
 .reset-filter-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.1rem;
-    justify-self: end;
-    padding: 0.2rem 0.4rem;
-    color: var(--primary-error--text);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--primary-error--lighter);
+    gap: 0.2rem;
+    flex-shrink: 0;
+    height: 1.6rem;
+    max-width: 6rem;
+    padding: 0 0.6rem 0 0.45rem;
+    overflow: hidden;
+    white-space: nowrap;
+    color: var(--primary-error);
+    background: rgba(253, 236, 234, 0.85);
+    border: none;
     border-radius: 999px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(211, 47, 47, 0.3);
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1;
-    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+    transition:
+        max-width 0.3s ease, padding 0.3s ease, margin 0.3s ease,
+        opacity 0.2s ease, transform 0.3s ease,
+        background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+        visibility 0s;
 }
 
 .reset-filter-btn .text {
-    font-size: 0.7rem;
+    display: block;
+    font-size: 0.65rem;
+    line-height: 1;
+    text-box: trim-both cap alphabetic;
 }
 
 .reset-filter-btn .ico {
-    font-size: 0.85rem;
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1;
+    transition: transform 0.4s ease;
 }
 
-.reset-filter-btn:hover {
-    background: var(--primary-error--text);
-    color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+@media (hover: hover) {
+    .reset-filter-btn:hover {
+        background: var(--primary-error);
+        color: #fff;
+        box-shadow: 0 3px 8px rgba(211, 47, 47, 0.3);
+    }
+
+    .reset-filter-btn:hover .ico {
+        transform: rotate(-360deg);
+    }
 }
 
 .reset-filter-btn:active {
     transform: translateY(1px);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
+.reset-filter-btn:focus-visible {
+    outline: 2px solid var(--primary-error);
+    outline-offset: 2px;
+}
+
+/* collapsed behind the filters button; the negative margin cancels the flex gap */
 .reset-filter-btn.hidden {
-    display: none;
+    max-width: 0;
+    padding-inline: 0;
+    margin-left: -0.2rem;
+    opacity: 0;
+    transform: translateX(-0.6rem);
+    box-shadow: none;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        max-width 0.3s ease, padding 0.3s ease, margin 0.3s ease,
+        opacity 0.2s ease, transform 0.3s ease, box-shadow 0.2s ease,
+        visibility 0s linear 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reset-filter-btn,
+    .reset-filter-btn.hidden,
+    .reset-filter-btn .ico {
+        transition: none;
+    }
 }
 
 
