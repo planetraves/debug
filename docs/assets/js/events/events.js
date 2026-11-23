@@ -792,6 +792,14 @@ export function selectFilterOption(optionBtn) {
         activeFilters[type].add(key);
         optionBtn.classList.add("active");
 
+    } else if ((type === "category" || type === "area")
+        && activeFilters[type].size === 1 && activeFilters[type].has(key)) {
+        // Clicking the only active option re-activates the whole group
+        activeFilters[type] = new Set(Object.keys(filterOptions[type]));
+        document
+            .querySelectorAll(`[data-filter-type="${type}"]`)
+            .forEach(btn => btn.classList.add("active"));
+
     } else {
         // Normal toggle behavior
         if (activeFilters[type].has(key)) {
